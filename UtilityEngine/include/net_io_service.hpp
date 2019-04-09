@@ -42,15 +42,13 @@ public:
 protected:
 	//! after start!
 	//! after server socket create!
-	virtual bool track_server(server_iface*) = 0;
-
+	virtual void track_server(server_iface*) = 0;
 	//! after start!
 	//! after session connected!
 	virtual void track_session(session_iface*) = 0;
 protected:
 	virtual void post_read_event(per_io_data* data) = 0;
 	virtual void post_send_event(per_io_data* data) = 0;
-	virtual void post_accept_event(server_iface* server, per_io_data* data) = 0;
 
 	// session_iface
 	void bind(session_iface* session);
@@ -61,6 +59,7 @@ protected:
 	
 	// server_iface
 	void process_accept(server_iface* server, per_io_data* data, sockaddr_storage* addr, session_iface** session);
+	accept_data* get_accept_data(server_iface* server);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net

@@ -33,8 +33,7 @@ public:
 private:
 	//! after start!
 	//! after server socket create!
-	bool track_server(server_iface*);
-
+	void track_server(server_iface*);
 	//! after start!
 	//! after session connected!
 	void track_session(session_iface*);

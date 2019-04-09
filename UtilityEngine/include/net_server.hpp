@@ -18,9 +18,6 @@ namespace net
 class server_iface : public framework
 {
 public:
-	struct accept_data : public per_io_data
-	{ char m_buff[sizeof(sockaddr_storage) * 2 + 50]; };
-public:
 	server_iface(void) :m_socket(nullptr), m_io_service(nullptr), m_running({ false }){}
 	virtual ~server_iface(void) = default;
 
@@ -34,6 +31,7 @@ public:
 	bool is_running(void){ return m_running; }
 protected:
 	virtual void process_accept(per_io_data*, sockaddr_storage*, session_iface**) = 0;
+	virtual accept_data* get_accept_data(void) = 0;
 protected:
 	socket_iface* m_socket;
 	io_service_iface* m_io_service;
@@ -59,6 +57,7 @@ public:
 	void stop(void);
 private:
 	void process_accept(per_io_data*, sockaddr_storage*, session_iface**);
+	accept_data* get_accept_data(void);
 	void post_request(session_iface* session, mem::buffer_iface* buffer,void* ptr);
 	void on_close_session(session_iface* session);
 protected:

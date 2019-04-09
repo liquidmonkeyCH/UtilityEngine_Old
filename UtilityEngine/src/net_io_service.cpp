@@ -23,6 +23,7 @@ int io_service_iface::process_send(session_iface* session, size_t size){ return 
 // server_iface
 void io_service_iface::process_accept(server_iface* server, per_io_data* data, 
 	sockaddr_storage* addr, session_iface** session){ server->process_accept(data, addr, session); }
+accept_data* io_service_iface::get_accept_data(server_iface* server){ return server->get_accept_data(); }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net
 ////////////////////////////////////////////////////////////////////////////////////////////////////

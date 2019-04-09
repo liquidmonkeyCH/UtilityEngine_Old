@@ -35,20 +35,7 @@ void server_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 
 	m_running = true;
 	
-	if (m_io_service->track_server(this)){
-		for (size_t i = 0; i < m_accept_data.size(); ++i)
-		{
-			accept_data* _data = m_accept_data.malloc();
-			if (!_data) break;	// accept_data empty!
-
-			_data->m_op = io_op::accept;
-			_data->m_owner = this;
-			_data->m_buffer.buf = _data->m_buff;
-			_data->m_buffer.len = sizeof(_data->m_buff);
-
-			m_io_service->post_accept_event(this, _data);
-		}
-	}
+	m_io_service->track_server(this);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class control_t>
@@ -74,6 +61,12 @@ void server_wrap<session_t, control_t>::stop(void)
 
 	on_stop();
 	framework::net_free();
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class session_t, class control_t>
+accept_data* server_wrap<session_t, control_t>::get_accept_data(void)
+{
+	return m_accept_data.malloc();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class control_t>
