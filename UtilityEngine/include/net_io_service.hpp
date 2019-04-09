@@ -36,6 +36,7 @@ public:
 	template<class session_t,class control_t> friend class server_wrap;
 	template<class session_t, class control_t> friend class client_wrap;
 	template<socket_type st,class buffer_t> friend class session_wrap;
+	friend class session_iface;
 public:
 	virtual void start(std::uint32_t nthread) = 0;
 	virtual void stop(void) = 0;
@@ -43,11 +44,12 @@ protected:
 	//! after start!
 	//! after server socket create!
 	virtual void track_server(server_iface*) = 0;
+	virtual void untrack_server(server_iface*){};
 	//! after start!
 	//! after session connected!
 	virtual void track_session(session_iface*) = 0;
+	virtual void untrack_session(session_iface*){}
 protected:
-	virtual void post_read_event(per_io_data* data) = 0;
 	virtual void post_send_event(per_io_data* data) = 0;
 
 	// session_iface

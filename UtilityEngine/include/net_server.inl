@@ -42,6 +42,7 @@ template<class session_t, class control_t>
 void server_wrap<session_t, control_t>::stop(void)
 {
 	m_running = false;
+	m_io_service->untrack_server(this);
 	m_socket->close();
 
 	for (typename mem::container<accept_data>::iterator it = m_accept_data.used_begin(); it != m_accept_data.used_end(); ++it)

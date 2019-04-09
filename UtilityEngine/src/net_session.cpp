@@ -43,6 +43,7 @@ session_iface::close(reason st)
 	if (!m_state.compare_exchange_strong(exp, static_cast<int>(state::closing)))
 		return;
 
+	m_io_service->untrack_session(this);
 	m_socket->close();
 	m_state = static_cast<int>(state::none);
 
