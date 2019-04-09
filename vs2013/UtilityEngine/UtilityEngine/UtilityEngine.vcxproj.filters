@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Core\mem">
+      <UniqueIdentifier>{56893947-fec2-4f17-aa52-b9c2717206fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\msg">
+      <UniqueIdentifier>{2ca01a9e-106a-4b1e-9d31-c719bbcd9e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\net">
+      <UniqueIdentifier>{c51e76ea-df3a-4b6b-80dc-d6419ffd9d18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\task">
+      <UniqueIdentifier>{daa3c4f2-ab9f-49e4-be4f-7e0482d85d4b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_container.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_rotative_buffer.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_plan0.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_planA.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_defines.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_deque.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_map.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_pares.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\base_defines.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\logger.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_client.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_defines.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_framework.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_iocp.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_server.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_session.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_socket.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher.hpp">
+      <Filter>Core\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher_balance.hpp">
+      <Filter>Core\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher_pool.hpp">
+      <Filter>Core\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_object.hpp">
+      <Filter>Core\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\thread_pool.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
+      <Filter>Core\mem</Filter>
+    </None>
+    <None Include="..\..\..\UtilityEngine\include\net_client.inl">
+      <Filter>Core\net</Filter>
+    </None>
+    <None Include="..\..\..\UtilityEngine\include\net_server.inl">
+      <Filter>Core\net</Filter>
+    </None>
+    <None Include="..\..\..\UtilityEngine\include\net_session.inl">
+      <Filter>Core\net</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\UtilityEngine\src\logger.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\mem_rotative_buffer.cpp">
+      <Filter>Core\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_plan0.cpp">
+      <Filter>Core\msg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp">
+      <Filter>Core\msg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_framework.cpp">
+      <Filter>Core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service.cpp">
+      <Filter>Core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_iocp.cpp">
+      <Filter>Core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_session.cpp">
+      <Filter>Core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_socket.cpp">
+      <Filter>Core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_balance.cpp">
+      <Filter>Core\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_pool.cpp">
+      <Filter>Core\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\task_object.cpp">
+      <Filter>Core\task</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

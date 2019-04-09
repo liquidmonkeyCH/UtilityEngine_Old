@@ -1,0 +1,53 @@
+/**
+* @file msg_controler_planA.hpp
+*
+* @author Hourui (liquidmonkey)
+*/
+#ifndef __MSG_CONTROLER_PLANA_HPP__
+#define __MSG_CONTROLER_PLANA_HPP__
+
+#include "msg_controler.hpp"
+#include "msg_handler_manager_map.hpp"
+#include "task_dispatcher_balance.hpp"
+#include "msg_pares.hpp"
+
+namespace Utility
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace msg
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace planA
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class controler : public controler_iface, public msg_handler_manager_map<std::uint32_t>
+{
+public:
+	controler(void);
+	~controler(void) = default;
+
+	controler(const controler&) = delete;
+	controler& operator=(const controler&) = delete;
+
+	using dispatch_t = task::dispatcher_balance;
+public:
+	void init(dispatch_t* dispatcher);
+
+	void post_request(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr);
+	void post_close(task::object_iface* obj);
+private:
+	void handle_wrap(std::uint32_t compkey, mem::buffer_iface* buffer, unsigned long m_len,
+					 task::object_iface* obj, const char* msg, void* ptr);
+
+	std::uint32_t& key_pares_t(const char* msg);
+	pares_t m_pares = msg::pares_len;
+private:
+	dispatch_t* m_dispatcher;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}//namespace planA
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}//namespace task
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}//namespace Utility 
+#endif //__MSG_CONTROLER_PLANA_HPP__

@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilityEngine", "UtilityEngine\UtilityEngine.vcxproj", "{BEAECF8A-747B-41E4-A214-2D462F1DB283}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerTest", "ServerTest\ServerTest.vcxproj", "{C50872DF-553A-4766-AD0A-466F771D88C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BEAECF8A-747B-41E4-A214-2D462F1DB283} = {BEAECF8A-747B-41E4-A214-2D462F1DB283}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientTest", "ClientTest\ClientTest.vcxproj", "{22A60828-A2BE-460A-80DC-406FD4A416A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BEAECF8A-747B-41E4-A214-2D462F1DB283} = {BEAECF8A-747B-41E4-A214-2D462F1DB283}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEAECF8A-747B-41E4-A214-2D462F1DB283}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BEAECF8A-747B-41E4-A214-2D462F1DB283}.Debug|Win32.Build.0 = Debug|Win32
+		{BEAECF8A-747B-41E4-A214-2D462F1DB283}.Release|Win32.ActiveCfg = Release|Win32
+		{BEAECF8A-747B-41E4-A214-2D462F1DB283}.Release|Win32.Build.0 = Release|Win32
+		{C50872DF-553A-4766-AD0A-466F771D88C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C50872DF-553A-4766-AD0A-466F771D88C1}.Debug|Win32.Build.0 = Debug|Win32
+		{C50872DF-553A-4766-AD0A-466F771D88C1}.Release|Win32.ActiveCfg = Release|Win32
+		{C50872DF-553A-4766-AD0A-466F771D88C1}.Release|Win32.Build.0 = Release|Win32
+		{22A60828-A2BE-460A-80DC-406FD4A416A6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{22A60828-A2BE-460A-80DC-406FD4A416A6}.Debug|Win32.Build.0 = Debug|Win32
+		{22A60828-A2BE-460A-80DC-406FD4A416A6}.Release|Win32.ActiveCfg = Release|Win32
+		{22A60828-A2BE-460A-80DC-406FD4A416A6}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

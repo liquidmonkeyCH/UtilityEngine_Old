@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BEAECF8A-747B-41E4-A214-2D462F1DB283}</ProjectGuid>
+    <RootNamespace>UtilityEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\UtilityEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\UtilityEngine\include\base_defines.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\logger.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_container.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_rotative_buffer.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_plan0.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_planA.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_defines.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_deque.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_map.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_pares.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_client.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_defines.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_framework.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_iocp.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_server.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_session.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_socket.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher_balance.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher_pool.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\task_object.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\thread_pool.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\UtilityEngine\include\mem_container.inl" />
+    <None Include="..\..\..\UtilityEngine\include\net_client.inl" />
+    <None Include="..\..\..\UtilityEngine\include\net_server.inl" />
+    <None Include="..\..\..\UtilityEngine\include\net_session.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\UtilityEngine\src\logger.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\mem_rotative_buffer.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_plan0.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_framework.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_iocp.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_session.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_socket.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_balance.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_pool.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\task_object.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

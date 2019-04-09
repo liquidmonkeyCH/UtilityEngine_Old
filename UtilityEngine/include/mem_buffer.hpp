@@ -1,0 +1,53 @@
+﻿/**
+* @file mem_buffer.hpp
+*
+* @author Hourui (liquidmonkey)
+*/
+#ifndef __MEM_BUFFER_HPP__
+#define __MEM_BUFFER_HPP__
+
+namespace Utility
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace mem
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class buffer_iface
+{
+public:
+	buffer_iface(void) = default;
+	~buffer_iface(void) = default;
+
+	//! Set size and initialize  
+	virtual void init(unsigned long size) = 0;
+
+	//! Reset initialize 
+	virtual void clear(void) = 0;
+
+	//! Returns: total writable size
+	virtual unsigned long writable_size(void) = 0;
+	//! Reg write operator
+	//! Param:(in-out)size [0~MAX_PACKET_LEN]
+	virtual char* write(unsigned long& size) = 0;
+	//! Commit write operator
+	//! Returns: |true [m_lastread = 0]|false [m_lastread != 0]|
+	//!	Next:	 |Need notify readable |No need notify readable|
+	virtual bool commit_write(unsigned long size) = 0;
+
+	//! Returns: total readable size or 0 when readable size less-than exp.
+	//! Change member [m_lastread] to 0 when readable size less-than exp.
+	//! Next: readable size less-than exp [m_lastread = 0]. Need wait for readable notify.
+	virtual unsigned long readable_size(unsigned long exp = 0) = 0;
+	//! Reg read operator
+	//! Param:(in-out)size [0~MAX_PACKET_LEN]
+	//! Always change member [m_lastread]
+	virtual const char* read(unsigned long& size) = 0;
+	//! Commit read operator
+	//! Release space for write operator
+	virtual void commit_read(unsigned long size) = 0;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}//namespace mem
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}//namespace Utility 
+#endif //__MEM_BUFFER_HPP__
