@@ -164,7 +164,7 @@ io_service_iocp::track_server(server_iface* server)
 	while (accept_data* data = get_accept_data(server))
 	{
 		data->m_op = io_op::accept;
-		data->m_owner = this;
+		data->m_owner = server;
 		data->m_buffer.buf = data->m_buff;
 		data->m_buffer.len = sizeof(data->m_buff);
 
