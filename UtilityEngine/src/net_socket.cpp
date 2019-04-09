@@ -264,7 +264,7 @@ socket_iface::connect(const char* host, std::uint32_t port, std::uint32_t timeou
 
 			//! Make sure there are no async connection errors
 			int err = 0;
-			unsigned int len = sizeof(err);
+			socklen_t len = sizeof(err);
 			if (getsockopt(m_fd, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&err), &len) == -1 || err != 0) {
 				close();
 				Clog::error_throw(errors::system, "connect() failure");
