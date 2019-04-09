@@ -46,7 +46,7 @@ io_service_iocp::close(void)
 
 	if (CloseHandle(m_hiocp) == FALSE)
 	{
-		Clog::error_throw(errors::logic, "iocp close error!");
+		Clog::error_throw(errors::system, "iocp close error!");
 	}
 
 	m_hiocp = NULL;
@@ -65,7 +65,7 @@ io_service_iocp::create_iocp(void)
 
 	if (m_hiocp == NULL)
 	{
-		Clog::error_throw(errors::logic, "create iocp handle failure!");
+		Clog::error_throw(errors::system, "create iocp handle failure!");
 	}
 
 	IOCP_DEBUG("create iocp handle!");
@@ -74,10 +74,10 @@ io_service_iocp::create_iocp(void)
 void
 io_service_iocp::stop(void)
 {
-	int state = static_cast<int>(state::running);
-	if (!m_state.compare_exchange_strong(state, static_cast<int>(state::stopping)))
+	int st = static_cast<int>(state::running);
+	if (!m_state.compare_exchange_strong(st, static_cast<int>(state::stopping)))
 	{
-		if (state == static_cast<int>(state::starting))
+		if (st == static_cast<int>(state::starting))
 		{
 			Clog::error_throw(errors::logic, "stop io_service_iocp on starting!");
 		}
@@ -103,8 +103,8 @@ io_service_iocp::stop(void)
 void
 io_service_iocp::start(std::uint32_t nthread)
 {
-	int state = static_cast<int>(state::none);
-	if (!m_state.compare_exchange_strong(state, static_cast<int>(state::starting)))
+	int st = static_cast<int>(state::none);
+	if (!m_state.compare_exchange_strong(st, static_cast<int>(state::starting)))
 		return;
 
 	IOCP_DEBUG("iocp starting!");
@@ -384,4 +384,4 @@ io_service_iocp::post_send_event(per_io_data* data)
 }//namespace net
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace Utility 
-#endif //__IO_SERVICE_IOCP_HPP__
+#endif //_WIN32

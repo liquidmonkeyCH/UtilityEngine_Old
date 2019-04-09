@@ -44,7 +44,7 @@ enum class socket_type { tcp, };
 	using fd_t = SOCKET;
 #else
 	using fd_t = int;
-	using OVERLAPPED = void*;
+	using OVERLAPPED = fd_t;
 	using ADDRESS_FAMILY = unsigned short;
 
 	struct WSABUF
@@ -66,7 +66,7 @@ enum class socket_type { tcp, };
 	#define WSAEINTR EINTR
 	#define SD_BOTH SHUT_RDWR
 	
-	inline void closesocket(fd_t& fd)	{ close(fd); }
+	inline int closesocket(fd_t& fd)	{ return close(fd); }
 #endif
 
 enum class io_op{ read, send, accept };
