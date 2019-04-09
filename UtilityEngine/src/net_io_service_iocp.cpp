@@ -25,7 +25,7 @@ namespace net
 using close_state = session_iface::reason;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 io_service_iocp::io_service_iocp(void)
-: m_state({ static_cast<int>(iocp_state::none) })
+: m_state({ static_cast<int>(state::none) })
 , m_hiocp(NULL)
 , m_accept(NULL)
 , m_accept_addrs(NULL)
@@ -74,10 +74,10 @@ io_service_iocp::create_iocp(void)
 void
 io_service_iocp::stop(void)
 {
-	int state = static_cast<int>(iocp_state::running);
-	if (!m_state.compare_exchange_strong(state, static_cast<int>(iocp_state::stopping)))
+	int state = static_cast<int>(state::running);
+	if (!m_state.compare_exchange_strong(state, static_cast<int>(state::stopping)))
 	{
-		if (state == static_cast<int>(iocp_state::starting))
+		if (state == static_cast<int>(state::starting))
 		{
 			Clog::error_throw(errors::logic, "stop io_service_iocp on starting!");
 		}
@@ -95,7 +95,7 @@ io_service_iocp::stop(void)
 
 	close();
 
-	m_state = static_cast<int>(iocp_state::none);
+	m_state = static_cast<int>(state::none);
 
 	IOCP_DEBUG("iocp stopped!");
 }
@@ -103,8 +103,8 @@ io_service_iocp::stop(void)
 void
 io_service_iocp::start(std::uint32_t nthread)
 {
-	int state = static_cast<int>(iocp_state::none);
-	if (!m_state.compare_exchange_strong(state, static_cast<int>(iocp_state::starting)))
+	int state = static_cast<int>(state::none);
+	if (!m_state.compare_exchange_strong(state, static_cast<int>(state::starting)))
 		return;
 
 	IOCP_DEBUG("iocp starting!");
@@ -121,14 +121,14 @@ io_service_iocp::start(std::uint32_t nthread)
 	for (std::uint32_t i = 0; i < nthread; ++i)
 		m_threads.push_back(std::thread(std::bind(&io_service_iocp::process_event, this)));
 
-	m_state = static_cast<int>(iocp_state::running);
+	m_state = static_cast<int>(state::running);
 	IOCP_DEBUG("iocp running! threads=%u", nthread);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 io_service_iocp::track_server(server_iface* server)
 {
-	if (m_state != static_cast<int>(iocp_state::running))
+	if (m_state != static_cast<int>(state::running))
 		return;
 
 	IOCP_DEBUG("iocp track_server!");
@@ -165,7 +165,7 @@ io_service_iocp::track_server(server_iface* server)
 void
 io_service_iocp::track_session(session_iface* session)
 {
-	if (m_state != static_cast<int>(iocp_state::running))
+	if (m_state != static_cast<int>(state::running))
 		return;
 
 	//IOCP_DEBUG("iocp track_session!");
@@ -197,7 +197,7 @@ io_service_iocp::process_event(void)
 	DWORD dwTrans = 0;
 	fd_t socket;
 	per_io_data* data;
-	while (m_state != static_cast<int>(iocp_state::stopping))
+	while (m_state != static_cast<int>(state::stopping))
 	{
 		BOOL bRet = GetQueuedCompletionStatus(m_hiocp, &dwTrans, (LPDWORD)&socket, (LPOVERLAPPED*)&data, WSA_INFINITE);
 		if (!bRet)
@@ -347,7 +347,7 @@ io_service_iocp::post_read_event(per_io_data* data)
 void
 io_service_iocp::post_send_event(per_io_data* data)
 {
-	if (m_state != static_cast<int>(iocp_state::running))
+	if (m_state != static_cast<int>(state::running))
 		return;
 
 	memset(&data->m_ol, 0, sizeof(data->m_ol));

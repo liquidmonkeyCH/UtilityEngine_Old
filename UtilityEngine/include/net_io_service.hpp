@@ -20,6 +20,13 @@ class server_iface;
 class io_service_iface
 {
 public:
+	enum class state{
+		none = 0,
+		starting,
+		running,
+		stopping,
+	};
+public:
 	io_service_iface(void) = default;
 	virtual ~io_service_iface(void) = default;
 

@@ -84,6 +84,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\net_defines.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_framework.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_epoll.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_iocp.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_server.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_session.hpp" />
@@ -107,6 +108,7 @@
     <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_framework.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_epoll.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_iocp.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_session.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_socket.cpp" />

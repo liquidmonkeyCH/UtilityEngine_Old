@@ -97,6 +97,9 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_planA.hpp">
       <Filter>Core\msg\plans</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_epoll.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
@@ -148,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp">
       <Filter>Core\msg\plans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_epoll.cpp">
+      <Filter>Core\net</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

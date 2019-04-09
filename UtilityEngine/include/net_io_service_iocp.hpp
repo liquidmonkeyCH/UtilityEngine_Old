@@ -22,13 +22,6 @@ namespace net
 class io_service_iocp : public io_service_iface
 {
 public:
-	enum class iocp_state{ 
-		none = 0,
-		starting,
-		running,
-		stopping,
-	};
-public:
 	io_service_iocp(void);
 	~io_service_iocp(void);
 
