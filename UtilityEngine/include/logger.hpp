@@ -33,11 +33,12 @@
 #include <stdarg.h>
 #include <cstdint>
 #include <mutex>
+#include <stdexcept>
 
 namespace Utility
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class utility_error : public std::exception
+class utility_error : public std::runtime_error
 {
 public:
 	utility_error(const std::int64_t error_no, const char* what = nullptr);

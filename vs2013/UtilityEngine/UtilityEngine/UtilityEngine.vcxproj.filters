@@ -17,6 +17,9 @@
     <Filter Include="Core\task">
       <UniqueIdentifier>{daa3c4f2-ab9f-49e4-be4f-7e0482d85d4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\msg\plans">
+      <UniqueIdentifier>{76ccba35-280d-4b87-8890-db52b5420d90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
@@ -29,12 +32,6 @@
       <Filter>Core\mem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler.hpp">
-      <Filter>Core\msg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_plan0.hpp">
-      <Filter>Core\msg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_planA.hpp">
       <Filter>Core\msg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_defines.hpp">
@@ -94,6 +91,12 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\thread_pool.hpp">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_plan0.hpp">
+      <Filter>Core\msg\plans</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_planA.hpp">
+      <Filter>Core\msg\plans</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
@@ -115,12 +118,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_rotative_buffer.cpp">
       <Filter>Core\mem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_plan0.cpp">
-      <Filter>Core\msg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp">
-      <Filter>Core\msg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\net_framework.cpp">
       <Filter>Core\net</Filter>
@@ -145,6 +142,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\task_object.cpp">
       <Filter>Core\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_plan0.cpp">
+      <Filter>Core\msg\plans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp">
+      <Filter>Core\msg\plans</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

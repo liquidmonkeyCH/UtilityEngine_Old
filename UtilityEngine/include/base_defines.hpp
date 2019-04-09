@@ -7,6 +7,7 @@
 #define __BASE_DEFINES_HPP__
 
 #include <assert.h>
+#include <string.h>
 //#define _NDEBUG
 
 #define MAX_PACKET_LEN 4096

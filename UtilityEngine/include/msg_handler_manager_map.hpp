@@ -37,7 +37,7 @@ private:
 template<class key_t>
 handler_t msg_handler_manager_map<key_t>::get_handle(key_t key)
 {
-	map_t::iterator it = m_map.find(key);
+	typename map_t::iterator it = m_map.find(key);
 	if (it != m_map.end())
 		return it->second;
 
@@ -47,7 +47,7 @@ handler_t msg_handler_manager_map<key_t>::get_handle(key_t key)
 template<class key_t>
 bool msg_handler_manager_map<key_t>::attach(key_t key, handler_t handle)
 {
-	map_t::iterator it = m_map.find(key);
+	typename map_t::iterator it = m_map.find(key);
 	if (it != m_map.end())
 		return false;
 
@@ -58,7 +58,7 @@ bool msg_handler_manager_map<key_t>::attach(key_t key, handler_t handle)
 template<class key_t>
 bool msg_handler_manager_map<key_t>::detach(key_t key)
 {
-	map_t::iterator it = m_map.find(key);
+	typename map_t::iterator it = m_map.find(key);
 	if (it == m_map.end())
 		return false;
 
