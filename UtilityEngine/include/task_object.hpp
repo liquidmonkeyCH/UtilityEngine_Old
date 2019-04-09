@@ -39,8 +39,8 @@ public:
 	void set_worker_index(std::uint32_t worker);
 	std::uint32_t get_worker_index(void);
 protected:
-	std::atomic_uint32_t m_compkey;
-	std::atomic_uint32_t m_worker_index;
+	std::atomic<std::uint32_t> m_compkey;
+	std::atomic<std::uint32_t> m_worker_index;
 	std::mutex m_ref_mutex;
 	std::atomic_int m_ref;
 };

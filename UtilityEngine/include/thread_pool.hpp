@@ -198,14 +198,15 @@ class thread_pool : public thread_pool_wrap < T >
 {
 private:
 	std::thread _pool[N];
+	using base = thread_pool_wrap < T >;
 public:
-	~thread_pool(void){ _destory(); pool = nullptr; }
+	~thread_pool(void){ this->_destory(); this->pool = nullptr; }
 	thread_pool(void)
 	{
-		pool = _pool;
-		m_size = N;
-		m_state = state::stop;
-		_init();
+		this->pool = _pool;
+		this->m_size = N;
+		this->m_state = base::state::stop;
+		this->_init();
 	}
 
 	thread_pool(const thread_pool&) = delete;
@@ -216,15 +217,16 @@ template<class T>
 class thread_pool<0, T> : public thread_pool_wrap < T >
 {
 public:
-	~thread_pool(void){ _destory(); delete[] pool; pool = nullptr; }
+	using base = thread_pool_wrap < T >;
+	~thread_pool(void){ this->_destory(); delete[] this->pool; this->pool = nullptr; }
 	thread_pool(void){}
 	thread_pool(size_t size)
 	{
 		assert(size != 0);
-		m_state = state::stop;
-		m_size = size;
-		pool = new std::thread[size];
-		_init();
+		this->m_state = base::state::stop;
+		this->m_size = size;
+		this->pool = new std::thread[size];
+		this->_init();
 	}
 
 	thread_pool(const thread_pool&) = delete;
@@ -233,13 +235,13 @@ public:
 	void init(size_t size)
 	{
 		assert(size != 0);
-		std::unique_lock<std::mutex> lock(mtx);
-		if (m_state != state::none) return;
-		m_state = state::stop;
+		std::unique_lock<std::mutex> lock(this->mtx);
+		if (this->m_state != base::state::none) return;
+		this->m_state = base::state::stop;
 		lock.unlock();
-		m_size = size;
-		pool = new std::thread[size];
-		_init();
+		this->m_size = size;
+		this->pool = new std::thread[size];
+		this->_init();
 	}
 };
 using threadpool = thread_pool < 0 >;
