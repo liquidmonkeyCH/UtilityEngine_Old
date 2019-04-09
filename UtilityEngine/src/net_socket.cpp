@@ -264,7 +264,7 @@ socket_iface::connect(const char* host, std::uint32_t port, std::uint32_t timeou
 
 			//! Make sure there are no async connection errors
 			int err = 0;
-			int len = sizeof(err);
+			unsigned int len = sizeof(err);
 			if (getsockopt(m_fd, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&err), &len) == -1 || err != 0) {
 				close();
 				Clog::error_throw(errors::system, "connect() failure");
@@ -296,7 +296,7 @@ socket_iface::bind(const char* host, std::uint32_t port)
 	socklen_t addr_len;
 
 	//! 0-init addr info struct
-	std::memset(&ss, 0, sizeof(ss));
+	memset(&ss, 0, sizeof(ss));
 
 	if (is_ipv6())
 	{

@@ -28,6 +28,8 @@
 	#include <sys/select.h> 
 	#include <arpa/inet.h>
 	#include <netdb.h>
+	#include <unistd.h>
+	#include <errno.h>
 #endif
 
 namespace Utility
@@ -43,6 +45,7 @@ enum class socket_type { tcp, };
 #else
 	using fd_t = int;
 	using OVERLAPPED = void*;
+	using ADDRESS_FAMILY = unsigned short;
 
 	struct WSABUF
 	{
@@ -50,7 +53,7 @@ enum class socket_type { tcp, };
 		char* buf;
 	};
 	
-	int WSAGetLastError(){ return errno; }
+	inline int WSAGetLastError(){ return errno; }
 	
 	#define ioctlsocket ioctl
 	#define INVALID_SOCKET (-1)
@@ -60,6 +63,10 @@ enum class socket_type { tcp, };
 	#define WSAEWOULDBLOCK EWOULDBLOCK 
 	#define WSAEALREADY EALREADY
 	#define WSAEINPROGRESS EINPROGRESS
+	#define WSAEINTR EINTR
+	#define SD_BOTH SHUT_RDWR
+	
+	inline void closesocket(fd_t& fd)	{ close(fd); }
 #endif
 
 enum class io_op{ read, send, accept };
