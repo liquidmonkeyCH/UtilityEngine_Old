@@ -152,7 +152,7 @@ socket_iface::connect(const char* host, std::uint32_t port, std::uint32_t timeou
 	socklen_t addr_len;
 
 	//! 0-init addr info struct
-	std::memset(&ss, 0, sizeof(ss));
+	memset(&ss, 0, sizeof(ss));
 
 	if (is_ipv6()) {
 		SOCKET_DEBUG("connect ipv6! host=%s port=%d", host, port);
@@ -239,7 +239,7 @@ socket_iface::connect(const char* host, std::uint32_t port, std::uint32_t timeou
 		tv.tv_sec = (timeout_msecs / 1000);
 		tv.tv_usec = ((timeout_msecs - (tv.tv_sec * 1000)) * 1000);
 
-		FD_SET set;
+		fd_set set;
 		FD_ZERO(&set);
 		FD_SET(m_fd, &set);
 

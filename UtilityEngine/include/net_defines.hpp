@@ -14,14 +14,20 @@
 
 #define NET_LOG
 #ifdef NET_LOG
-#include "logger.hpp"
-#define NET_DEBUG(fmt,...) Clog::debug(fmt,__VA_ARGS__);
+	#include "logger.hpp"
+	#define NET_DEBUG(fmt,...) Clog::debug(fmt,__VA_ARGS__);
 #else
-#define NET_DEBUG(fmt,...)
+	#define NET_DEBUG(fmt,...)
 #endif
 
 #ifdef _WIN32
-#include <WinSock2.h>
+	#include <WinSock2.h>
+#else
+	#include <sys/socket.h>
+	#include <sys/ioctl.h>
+	#include <sys/select.h> 
+	#include <arpa/inet.h>
+	#include <netdb.h>
 #endif
 
 namespace Utility
@@ -30,17 +36,36 @@ namespace Utility
 namespace net
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-using fd_t = SOCKET;
 enum class socket_type { tcp, };
 
-#ifndef _WIN32
-using OVERLAPPED = void*;
+#ifdef _WIN32
+	using fd_t = SOCKET;
+#else
+	using fd_t = int;
+	using OVERLAPPED = void*;
+
+	struct WSABUF
+	{
+		unsigned long len;
+		char* buf;
+	};
+	
+	int WSAGetLastError(){ return errno; }
+	
+	#define ioctlsocket ioctl
+	#define INVALID_SOCKET (-1)
+	#define SOCKET_ERROR (-1)
+	
+	#define WSAETIMEDOUT ETIMEDOUT
+	#define WSAEWOULDBLOCK EWOULDBLOCK 
+	#define WSAEALREADY EALREADY
+	#define WSAEINPROGRESS EINPROGRESS
 #endif
 
 enum class io_op{ read, send, accept };
 struct per_io_data
 {
-	OVERLAPPED m_ol;                 // �ص��ṹ
+	OVERLAPPED m_ol;                 // ÖØµþ½á¹¹
 	WSABUF m_buffer;
 	io_op m_op;
 	void* m_owner;

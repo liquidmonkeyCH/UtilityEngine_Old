@@ -6,8 +6,6 @@
 #ifndef __NET_SERVER_HPP__
 #define __NET_SERVER_HPP__
 
-#include "net_framework.hpp"
-#include "net_io_service.hpp"
 #include "mem_container.hpp"
 #include "net_session.hpp"
 

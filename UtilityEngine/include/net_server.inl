@@ -68,7 +68,7 @@ void server_wrap<session_t, control_t>::stop(void)
 
 	} while (true);
 
-	for (mem::container<session_t>::iterator it = m_pool.used_begin(); it != m_pool.used_end(); ++it)
+	for (typename mem::container<session_t>::iterator it = m_pool.used_begin(); it != m_pool.used_end(); ++it)
 	{
 		it->close(session_iface::reason::cs_service_stop);
 	}

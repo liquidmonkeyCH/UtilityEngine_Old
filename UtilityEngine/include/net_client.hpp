@@ -6,8 +6,6 @@
 #ifndef __NET_CLIENT_HPP__
 #define __NET_CLIENT_HPP__
 
-#include "net_framework.hpp"
-#include "net_io_service.hpp"
 #include "net_session.hpp"
 
 namespace Utility
