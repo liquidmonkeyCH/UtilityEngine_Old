@@ -35,19 +35,19 @@ void server_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 
 	m_running = true;
 	
-	m_io_service->track_server(this);
-	
-	for (size_t i = 0; i < m_accept_data.size(); ++i)
-	{
-		accept_data* _data = m_accept_data.malloc();
-		if (!_data) break;	// accept_data empty!
+	if (m_io_service->track_server(this)){
+		for (size_t i = 0; i < m_accept_data.size(); ++i)
+		{
+			accept_data* _data = m_accept_data.malloc();
+			if (!_data) break;	// accept_data empty!
 
-		_data->m_op = io_op::accept;
-		_data->m_owner = this;
-		_data->m_buffer.buf = _data->m_buff;
-		_data->m_buffer.len = sizeof(_data->m_buff);
+			_data->m_op = io_op::accept;
+			_data->m_owner = this;
+			_data->m_buffer.buf = _data->m_buff;
+			_data->m_buffer.len = sizeof(_data->m_buff);
 
-		m_io_service->post_accept_event(this, _data);
+			m_io_service->post_accept_event(this, _data);
+		}
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,16 +57,13 @@ void server_wrap<session_t, control_t>::stop(void)
 	m_running = false;
 	m_socket->close();
 
+	for (typename mem::container<accept_data>::iterator it = m_accept_data.used_begin(); it != m_accept_data.used_end(); ++it)
+	{
+		if (it->m_fd != INVALID_SOCKET)
+			m_socket->close_fd(it->m_fd);
+	}
+
 	m_accept_data.clear();
-
-	do{
-		accept_data* data = m_accept_data.malloc();
-		if (!data) break;
-
-		if (data->m_fd != INVALID_SOCKET)
-			m_socket->close_fd(data->m_fd);
-
-	} while (true);
 
 	for (typename mem::container<session_t>::iterator it = m_pool.used_begin(); it != m_pool.used_end(); ++it)
 	{

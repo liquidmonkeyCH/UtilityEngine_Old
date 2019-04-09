@@ -29,16 +29,15 @@ public:
 	io_service_iocp& operator=(const io_service_iocp&) = delete;
 public:
 	void start(std::uint32_t nthread = 0);
-
+	void stop(void);
+private:
 	//! after start!
 	//! after server socket create!
-	void track_server(server_iface*);
+	bool track_server(server_iface*);
 
 	//! after start!
 	//! after session connected!
 	void track_session(session_iface*);
-
-	void stop(void);
 private:
 	void post_read_event(per_io_data* data);
 	void post_send_event(per_io_data* data);

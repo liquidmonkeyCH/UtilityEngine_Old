@@ -125,11 +125,11 @@ io_service_iocp::start(std::uint32_t nthread)
 	IOCP_DEBUG("iocp running! threads=%u", nthread);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void
+bool
 io_service_iocp::track_server(server_iface* server)
 {
 	if (m_state != static_cast<int>(state::running))
-		return;
+		return false;
 
 	IOCP_DEBUG("iocp track_server!");
 	fd_t fd = server->get_fd();
@@ -160,6 +160,8 @@ io_service_iocp::track_server(server_iface* server)
 	{
 		Clog::error_throw(errors::system, "server CreateIoCompletionPort failure!");
 	}
+
+	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
