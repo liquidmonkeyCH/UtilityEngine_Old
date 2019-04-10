@@ -207,19 +207,26 @@ io_service_iocp::process_event(void)
 	DWORD dwTrans = 0;
 	fd_t socket;
 	per_io_data* data;
+	BOOL bRet;
+	DWORD err;
+	server_iface* server = nullptr;
+	session_iface* session = nullptr;
+	struct sockaddr_storage* addrClient = nullptr, *addrLocal = nullptr;
+	int client_len, local_len, addrlen;
+
 	while (m_state != static_cast<int>(state::stopping))
 	{
-		BOOL bRet = GetQueuedCompletionStatus(m_hiocp, &dwTrans, (LPDWORD)&socket, (LPOVERLAPPED*)&data, WSA_INFINITE);
+		bRet = GetQueuedCompletionStatus(m_hiocp, &dwTrans, (LPDWORD)&socket, (LPOVERLAPPED*)&data, WSA_INFINITE);
 		if (!bRet)
 		{
-			DWORD err = GetLastError();
+			err = GetLastError();
 			switch (err)
 			{
 			case WAIT_TIMEOUT:
 				if (data->m_op == io_op::accept)
 				{
 					IOCP_DEBUG("accept wait timeout!");
-					server_iface* server = static_cast<server_iface*>(data->m_owner);
+					server = static_cast<server_iface*>(data->m_owner);
 					server->get_socket()->close_fd(data->m_fd);
 					post_accept_event(server, data);
 					break;
@@ -231,7 +238,7 @@ io_service_iocp::process_event(void)
 				if (data->m_op == io_op::accept)
 				{
 					IOCP_DEBUG("client close socket befor accept completing!");
-					server_iface* server = static_cast<server_iface*>(data->m_owner);
+					server = static_cast<server_iface*>(data->m_owner);
 					server->get_socket()->close_fd(data->m_fd);
 					post_accept_event(server, data);
 					break;
@@ -262,7 +269,6 @@ io_service_iocp::process_event(void)
 			continue;
 		}
 
-		session_iface* session = nullptr;
 		switch (data->m_op)
 		{
 		case io_op::read:
@@ -281,11 +287,10 @@ io_service_iocp::process_event(void)
 			break;
 		case io_op::accept:
 			{
-				server_iface* server = static_cast<server_iface*>(data->m_owner);
+				server = static_cast<server_iface*>(data->m_owner);
 				setsockopt(data->m_fd, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&(socket), sizeof(socket));
 
-				struct sockaddr_storage* addrClient = NULL, *addrLocal = NULL;
-				int client_len = sizeof(sockaddr_storage), local_len = sizeof(sockaddr_storage), addrlen = sizeof(sockaddr_storage) + 16;
+				client_len = sizeof(sockaddr_storage), local_len = sizeof(sockaddr_storage), addrlen = sizeof(sockaddr_storage) + 16;
 #if (1)
 				m_accept_addrs(data->m_buffer.buf, 0, addrlen, addrlen,
 					(LPSOCKADDR*)&addrLocal, &local_len, (LPSOCKADDR*)&addrClient, &client_len);			

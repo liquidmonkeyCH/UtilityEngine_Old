@@ -45,12 +45,15 @@ private:
 	void post_send_event(per_io_data* data);
 	void post_accept_event(server_iface* server, per_io_data* data);
 private:
+	void process_send(per_io_data* data,bool io);
+private:
 	void create_epoll(void);
 	void process_event(void);
 	void close(void);
 private:
 	std::atomic_int m_state;
 	std::list<std::thread>		m_threads;
+	bool m_mulit_threads;
 	
 	fd_t m_epoll;
 	static const int MAXEVENTS = 255; 
