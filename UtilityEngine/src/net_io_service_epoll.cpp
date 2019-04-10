@@ -109,6 +109,8 @@ io_service_epoll::start(std::uint32_t nthread)
 
 	if (nthread == 0)
 		nthread = get_nprocs();
+		
+	m_events_pool.init(nthread);
 
 	for (std::uint32_t i = 0; i < nthread; ++i)
 		m_threads.push_back(std::thread(std::bind(&io_service_epoll::process_event, this)));
@@ -152,7 +154,7 @@ void
 io_service_epoll::untrack_server(server_iface* server)
 {
 	struct epoll_event _ev{0,{0}};
-	epoll_ctl(m_epoll,EPOLL_CTL_DEL,server->get_fd(),&_ev)
+	epoll_ctl(m_epoll,EPOLL_CTL_DEL,server->get_fd(),&_ev);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -187,22 +189,44 @@ void
 io_service_epoll::untrack_session(session_iface* session)
 {
 	struct epoll_event _ev{0,{0}};
-	epoll_ctl(m_epoll,EPOLL_CTL_DEL,session->get_fd(),&_ev)
+	epoll_ctl(m_epoll,EPOLL_CTL_DEL,session->get_fd(),&_ev);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 io_service_epoll::process_event(void)
 {
-	DWORD dwTrans = 0;
 	fd_t socket;
 	per_io_data* data;
+	struct epoll_event* m_events  = m_events_pool.malloc()->m_data;
+	epoll_event* end = m_events;
+	epoll_event* it = m_events;
+	int size = 0;
 	while (m_state != static_cast<int>(state::stopping))
 	{
-		BOOL bRet = epoll_wait(m_epoll, &dwTrans, (LPDWORD)&socket, (LPOVERLAPPED*)&data, WSA_INFINITE);
-		if (!bRet)
+		size = epoll_wait(m_epoll, m_events, MAXEVENTS, 500);
+		if(size == 0)
+			continue;
+		
+		if (size < 0)
 		{
-			DWORD err = GetLastError();
-			switch (err)
+			if(errno == EINTR)
+				continue;
+				
+			Clog::error_throw(errors::system, "epoll_wait wait error!(%d)",errno);
+		}
+		
+		end = m_events + size;
+		for(it = m_events;it != end; ++it)
+		{
+			data = static_cast<per_io_data*>(it->data.ptr);
+			
+			
+			
+			
+		}
+	}
+		/*{
+			switch (errno)
 			{
 			case WAIT_TIMEOUT:
 				if (data->m_op == io_op::accept)
@@ -296,7 +320,7 @@ io_service_epoll::process_event(void)
 		
 	}
 
-	EPOLL_DEBUG("exit request!");
+	EPOLL_DEBUG("exit request!");*/
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -316,6 +340,7 @@ io_service_epoll::post_send_event(per_io_data* data)
 		{
 			if (errno == EINTR)
 				continue;
+				
 			if (errno == EAGAIN)
 			{
 				struct epoll_event _ev;
@@ -333,7 +358,7 @@ io_service_epoll::post_send_event(per_io_data* data)
 
 			if (errno == ECONNABORTED || errno == ECONNRESET)
 			{
-				IOCP_DEBUG("send error: connection peer closed!");
+				EPOLL_DEBUG("send error: connection peer closed!");
 				session->close(close_state::cs_connect_peer_close);
 				return;
 			}

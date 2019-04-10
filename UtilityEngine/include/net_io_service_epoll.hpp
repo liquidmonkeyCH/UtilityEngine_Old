@@ -9,8 +9,10 @@
 
 #include <thread>
 #include <list>
-#include "net_io_service.hpp"
 #include <sys/epoll.h> 
+
+#include "net_io_service.hpp"
+#include "mem_container.hpp"
 
 namespace Utility
 {
@@ -37,6 +39,7 @@ private:
 	//! after start!
 	//! after session connected!
 	void track_session(session_iface*);
+	void untrack_session(session_iface*);
 private:
 	void post_read_event(per_io_data* data);
 	void post_send_event(per_io_data* data);
@@ -50,8 +53,9 @@ private:
 	std::list<std::thread>		m_threads;
 	
 	fd_t m_epoll;
-	static const int MAXEVENTS = 1024; 
-    struct epoll_event events[MAXEVENTS];
+	static const int MAXEVENTS = 255; 
+	struct event_array{ struct epoll_event m_data[MAXEVENTS]; };
+	mem::container<event_array> m_events_pool;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 using io_service_iocp = io_service_epoll;

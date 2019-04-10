@@ -29,6 +29,7 @@ public:
 	fd_t get_fd(void){ return m_socket->get_fd(); }
 	socket_iface* get_socket(void){ return m_socket; }
 	bool is_running(void){ return m_running; }
+	virtual void stop(void) = 0;
 protected:
 	virtual void process_accept(per_io_data*, sockaddr_storage*, session_iface**) = 0;
 	virtual accept_data* get_accept_data(void) = 0;
