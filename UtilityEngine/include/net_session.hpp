@@ -38,6 +38,7 @@ public:
 	virtual ~session_iface(void) = default;
 public:
 	fd_t get_fd(void);
+	socket_iface* get_socket(void);
 	void close(reason);
 	bool is_connected(void);
 protected:

@@ -30,6 +30,7 @@
 	#include <netdb.h>
 	#include <unistd.h>
 	#include <errno.h>
+	#include <atomic>
 #endif
 
 namespace Utility
@@ -41,10 +42,12 @@ namespace net
 enum class socket_type { tcp, };
 
 #ifdef _WIN32
+	enum class io_op{ accept,read, send, };
 	using fd_t = SOCKET;
 #else
+	enum class io_op{ accept, other };
 	using fd_t = int;
-	using OVERLAPPED = fd_t;
+	using OVERLAPPED = std::atomic_bool;
 	using ADDRESS_FAMILY = unsigned short;
 
 	struct WSABUF
@@ -69,7 +72,6 @@ enum class socket_type { tcp, };
 	inline int closesocket(fd_t& fd)	{ return close(fd); }
 #endif
 
-enum class io_op{ read, send, accept };
 struct per_io_data
 {
 	OVERLAPPED m_ol;                 // ÖØµþ½á¹¹

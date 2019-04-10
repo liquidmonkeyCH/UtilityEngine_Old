@@ -56,8 +56,8 @@ protected:
 	void bind(session_iface* session);
 	per_io_data* get_read_data(session_iface* session);
 	per_io_data* get_send_data(session_iface* session);
-	int process_read(session_iface* session, size_t size);
-	int process_send(session_iface* session, size_t size);
+	bool process_read(session_iface* session, unsigned long size);
+	bool process_send(session_iface* session, unsigned long size);
 	
 	// server_iface
 	void process_accept(server_iface* server, per_io_data* data, sockaddr_storage* addr, session_iface** session);
