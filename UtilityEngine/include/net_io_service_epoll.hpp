@@ -68,4 +68,6 @@ using io_service_iocp = io_service_epoll;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace Utility 
 #endif //__NET_IO_SERVICE_EPOLL_HPP__
+#else
+#include "net_io_service_iocp.hpp"
 #endif // _WIN32

@@ -7,7 +7,6 @@
 #include <memory>
 
 #include "net_io_service_iocp.hpp"
-#include "net_io_service_epoll.hpp"
 #include "msg_controler_plan0.hpp"
 #include "mem_rotative_buffer.hpp"
 #include "net_client.hpp"
@@ -27,6 +26,12 @@ public:
 int handler(task::object_iface* obj, const char* msg, void* ptr)
 {
 	Clog::info("recv msg: %s", msg);
+	std::string str(msg);
+	if (str.size() < MAX_PACKET_LEN/2 -10)
+		str += msg;
+
+	GameSession* session = dynamic_cast<GameSession*>(obj);
+	session->send(str.c_str(), str.size() + 1);
 	return 0;
 }
 
