@@ -83,9 +83,6 @@ io_service_epoll::stop(void)
 
 	EPOLL_DEBUG("epoll stopping!");
 
-	/*for (size_t i = 0; i < m_threads.size(); ++i)
-		PostQueuedCompletionStatus(m_hepoll, -1, NULL, NULL);*/
-
 	for (std::thread& th : m_threads)
 		th.join();
 

@@ -17,7 +17,7 @@ class GameSession : public net::session_wrap < net::socket_type::tcp, mem::rotat
 public:
 	void on_connect(void)
 	{
-		m_socket->set_send_buffer(16);
+		m_socket->set_send_buffer(8);
 	}
 };
 
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 
 		
 			Server.init(nCount, &io_service, &dispatcher);
-			Server.start( "127.0.0.1", 55552);
+			Server.start( "10.0.0.35", 55552);
 		
 	
 		std::string str;
