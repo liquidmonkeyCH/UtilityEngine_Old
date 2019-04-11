@@ -25,6 +25,7 @@ bool client_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 	try{
 		if (m_session.m_socket->connect(host, port, timeout_msecs)){
 			m_session.set_connected(this,INVALID_SOCKET, nullptr);
+			m_session.on_connect();
 			m_session.init_buffer(m_read_buffer_size, m_send_buffer_size);
 			m_session.m_socket->set_blocking(false);
 			m_io_service->track_session(&m_session);

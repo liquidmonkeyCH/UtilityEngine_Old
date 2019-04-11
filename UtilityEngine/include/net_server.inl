@@ -82,6 +82,7 @@ void server_wrap<session_t, control_t>::process_accept(per_io_data* data, sockad
 	else
 	{
 		session->set_connected(this,data->m_fd, addr);
+		session->on_connect();
 		session->init_buffer(m_read_buffer_size, m_send_buffer_size);
 		session->m_socket->set_blocking(false);
 	}

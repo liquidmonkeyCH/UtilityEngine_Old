@@ -12,18 +12,26 @@
 #include "net_server.hpp"
 
 using namespace Utility;
-using session_t = net::session_wrap < net::socket_type::tcp, mem::rotative_buffer > ;
+class GameSession : public net::session_wrap < net::socket_type::tcp, mem::rotative_buffer >
+{
+public:
+	void on_connect(void)
+	{
+		m_socket->set_send_buffer(16);
+	}
+};
+
 
 int handler(task::object_iface* obj, const char* msg, void* ptr)
 {
 	Clog::info("recv msg: %s", msg);
-	session_t* session = dynamic_cast<session_t*>(obj);
+	GameSession* session = dynamic_cast<GameSession*>(obj);
 	session->send(msg, strlen(msg) + 1);
 	
 	return 0;
 }
 
-class GameServer : public net::server_wrap <session_t, msg::plan0::controler>
+class GameServer : public net::server_wrap <GameSession, msg::plan0::controler>
 {
 public:
 	virtual void on_start(void)

@@ -76,6 +76,7 @@ protected:
 	void clear(void);
 	void do_close(void*);
 	virtual void on_close(reason){}
+	virtual void on_connect(void){}
 
 	bool process_read(unsigned long size);
 	bool process_send(unsigned long size);
