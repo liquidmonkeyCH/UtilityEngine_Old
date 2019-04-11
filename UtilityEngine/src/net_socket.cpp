@@ -8,7 +8,10 @@
 
 #ifdef _WIN32
 #include <Ws2tcpip.h>
-#pragma comment(lib,"ws2_32.lib")  
+#include <Mstcpip.h>
+#pragma comment(lib,"ws2_32.lib") 
+#else
+#include <netinet/tcp.h> 
 #endif
 
 #define SOCKET_LOG
@@ -411,7 +414,6 @@ bool socket_wrap<socket_type::tcp>::set_no_delay(bool val)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <Mstcpip.h>
 template<>
 bool socket_wrap<socket_type::tcp>::set_keep_alive(bool on, std::uint32_t idle, std::uint32_t interval, std::uint32_t cnt)
 {
