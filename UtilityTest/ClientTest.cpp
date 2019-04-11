@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	{
 		std::shared_ptr<NetClient> client(new NetClient);
 		client->init(&io_service, &dispatcher);
-		if (!client->start("127.0.0.1", 55552,1000))
+		if (!client->start("10.0.0.35", 55552,1000))
 		{
 			Clog::debug("connect timeout!");
 			continue;
