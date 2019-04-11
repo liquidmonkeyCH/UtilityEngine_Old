@@ -10,7 +10,7 @@
 
 //#define SESSION_LOG
 #ifdef SESSION_LOG
-#define SESSION_DEBUG(fmt,...) NET_DEBUG(fmt,__VA_ARGS__)
+#define SESSION_DEBUG(fmt,...) NET_DEBUG(fmt,##__VA_ARGS__)
 #else
 #define SESSION_DEBUG(fmt,...)
 #endif

@@ -14,7 +14,7 @@
 //#define SOCKET_LOG
 
 #ifdef SOCKET_LOG
-#define SOCKET_DEBUG(fmt,...) NET_DEBUG(fmt,__VA_ARGS__)
+#define SOCKET_DEBUG(fmt,...) NET_DEBUG(fmt,##__VA_ARGS__)
 #else
 #define SOCKET_DEBUG(fmt,...)
 #endif

@@ -9,13 +9,14 @@
 
 #include <string>
 #include <cstdint>
+#include <stdio.h>
 
 #include "base_defines.hpp"
 
 #define NET_LOG
 #ifdef NET_LOG
 	#include "logger.hpp"
-	#define NET_DEBUG(fmt,...) Clog::debug(fmt,__VA_ARGS__);
+	#define NET_DEBUG(fmt,...) Clog::debug(fmt,##__VA_ARGS__);
 #else
 	#define NET_DEBUG(fmt,...)
 #endif
@@ -47,8 +48,13 @@ enum class socket_type { tcp, };
 #else
 	enum class io_op{ accept, other };
 	using fd_t = int;
-	using OVERLAPPED = std::atomic_bool;
 	using ADDRESS_FAMILY = unsigned short;
+	
+	struct OVERLAPPED
+	{
+		std::atomic_bool m_inuse;
+		std::atomic_bool m_need_send;
+	};
 
 	struct WSABUF
 	{

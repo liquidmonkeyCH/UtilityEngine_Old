@@ -6,6 +6,7 @@
 
 #include "logger.hpp"
 #include "net_io_service_iocp.hpp"
+#include "net_io_service_epoll.hpp"
 #include "msg_controler_plan0.hpp"
 #include "mem_rotative_buffer.hpp"
 #include "net_server.hpp"

@@ -11,7 +11,7 @@
 
 //#define IOCP_LOG
 #ifdef IOCP_LOG
-#define IOCP_DEBUG(fmt,...) NET_DEBUG(fmt,__VA_ARGS__)
+#define IOCP_DEBUG(fmt,...) NET_DEBUG(fmt,##__VA_ARGS__)
 #else
 #define IOCP_DEBUG(fmt,...)
 #endif

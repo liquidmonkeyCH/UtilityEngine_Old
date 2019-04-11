@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="UtilityEngine" InternalType="Library">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
+  </Plugins>
+  <Description/>
+  <Dependencies/>
+  <VirtualDirectory Name="Core">
+    <File Name="../../UtilityEngine/include/base_defines.hpp"/>
+    <File Name="../../UtilityEngine/include/logger.hpp"/>
+    <File Name="../../UtilityEngine/include/thread_pool.hpp"/>
+    <File Name="../../UtilityEngine/src/logger.cpp"/>
+    <VirtualDirectory Name="mem">
+      <File Name="../../UtilityEngine/include/mem_buffer.hpp"/>
+      <File Name="../../UtilityEngine/include/mem_container.hpp"/>
+      <File Name="../../UtilityEngine/include/mem_container.inl"/>
+      <File Name="../../UtilityEngine/src/mem_rotative_buffer.cpp"/>
+      <File Name="../../UtilityEngine/include/mem_rotative_buffer.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="msg">
+      <File Name="../../UtilityEngine/include/msg_controler.hpp"/>
+      <File Name="../../UtilityEngine/include/msg_defines.hpp"/>
+      <File Name="../../UtilityEngine/include/msg_handler_manager_deque.hpp"/>
+      <File Name="../../UtilityEngine/include/msg_handler_manager_map.hpp"/>
+      <File Name="../../UtilityEngine/include/msg_pares.hpp"/>
+      <VirtualDirectory Name="plans">
+        <File Name="../../UtilityEngine/src/msg_controler_plan0.cpp"/>
+        <File Name="../../UtilityEngine/include/msg_controler_plan0.hpp"/>
+        <File Name="../../UtilityEngine/src/msg_controler_planA.cpp"/>
+        <File Name="../../UtilityEngine/include/msg_controler_planA.hpp"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+    <VirtualDirectory Name="net">
+      <File Name="../../UtilityEngine/include/net_client.hpp"/>
+      <File Name="../../UtilityEngine/include/net_client.inl"/>
+      <File Name="../../UtilityEngine/include/net_defines.hpp"/>
+      <File Name="../../UtilityEngine/src/net_framework.cpp"/>
+      <File Name="../../UtilityEngine/include/net_framework.hpp"/>
+      <File Name="../../UtilityEngine/src/net_io_service.cpp"/>
+      <File Name="../../UtilityEngine/include/net_io_service.hpp"/>
+      <File Name="../../UtilityEngine/src/net_io_service_iocp.cpp"/>
+      <File Name="../../UtilityEngine/include/net_io_service_iocp.hpp"/>
+      <File Name="../../UtilityEngine/include/net_server.hpp"/>
+      <File Name="../../UtilityEngine/include/net_server.inl"/>
+      <File Name="../../UtilityEngine/src/net_session.cpp"/>
+      <File Name="../../UtilityEngine/include/net_session.hpp"/>
+      <File Name="../../UtilityEngine/include/net_session.inl"/>
+      <File Name="../../UtilityEngine/src/net_socket.cpp"/>
+      <File Name="../../UtilityEngine/include/net_socket.hpp"/>
+      <File Name="../../UtilityEngine/include/net_io_service_epoll.hpp"/>
+      <File Name="../../UtilityEngine/src/net_io_service_epoll.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="task">
+      <File Name="../../UtilityEngine/include/task_dispatcher.hpp"/>
+      <File Name="../../UtilityEngine/src/task_dispatcher_balance.cpp"/>
+      <File Name="../../UtilityEngine/include/task_dispatcher_balance.hpp"/>
+      <File Name="../../UtilityEngine/src/task_dispatcher_pool.cpp"/>
+      <File Name="../../UtilityEngine/include/task_dispatcher_pool.hpp"/>
+      <File Name="../../UtilityEngine/src/task_object.cpp"/>
+      <File Name="../../UtilityEngine/include/task_object.hpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <Settings Type="Static Library">
+    <GlobalSettings>
+      <Compiler Options="" C_Options="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="gnu g++5.2" DebuggerType="GNU gdb debugger" Type="Static Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g;-ggdb;-fPIC;-std=c++0x;" C_Options="-g;-ggdb;-fPIC;-std=c++0x;" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+        <IncludePath Value="."/>
+        <IncludePath Value="../../UtilityEngine/include"/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="../lib/lib$(ProjectName).a" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName/>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no">
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="" C_Options="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="-O2" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName).so" IntermediateDirectory="./Release" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[
+      
+      ]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName/>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no">
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+  </Settings>
+</CodeLite_Project>

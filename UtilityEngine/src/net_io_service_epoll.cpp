@@ -9,9 +9,9 @@
 #include "net_server.hpp"
 #include <sys/sysinfo.h>
 
-//#define IOCP_LOG
+#define EPOLL_LOG
 #ifdef EPOLL_LOG
-#define EPOLL_DEBUG(fmt,...) NET_DEBUG(fmt,__VA_ARGS__)
+#define EPOLL_DEBUG(fmt,...) NET_DEBUG(fmt,##__VA_ARGS__)
 #else
 #define EPOLL_DEBUG(fmt,...)
 #endif
@@ -121,6 +121,20 @@ io_service_epoll::start(std::uint32_t nthread)
 	EPOLL_DEBUG("epoll running! threads=%u", nthread);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+bool
+io_service_epoll::epoll_control(int op,fd_t fd,epoll_event* ev)
+{
+	while(epoll_ctl(m_epoll,op,fd,ev) < 0)
+	{
+		if(errno == EINTR)
+			continue;
+		
+		return false;
+	}
+	
+	return true;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 io_service_epoll::track_server(server_iface* server)
 {
@@ -134,21 +148,20 @@ io_service_epoll::track_server(server_iface* server)
 	fd_t fd = socket->get_fd();
 
 	accept_data* data = get_accept_data(server);
-	data->m_ol = false;
+	data->m_ol.m_inuse = false;
+	data->m_ol.m_need_send = false;
 	data->m_op = io_op::accept;
 	data->m_owner = server;
 	data->m_fd = INVALID_SOCKET;
 	data->m_buffer.buf = data->m_buff;
 	data->m_buffer.len = sizeof(data->m_buff);
 	
-	struct epoll_event _ev;
-	_ev.events = EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
-	_ev.data.ptr = static_cast<void*>(data);
-	
-	if(epoll_ctl(m_epoll,EPOLL_CTL_ADD,fd,&_ev) < 0)
+	struct epoll_event _ev{EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT,{static_cast<void*>(data)}};
+
+	if(!epoll_control(EPOLL_CTL_ADD,fd,&_ev))
 	{
 		server->stop();
-		Clog::error_throw(errors::system, "server:epoll_ctl(EPOLL_CTL_ADD) failure!");
+		Clog::error_throw(errors::system, "server:epoll_ctl(EPOLL_CTL_ADD) failure!(%d)",errno);
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,7 +169,10 @@ void
 io_service_epoll::untrack_server(server_iface* server)
 {
 	struct epoll_event _ev{0,{0}};
-	epoll_ctl(m_epoll,EPOLL_CTL_DEL,server->get_fd(),&_ev);
+	if(!epoll_control(EPOLL_CTL_DEL,server->get_fd(),&_ev))
+	{
+		Clog::error_throw(errors::system, "server:epoll_ctl(EPOLL_CTL_DEL) failure!(%d)",errno);
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -169,18 +185,24 @@ io_service_epoll::track_session(session_iface* session)
 
 	fd_t fd = session->get_fd();
 	bind(session);
+	
+	per_io_data* data = get_send_data(session);
+	data->m_ol.m_inuse = false;
+	data->m_ol.m_need_send = false;
+	data->m_op = io_op::other;
+	data->m_owner = session;
+	data->m_fd = fd;
 
-	per_io_data* data = get_read_data(session);
-	data->m_ol = false;
+	data = get_read_data(session);
+	data->m_ol.m_inuse = false;
+	data->m_ol.m_need_send = false;
 	data->m_op = io_op::other;
 	data->m_owner = session;
 	data->m_fd = fd;
 	
-	struct epoll_event _ev;
-	_ev.events = EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
-	_ev.data.ptr = static_cast<void*>(data);
+	struct epoll_event _ev{EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT,{static_cast<void*>(data)}};
 
-	if(epoll_ctl(m_epoll,EPOLL_CTL_ADD,fd,&_ev) < 0)
+	if(!epoll_control(EPOLL_CTL_ADD,fd,&_ev))
 	{
 		session->close(close_state::cs_service_stop);
 		Clog::error_throw(errors::system, "session:epoll_ctl(EPOLL_CTL_ADD) failure!(%d)",errno);
@@ -191,24 +213,30 @@ void
 io_service_epoll::untrack_session(session_iface* session)
 {
 	struct epoll_event _ev{0,{0}};
-	epoll_ctl(m_epoll,EPOLL_CTL_DEL,session->get_fd(),&_ev);
+	if(!epoll_control(EPOLL_CTL_DEL,session->get_fd(),&_ev))
+	{
+		Clog::error_throw(errors::system, "session:epoll_ctl(EPOLL_CTL_DEL) failure!(%d)",errno);
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 io_service_epoll::process_event(void)
 {
-	per_io_data* data;
+	per_io_data* data,*sdata;
 	session_iface* session = nullptr;
 	server_iface* server = nullptr;
 	socket_iface* socket = nullptr;
+	fd_t fd;
 
 	epoll_event* m_events  = m_events_pool.malloc()->m_data;
 	epoll_event *end,*it;
-	int size = 0;
+	int size,len;
 
 	struct sockaddr_storage addr;
-	int len;
+	socklen_t addrlen;
 	bool b_exp,b_empty;
+	
+	struct epoll_event _ev;
 	
 	while (m_state != static_cast<int>(state::stopping))
 	{
@@ -230,16 +258,12 @@ io_service_epoll::process_event(void)
 			data = static_cast<per_io_data*>(it->data.ptr);
 			if(data->m_op == io_op::accept)
 			{
-				if(m_mulit_threads)
-				{
-					b_exp = false;
-					if(!data->m_ol.compare_exchange_strong(b_exp,true))
-						continue;
-				}
-
 				server = static_cast<server_iface*>(data->m_owner);
+				socket = server->get_socket();
+				fd = socket->get_fd();
 				do{
-					data->m_fd = accept();
+					addrlen = sizeof(sockaddr_storage);
+					data->m_fd = accept(fd,(sockaddr*)&addr,&addrlen);
 					if(data->m_fd == INVALID_SOCKET)
 					{
 						if(errno == EAGAIN)
@@ -251,14 +275,6 @@ io_service_epoll::process_event(void)
 						Clog::error_throw(errors::system, "epoll accept error!(%d)",errno);
 					}
 
-					setsockopt(data->m_fd, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&(server->get_fd()), sizeof(fd_t));
-
-					len = sizeof(sockaddr_storage);
-					if (SOCKET_ERROR == getpeername(data->m_fd, (sockaddr*)&addr, &len))
-					{
-						EPOLL_DEBUG("getpeername error! errno=%d", WSAGetLastError());
-					}
-
 					process_accept(server,data,&addr,&session);
 
 					if(session) 
@@ -267,16 +283,19 @@ io_service_epoll::process_event(void)
 						continue;
 					}
 
-					closesocket(data->m_fd);
+					socket->close_fd(data->m_fd);
 				}while(true);
 
-				post_accept_event(server, data);
-
-				if(m_mulit_threads) 
-					data->m_ol = false;
-
+				_ev.events = EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
+				_ev.data.ptr = static_cast<void*>(data);
+				
+				if(!epoll_control(EPOLL_CTL_MOD,fd,&_ev))
+				{
+					server->stop();
+					Clog::error_throw(errors::system, "server:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
+				}	
 				continue;
-			}
+			}//ACCEPT
 
 			if(it->events & EPOLLRDHUP)
 			{
@@ -295,7 +314,7 @@ io_service_epoll::process_event(void)
 				if(m_mulit_threads)
 				{
 					b_exp = false;
-					if(!data->m_ol.compare_exchange_strong(b_exp,true))
+					if(!data->m_ol.m_inuse.compare_exchange_strong(b_exp,true))
 					{
 						EPOLL_DEBUG("duplicate read");
 						continue;
@@ -336,31 +355,78 @@ io_service_epoll::process_event(void)
 				}while(true);
 
 				if(m_mulit_threads) 
-					data->m_ol = false;
+					data->m_ol.m_inuse = false;
 
 				if(b_exp)
-					post_read_event(data);
-			}
+				{
+					_ev.events = EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
+					if(data->m_ol.m_need_send) _ev.events |= EPOLLOUT;
+					_ev.data.ptr = static_cast<void*>(data);
+					
+					if(!epoll_control(EPOLL_CTL_MOD,data->m_fd,&_ev))
+					{
+						session->close(close_state::cs_service_stop);
+						Clog::error_throw(errors::system, "read:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
+					}
+				}
+			}//EPOLLIN
 
 			if(it->events & EPOLLOUT)
 			{
 				session = static_cast<session_iface*>(data->m_owner);
-				process_send(get_send_data(session),true);
-			}
-			
-		}
-	}
+				sdata = get_send_data(session);
+				if(m_mulit_threads)
+				{
+					b_exp = false;
+					if(!sdata->m_ol.m_inuse.compare_exchange_strong(b_exp,true))
+					{
+						EPOLL_DEBUG("duplicate send");
+						continue;
+					}	
+				}
+				
+				b_exp = process_send(sdata,data);
+				
+				if(m_mulit_threads) 
+					sdata->m_ol.m_inuse = false;
+
+				if(b_exp)
+				{
+					data->m_ol.m_need_send = true;
+					_ev.events = EPOLLOUT|EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
+					_ev.data.ptr = static_cast<void*>(data);
+					
+					if(!epoll_control(EPOLL_CTL_MOD,data->m_fd,&_ev))
+					{
+						session->close(close_state::cs_service_stop);
+						Clog::error_throw(errors::system, "send:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
+					}
+				}
+			}//EPOLLOUT
+		}//FOR
+	}//WHILE
 
 	EPOLL_DEBUG("exit request!");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void
-io_service_epoll::process_send(per_io_data* data,bool io)
+bool
+io_service_epoll::process_send(per_io_data* data,per_io_data* _data)
 {
 	session_iface* session = static_cast<session_iface*>(data->m_owner);
 	socket_iface* socket = session->get_socket();
 	int len = 0;
-
+	
+	if(_data)
+	{
+		_data->m_ol.m_need_send = false;
+		struct epoll_event _ev{EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT,{static_cast<void*>(_data)}};
+		if(!epoll_control(EPOLL_CTL_MOD,_data->m_fd,&_ev))
+		{
+			session->close(close_state::cs_service_stop);
+			Clog::error_throw(errors::system, "send: epoll_ctl(EPOLL_CTL_MOD) failure!(%d)", errno);
+		}
+	}
+	
 	do
 	{
 		len = socket->write(data->m_buffer.buf, data->m_buffer.len);
@@ -370,49 +436,24 @@ io_service_epoll::process_send(per_io_data* data,bool io)
 				continue;
 
 			if (errno == EAGAIN)
-			{
-				EPOLL_DEBUG("send: epoll_ctl(EPOLL_CTL_MOD) EPOLLOUT|EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;");
-
-				struct epoll_event _ev;
-				_ev.events = EPOLLOUT|EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
-				_ev.data.ptr = (void*)get_read_data(session);
-
-				if (epoll_ctl(m_epoll, EPOLL_CTL_MOD, socket->get_fd(), &_ev) != 0)
-				{
-					session->close(close_state::cs_service_stop);
-					Clog::error_throw(errors::system, "send: epoll_ctl(EPOLL_CTL_MOD) failure!(%d)", errno);
-				}
-
-				return;
-			}
+				return true;
 
 			if (errno == ECONNABORTED || errno == ECONNRESET)
 			{
 				EPOLL_DEBUG("send error: connection peer closed!");
 				session->close(close_state::cs_connect_peer_close);
-				return;
+				return false;
 			}
 
 			Clog::error_throw(errors::system, "Send error! erron=%d", errno);
 		}
 
-		if (!process_send(session, len))
-		{
-			if(io)
-				break;
-			else
-				return;
-		}
+		if (!io_service_iface::process_send(session, len))
+			return false;
+			
 	}while (true);
-
-	struct epoll_event _ev;
-	_ev.events = EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
-	_ev.data.ptr = (void*)get_read_data(session);
-	if (epoll_ctl(m_epoll, EPOLL_CTL_MOD, socket->get_fd(), &_ev) != 0)
-	{
-		session->close(close_state::cs_service_stop);
-		Clog::error_throw(errors::system, "send: epoll_ctl(EPOLL_CTL_MOD) failure!(%d)", errno);
-	}
+	
+	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -421,7 +462,21 @@ io_service_epoll::post_send_event(per_io_data* data)
 	if (m_state != static_cast<int>(state::running))
 		return;
 
-	process_send(data,false);
+	if(!process_send(data))
+		return;
+		
+	EPOLL_DEBUG("send: epoll_ctl(EPOLL_CTL_MOD) EPOLLOUT|EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;");
+				
+	session_iface* session = static_cast<session_iface*>(data->m_owner);	
+	per_io_data* _data = get_read_data(session);
+	_data->m_ol.m_need_send = true;
+	struct epoll_event _ev{EPOLLOUT|EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT,{static_cast<void*>(_data)}};
+	
+	if(!epoll_control(EPOLL_CTL_MOD,_data->m_fd,&_ev))
+	{
+		session->close(close_state::cs_service_stop);
+		Clog::error_throw(errors::system, "send: epoll_ctl(EPOLL_CTL_MOD) failure!(%d)", errno);
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net
