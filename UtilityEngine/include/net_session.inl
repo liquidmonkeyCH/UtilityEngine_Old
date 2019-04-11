@@ -17,23 +17,23 @@ session_wrap<st, buffer_t>::~session_wrap(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<socket_type st, class buffer_t>
-void session_wrap<st, buffer_t>::init_buffer(unsigned long read_buffer_size, unsigned long send_buffer_size)
+void session_wrap<st, buffer_t>::init_buffer(unsigned long recv_buffer_size, unsigned long send_buffer_size)
 {
-	m_read_buffer.init(read_buffer_size);
+	m_recv_buffer.init(recv_buffer_size);
 	m_send_buffer.init(send_buffer_size);
 
-	m_read_data.m_buffer.len = MAX_PACKET_LEN;
-	m_read_data.m_buffer.buf = m_read_buffer.write(m_read_data.m_buffer.len);
+	m_recv_data.m_buffer.len = MAX_PACKET_LEN;
+	m_recv_data.m_buffer.buf = m_recv_buffer.write(m_recv_data.m_buffer.len);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<socket_type st, class buffer_t>
 void session_wrap<st, buffer_t>::clear(void)
 {
-	m_read_buffer.clear();
+	m_recv_buffer.clear();
 	m_send_buffer.clear();
 
-	m_read_data.m_buffer.len = MAX_PACKET_LEN;
-	m_read_data.m_buffer.buf = m_read_buffer.write(m_read_data.m_buffer.len);
+	m_recv_data.m_buffer.len = MAX_PACKET_LEN;
+	m_recv_data.m_buffer.buf = m_recv_buffer.write(m_recv_data.m_buffer.len);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<socket_type st, class buffer_t>
@@ -100,25 +100,25 @@ bool session_wrap<st, buffer_t>::process_send(unsigned long size)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<socket_type st, class buffer_t>
-bool session_wrap<st, buffer_t>::process_read(unsigned long size)
+bool session_wrap<st, buffer_t>::process_recv(unsigned long size)
 {
 	if (m_state != static_cast<int>(state::connected))
 		return false;
 
-	if (m_read_buffer.commit_write(size))
+	if (m_recv_buffer.commit_write(size))
 	{
 		std::lock_guard<std::recursive_mutex> lock(m_close_mutex);
 		if (m_state != static_cast<int>(state::connected))
 			return false;
-		m_parent->post_request(this, &m_read_buffer, nullptr);
+		m_parent->post_request(this, &m_recv_buffer, nullptr);
 	}
 
-	m_read_data.m_buffer.len = MAX_PACKET_LEN;
-	m_read_data.m_buffer.buf = m_read_buffer.write(m_read_data.m_buffer.len);
+	m_recv_data.m_buffer.len = MAX_PACKET_LEN;
+	m_recv_data.m_buffer.buf = m_recv_buffer.write(m_recv_data.m_buffer.len);
 
-	if (m_read_data.m_buffer.len == 0)
+	if (m_recv_data.m_buffer.len == 0)
 	{
-		close(reason::cs_read_buffer_overflow);
+		close(reason::cs_recv_buffer_overflow);
 		return false;
 	}
 

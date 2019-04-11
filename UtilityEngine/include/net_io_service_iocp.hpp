@@ -38,7 +38,7 @@ private:
 	//! after session connected!
 	void track_session(session_iface*);
 private:
-	void post_read_event(per_io_data* data);
+	void post_recv_event(per_io_data* data);
 	void post_send_event(per_io_data* data);
 	void post_accept_event(server_iface* server, per_io_data* data);
 private:

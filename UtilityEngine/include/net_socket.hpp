@@ -47,7 +47,7 @@ public:
 	bool is_ipv6(void) const;
 	bool set_blocking(bool bflag);
 	bool set_send_buffer(std::uint32_t size);
-	bool set_read_buffer(std::uint32_t size);
+	bool set_recv_buffer(std::uint32_t size);
 protected:
 	void create_socket(void);
 	template<class T>

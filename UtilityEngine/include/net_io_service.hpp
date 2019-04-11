@@ -54,9 +54,9 @@ protected:
 
 	// session_iface
 	void bind(session_iface* session);
-	per_io_data* get_read_data(session_iface* session);
+	per_io_data* get_recv_data(session_iface* session);
 	per_io_data* get_send_data(session_iface* session);
-	bool process_read(session_iface* session, unsigned long size);
+	bool process_recv(session_iface* session, unsigned long size);
 	bool process_send(session_iface* session, unsigned long size);
 	
 	// server_iface

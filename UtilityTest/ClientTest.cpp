@@ -14,18 +14,28 @@
 
 using namespace Utility;
 
+class GameSession : public net::session_wrap < net::socket_type::tcp, mem::rotative_buffer >
+{
+public:
+	void on_connect(void)
+	{
+		m_socket->set_recv_buffer(8);
+	}
+};
+
+
 int handler(task::object_iface* obj, const char* msg, void* ptr)
 {
 	Clog::info("recv msg: %s", msg);
 	return 0;
 }
 
-class NetClient : public net::client_wrap < net::session_wrap<net::socket_type::tcp, mem::rotative_buffer>, msg::plan0::controler>
+class NetClient : public net::client_wrap <GameSession, msg::plan0::controler>
 {
 public:
 	void on_start(void)
 	{
-		m_read_buffer_size = 2 * MAX_PACKET_LEN;
+		m_recv_buffer_size = 2 * MAX_PACKET_LEN;
 		m_send_buffer_size = 2 * MAX_PACKET_LEN;
 		m_controler.attach(handler);
 	}

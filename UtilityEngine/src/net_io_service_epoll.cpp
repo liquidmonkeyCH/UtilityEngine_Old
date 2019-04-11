@@ -190,7 +190,7 @@ io_service_epoll::track_session(session_iface* session)
 	data->m_owner = session;
 	data->m_fd = fd;
 
-	data = get_read_data(session);
+	data = get_recv_data(session);
 	data->m_ol.m_inuse = false;
 	data->m_ol.m_need_send = false;
 	data->m_op = io_op::other;
@@ -346,7 +346,7 @@ io_service_epoll::process_event(void)
 					}
 
 					b_empty = len < data->m_buffer.len;
-					b_exp = process_read(session,len);
+					b_exp = process_recv(session,len);
 					if(b_empty || !b_exp) 
 						break;
 				}while(true);
@@ -363,7 +363,7 @@ io_service_epoll::process_event(void)
 					if(!epoll_control(EPOLL_CTL_MOD,data->m_fd,&_ev))
 					{
 						session->close(close_state::cs_service_stop);
-						Clog::error_throw(errors::system, "read:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
+						Clog::error_throw(errors::system, "recv:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
 					}
 				}
 			}//EPOLLIN
@@ -465,7 +465,7 @@ io_service_epoll::post_send_event(per_io_data* data)
 	EPOLL_DEBUG("send: epoll_ctl(EPOLL_CTL_MOD) EPOLLOUT|EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;");
 				
 	session_iface* session = static_cast<session_iface*>(data->m_owner);	
-	per_io_data* _data = get_read_data(session);
+	per_io_data* _data = get_recv_data(session);
 	_data->m_ol.m_need_send = true;
 	struct epoll_event _ev{EPOLLOUT|EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT,{static_cast<void*>(_data)}};
 	

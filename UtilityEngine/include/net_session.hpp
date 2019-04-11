@@ -26,7 +26,7 @@ public:
 		cs_connect_timeout,
 		cs_connect_peer_close,
 		cs_send_buffer_overflow,
-		cs_read_buffer_overflow,
+		cs_recv_buffer_overflow,
 		cs_handle_error
 	};
 	enum class state{ none,connected,closing };
@@ -45,7 +45,7 @@ protected:
 	void set_connected(framework* parent,fd_t fd, sockaddr_storage* addr);
 	void handle_error(std::uint32_t compkey);
 	//! for wrap
-	virtual bool process_read(unsigned long size) = 0;
+	virtual bool process_recv(unsigned long size) = 0;
 	virtual bool process_send(unsigned long size) = 0;
 protected:
 	io_service_iface* m_io_service;
@@ -54,7 +54,7 @@ protected:
 
 	socket_iface* m_socket;
 
-	per_io_data m_read_data;
+	per_io_data m_recv_data;
 	per_io_data m_send_data;
 
 	std::recursive_mutex m_close_mutex;
@@ -71,20 +71,20 @@ public:
 	session_wrap(void);
 	virtual ~session_wrap(void);
 protected:
-	void init_buffer(unsigned long read_buffer_size, unsigned long send_buffer_size);
+	void init_buffer(unsigned long recv_buffer_size, unsigned long send_buffer_size);
 
 	void clear(void);
 	void do_close(void*);
 	virtual void on_close(reason){}
 	virtual void on_connect(void){}
 
-	bool process_read(unsigned long size);
+	bool process_recv(unsigned long size);
 	bool process_send(unsigned long size);
 public:
 	void send(const char* packet, unsigned long size);
 protected:
 	socket_wrap<st> m_socket_impl;
-	buffer_t m_read_buffer;
+	buffer_t m_recv_buffer;
 	buffer_t m_send_buffer;
 	std::mutex m_send_mutex;
 };

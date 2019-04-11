@@ -18,6 +18,9 @@ public:
 	void on_connect(void)
 	{
 		m_socket->set_send_buffer(8);
+		m_socket->set_recv_buffer(8);
+		m_socket_impl.set_no_delay(true);
+		m_socket_impl.set_keep_alive(true, 1000, 1000, 15);
 	}
 };
 

@@ -193,12 +193,12 @@ io_service_iocp::track_session(session_iface* session)
 	_data->m_owner = session;
 	_data->m_op = io_op::send;
 	
-	_data = get_read_data(session);
+	_data = get_recv_data(session);
 	_data->m_fd = fd;
 	_data->m_owner = session;
-	_data->m_op = io_op::read;
+	_data->m_op = io_op::recv;
 
-	post_read_event(_data);
+	post_recv_event(_data);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -271,11 +271,11 @@ io_service_iocp::process_event(void)
 
 		switch (data->m_op)
 		{
-		case io_op::read:
+		case io_op::recv:
 			{
 				session = static_cast<session_iface*>(data->m_owner);
-				if(process_read(session,dwTrans))
-					post_read_event(data);
+				if (process_recv(session, dwTrans))
+					post_recv_event(data);
 			}
 			break;
 		case io_op::send:
@@ -337,7 +337,7 @@ io_service_iocp::post_accept_event(server_iface* server, per_io_data* data)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-io_service_iocp::post_read_event(per_io_data* data)
+io_service_iocp::post_recv_event(per_io_data* data)
 {
 	memset(&data->m_ol, 0, sizeof(data->m_ol));
 	DWORD dwRecv = 0;

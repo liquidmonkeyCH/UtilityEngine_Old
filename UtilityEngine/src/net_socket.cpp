@@ -123,7 +123,7 @@ socket_iface::set_send_buffer(std::uint32_t size)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-socket_iface::set_read_buffer(std::uint32_t size)
+socket_iface::set_recv_buffer(std::uint32_t size)
 {
 	if (!set_opt(SOL_SOCKET, SO_RCVBUF, size))
 	{

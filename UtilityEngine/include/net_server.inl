@@ -13,7 +13,7 @@ void server_wrap<session_t,control_t>::init(size_t max_session, io_service_iface
 	m_pool.init(max_session);
 	m_accept_data.init(10);
 
-	m_read_buffer_size = MAX_PACKET_LEN * 10;
+	m_recv_buffer_size = MAX_PACKET_LEN * 10;
 	m_send_buffer_size = MAX_PACKET_LEN * 10;
 
 	m_io_service = io_service;
@@ -83,7 +83,7 @@ void server_wrap<session_t, control_t>::process_accept(per_io_data* data, sockad
 	{
 		session->set_connected(this,data->m_fd, addr);
 		session->on_connect();
-		session->init_buffer(m_read_buffer_size, m_send_buffer_size);
+		session->init_buffer(m_recv_buffer_size, m_send_buffer_size);
 		session->m_socket->set_blocking(false);
 	}
 	*se = session;

@@ -43,7 +43,7 @@ namespace net
 enum class socket_type { tcp, };
 
 #ifdef _WIN32
-	enum class io_op{ accept,read, send, };
+	enum class io_op{ accept,recv, send, };
 	using fd_t = SOCKET;
 #else
 	enum class io_op{ accept, other };

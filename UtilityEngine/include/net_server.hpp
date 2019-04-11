@@ -70,7 +70,7 @@ protected:
 	mem::container<accept_data>	m_accept_data;
 	std::mutex					m_accept_mutex;
 	//! for session
-	unsigned long				m_read_buffer_size;
+	unsigned long				m_recv_buffer_size;
 	unsigned long				m_send_buffer_size;
 
 	control_t					m_controler;

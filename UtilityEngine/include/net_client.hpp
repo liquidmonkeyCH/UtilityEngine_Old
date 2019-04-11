@@ -53,7 +53,7 @@ protected:
 protected:
 	session_t				m_session;
 	//! for session
-	unsigned long			m_read_buffer_size;
+	unsigned long			m_recv_buffer_size;
 	unsigned long			m_send_buffer_size;
 
 	control_t				m_controler;
