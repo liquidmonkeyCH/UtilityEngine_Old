@@ -46,8 +46,12 @@ public:
 
 	bool is_ipv6(void) const;
 	bool set_blocking(bool bflag);
+	bool set_send_buffer(std::uint32_t size);
+	bool set_read_buffer(std::uint32_t size);
 protected:
 	void create_socket(void);
+	template<class T>
+	bool set_opt(int lv,int name, T val){ return setsockopt(m_fd, lv, name, (char*)&val, sizeof(val)) != SOCKET_ERROR; }
 protected:
 	fd_t m_fd;
 	std::string m_host;
@@ -59,6 +63,8 @@ class socket_wrap : public socket_iface
 {
 public:
 	fd_t create_fd(void);
+	bool set_no_delay(bool val);
+	bool set_keep_alive(bool on, std::uint32_t idle, std::uint32_t interval, std::uint32_t cnt);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net

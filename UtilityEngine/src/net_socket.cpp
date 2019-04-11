@@ -11,7 +11,7 @@
 #pragma comment(lib,"ws2_32.lib")  
 #endif
 
-//#define SOCKET_LOG
+#define SOCKET_LOG
 
 #ifdef SOCKET_LOG
 #define SOCKET_DEBUG(fmt,...) NET_DEBUG(fmt,##__VA_ARGS__)
@@ -98,10 +98,37 @@ socket_iface::is_ipv6(void) const
 bool
 socket_iface::set_blocking(bool bflag)
 {
+	if (m_fd == INVALID_SOCKET)
+		return false;
+
 	SOCKET_DEBUG("set socket %s", bflag ? "blocking" : "non-blocking");
 
 	u_long mode = bflag ? 0 : 1;
 	return ioctlsocket(m_fd, FIONBIO, &mode) == 0;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool
+socket_iface::set_send_buffer(std::uint32_t size)
+{
+	if (!set_opt(SOL_SOCKET, SO_SNDBUF, size))
+	{
+		SOCKET_DEBUG("set_no_delay error!(%d)", WSAGetLastError());
+		return false;
+	}
+
+	return true;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool
+socket_iface::set_read_buffer(std::uint32_t size)
+{
+	if (!set_opt(SOL_SOCKET, SO_RCVBUF, size))
+	{
+		SOCKET_DEBUG("set_no_delay error!(%d)", WSAGetLastError());
+		return false;
+	}
+
+	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 int
@@ -367,6 +394,72 @@ fd_t socket_wrap<socket_type::tcp>::create_fd(void)
 {
 	ADDRESS_FAMILY family = is_ipv6() ? AF_INET6 : AF_INET;
 	return socket(family, SOCK_STREAM, 0);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<>
+bool socket_wrap<socket_type::tcp>::set_no_delay(bool val)
+{
+	if (m_fd == INVALID_SOCKET)
+		return false;
+
+	if (!set_opt(IPPROTO_TCP, TCP_NODELAY, val))
+	{
+		SOCKET_DEBUG("set_no_delay error!(%d)", WSAGetLastError());
+		return false;
+	}
+
+	return true;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <Mstcpip.h>
+template<>
+bool socket_wrap<socket_type::tcp>::set_keep_alive(bool on, std::uint32_t idle, std::uint32_t interval, std::uint32_t cnt)
+{
+	if (m_fd == INVALID_SOCKET)
+		return false;
+
+	if (!set_opt(SOL_SOCKET, SO_KEEPALIVE, on))
+	{
+		SOCKET_DEBUG("set_keep_alive error!(%d)", WSAGetLastError());
+		return false;
+	}
+
+	if (!on)
+		return true;
+
+#ifdef _WIN32
+	struct tcp_keepalive in_keep_alive = { 0 };
+	struct tcp_keepalive out_keep_alive = { 0 };
+	DWORD ul_in_len = sizeof(in_keep_alive);
+	DWORD ul_out_len = sizeof(out_keep_alive);
+	DWORD ul_bytes_return = 0;
+	in_keep_alive.onoff = 1;
+	in_keep_alive.keepaliveinterval = interval;
+	in_keep_alive.keepalivetime = idle;
+	if (WSAIoctl(m_fd, SIO_KEEPALIVE_VALS, (LPVOID)&in_keep_alive, ul_in_len,
+		(LPVOID)&out_keep_alive, ul_out_len, &ul_bytes_return, NULL, NULL) == SOCKET_ERROR)
+	{
+		SOCKET_DEBUG("set_keep_alive error!(%d)", WSAGetLastError());
+		return false;
+	}
+#else
+	if (!set_opt(SOL_TCP, TCP_KEEPIDLE, idle/1000))
+	{
+		SOCKET_DEBUG("set_keep_alive error!(%d)", errno);
+		return false;
+	}
+	if (!set_opt(SOL_TCP, TCP_KEEPINTVL, interval / 1000))
+	{
+		SOCKET_DEBUG("set_keep_alive error!(%d)", errno);
+		return false;
+	}
+	if (!set_opt(SOL_TCP, TCP_KEEPCNT, cnt))
+	{
+		SOCKET_DEBUG("set_keep_alive error!(%d)", errno);
+		return false;
+	}
+#endif
+	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net
