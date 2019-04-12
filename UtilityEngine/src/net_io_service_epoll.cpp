@@ -275,14 +275,7 @@ io_service_epoll::process_event(epoll_event* m_events)
 					}
 
 					process_accept(server,data,&addr,&session);
-
-					if(session) 
-					{
-						track_session(session);
-						continue;
-					}
-
-					socket->close_fd(data->m_fd);
+					if(session) track_session(session);
 				}while(true);
 
 				_ev.events = EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT;
