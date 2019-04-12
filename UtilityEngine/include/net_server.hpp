@@ -6,6 +6,7 @@
 #ifndef __NET_SERVER_HPP__
 #define __NET_SERVER_HPP__
 
+#include <future>
 #include "mem_container.hpp"
 #include "net_session.hpp"
 
@@ -37,6 +38,7 @@ protected:
 	socket_iface* m_socket;
 	io_service_iface* m_io_service;
 	std::atomic_bool m_running;
+	std::promise<bool> m_can_stop;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t,class control_t>
@@ -60,19 +62,20 @@ private:
 	void process_accept(per_io_data*, sockaddr_storage*, session_iface**);
 	accept_data* get_accept_data(void);
 	void post_request(session_iface* session, mem::buffer_iface* buffer,void* ptr);
+	session_t* get_session(void);
 	void on_close_session(session_iface* session);
 protected:
 	virtual void on_start(void){}
 	virtual void on_stop(void){}
 protected:
 	sokcet_mode					m_socket_impl;
-	mem::container<session_t>	m_pool;
 	mem::container<accept_data>	m_accept_data;
-	std::mutex					m_accept_mutex;
+	mem::container<session_t>	m_session_pool;
+	std::mutex					m_session_mutex;
 	//! for session
 	unsigned long				m_recv_buffer_size;
 	unsigned long				m_send_buffer_size;
-
+	//! for hanlder
 	control_t					m_controler;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////

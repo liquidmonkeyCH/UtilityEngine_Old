@@ -6,6 +6,7 @@
 #ifndef __NET_CLIENT_HPP__
 #define __NET_CLIENT_HPP__
 
+#include <future>
 #include "net_session.hpp"
 
 namespace Utility
@@ -17,6 +18,8 @@ namespace net
 class client_iface : public framework
 {
 public:
+	enum class state{ none, starting, connecting, connected, timeout, stopping };
+
 	client_iface(void) = default;
 	virtual ~client_iface(void) = default;
 
@@ -40,23 +43,32 @@ public:
 	using dispatch_t = typename control_t::dispatch_t;
 public:
 	void init(io_service_iface* io_service, dispatch_t* dispatcher);
-	bool start(const char* host, std::uint32_t port, std::uint32_t timeout_msecs = 0);
+	state start(const char* host, std::uint32_t port, std::uint32_t timeout_msecs = 0);
 	void stop(void);
+	void join(void);
 
 	void send(const char* msg, unsigned long len) { m_session.send(msg,len); }
 	bool is_connected(void){ return m_session.is_connected(); }
 protected:
 	void post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr);
+	bool connect(const char* host, std::uint32_t port, std::uint32_t timeout_msecs);
+
 	void on_close_session(session_iface* session);
+protected:
 	virtual void on_start(void){}
 	virtual void on_stop(void){}
+	virtual void on_disconnect(void){}
+	virtual bool on_connect_retry(const char* host, std::uint32_t port, std::uint32_t timeout_msecs){ return false; }
 protected:
 	session_t				m_session;
 	//! for session
 	unsigned long			m_recv_buffer_size;
 	unsigned long			m_send_buffer_size;
-
+	//! for msg handle
 	control_t				m_controler;
+
+	std::atomic_int			m_state;
+	std::promise<bool>		m_can_stop;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "net_client.inl"

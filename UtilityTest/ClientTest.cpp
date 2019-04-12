@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	io_service.start();
 
 	NetClient::dispatch_t dispatcher;
-	dispatcher.start(1);
+	dispatcher.start(2);
 
 	int nCount;
 	
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 	{
 		std::shared_ptr<NetClient> client(new NetClient);
 		client->init(&io_service, &dispatcher);
-		if (!client->start("10.0.0.35", 55552,1000))
+		if (client->start("127.0.0.1", 55552,1000) == net::client_iface::state::timeout)
 		{
 			Clog::debug("connect timeout!");
 			continue;
@@ -109,9 +109,15 @@ int main(int argc, char* argv[])
 		client->stop();
 	}
 
+	for (std::shared_ptr<NetClient> client : m_list)
+	{
+		client->join();
+	}
+
 	m_list.clear();
 
 	io_service.stop();
+	dispatcher.stop();
 
 	net::framework::net_free();
 

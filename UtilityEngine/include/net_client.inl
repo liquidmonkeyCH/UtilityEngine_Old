@@ -17,11 +17,29 @@ void client_wrap<session_t, control_t>::init(io_service_iface* io_service, dispa
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class control_t>
-bool client_wrap<session_t, control_t>::start(const char* host, std::uint32_t port, std::uint32_t timeout_msecs)
+client_iface::state client_wrap<session_t, control_t>::start(const char* host, std::uint32_t port, std::uint32_t timeout_msecs)
 {
+	int exp = static_cast<int>(state::none);
+	if (!m_state.compare_exchange_strong(exp, static_cast<int>(state::starting)))
+		return static_cast<state>(exp);
+
 	framework::net_init();
 	on_start();
+
+	if (connect(host, port, timeout_msecs))
+		return state::connected;
 	
+	m_state = static_cast<int>(state::none);
+	return state::timeout;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class session_t, class control_t>
+bool client_wrap<session_t, control_t>::connect(const char* host, std::uint32_t port, std::uint32_t timeout_msecs)
+{
+	int exp = static_cast<int>(state::starting);
+	if (!m_state.compare_exchange_strong(exp, static_cast<int>(state::connecting)))
+		return false;
+
 	try{
 		if (m_session.m_socket->connect(host, port, timeout_msecs)){
 			m_session.set_connected(this,INVALID_SOCKET, nullptr);
@@ -29,6 +47,8 @@ bool client_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 			m_session.init_buffer(m_recv_buffer_size, m_send_buffer_size);
 			m_session.m_socket->set_blocking(false);
 			m_io_service->track_session(&m_session);
+			m_can_stop = std::promise<bool>();
+			m_state = static_cast<int>(state::connected);
 			return true;
 		}
 	}
@@ -36,16 +56,27 @@ bool client_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 		Clog::error(e.what());
 		throw(e);
 	}
-	
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class control_t>
 void client_wrap<session_t, control_t>::stop(void)
 {
+	int exp = static_cast<int>(state::connected);
+	if (!m_state.compare_exchange_strong(exp, static_cast<int>(state::stopping)))
+		return;
+
 	m_session.close(session_iface::reason::cs_service_stop);
 	on_stop();
+
 	framework::net_free();
+	m_state = static_cast<int>(state::none);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class session_t, class control_t>
+void client_wrap<session_t, control_t>::join(void)
+{
+	m_can_stop.get_future().get();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class control_t>
@@ -57,5 +88,6 @@ void client_wrap<session_t, control_t>::post_request(session_iface* session, mem
 template<class session_t, class control_t>
 void client_wrap<session_t, control_t>::on_close_session(session_iface* session)
 {
+	m_can_stop.set_value(true);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

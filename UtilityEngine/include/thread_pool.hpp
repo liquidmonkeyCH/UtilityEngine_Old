@@ -147,22 +147,22 @@ private:
 
 		task_t task(std::move(tasks.front()));
 		tasks.pop();
-		--m_ntasks;
 
+		lock.unlock();
+
+		--m_ntasks;
 		return task;
 	}
 
 	void _run(size_t i)
 	{
+		++m_working;
 		while (true)
 		{
+			--m_working;
 			if (task_t task = get_task(i))
 				task();
-
-			--m_working;
-
-			std::lock_guard<std::mutex> lock(mtx);
-			if (m_state == state::none)
+			else
 				break;
 		}
 	}

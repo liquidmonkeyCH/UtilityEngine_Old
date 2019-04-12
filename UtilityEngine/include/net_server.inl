@@ -10,7 +10,7 @@ void server_wrap<session_t,control_t>::init(size_t max_session, io_service_iface
 	if (m_io_service)
 		Clog::error_throw(errors::logic, "server initialized!");
 
-	m_pool.init(max_session);
+	m_session_pool.init(max_session);
 	m_accept_data.init(10);
 
 	m_recv_buffer_size = MAX_PACKET_LEN * 10;
@@ -23,8 +23,8 @@ void server_wrap<session_t,control_t>::init(size_t max_session, io_service_iface
 template<class session_t, class control_t>
 void server_wrap<session_t, control_t>::start(const char* host, std::uint32_t port)
 {
-	bool b_running = false;
-	if (!m_running.compare_exchange_strong(b_running, true))
+	bool exp = false;
+	if (!m_running.compare_exchange_strong(exp, true))
 		Clog::error_throw(errors::logic, "server already running!");
 
 	framework::net_init();
@@ -34,6 +34,7 @@ void server_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 	m_socket->listen();
 
 	m_running = true;
+	m_can_stop = std::promise<bool>();
 	
 	m_io_service->track_server(this);
 }
@@ -41,7 +42,10 @@ void server_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 template<class session_t, class control_t>
 void server_wrap<session_t, control_t>::stop(void)
 {
-	m_running = false;
+	bool exp = true;
+	if (!m_running.compare_exchange_strong(exp, false))
+		return;
+
 	m_io_service->untrack_server(this);
 	m_socket->close();
 
@@ -50,15 +54,25 @@ void server_wrap<session_t, control_t>::stop(void)
 		if (it->m_fd != INVALID_SOCKET)
 			m_socket->close_fd(it->m_fd);
 	}
-
 	m_accept_data.clear();
 
-	for (typename mem::container<session_t>::iterator it = m_pool.used_begin(); it != m_pool.used_end(); ++it)
+	std::future<bool> stop_wait;
+	m_session_mutex.lock();
+
+	for (typename mem::container<session_t>::iterator it = m_session_pool.used_begin(); it != m_session_pool.used_end(); ++it)
 	{
+		if (!stop_wait.valid())
+			stop_wait = m_can_stop.get_future();
+
 		it->close(session_iface::reason::cs_service_stop);
 	}
+	m_session_mutex.unlock();
 
-	m_pool.clear();
+	// wait all session close!
+	if (stop_wait.valid())
+		stop_wait.get();
+
+	m_session_pool.clear();
 
 	on_stop();
 	framework::net_free();
@@ -71,10 +85,19 @@ accept_data* server_wrap<session_t, control_t>::get_accept_data(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class control_t>
+session_t* server_wrap<session_t, control_t>::get_session(void)
+{
+	std::lock_guard<std::mutex> lock(m_session_mutex);
+	if (!m_running)
+		return nullptr;
+
+	return m_session_pool.malloc();
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class session_t, class control_t>
 void server_wrap<session_t, control_t>::process_accept(per_io_data* data, sockaddr_storage* addr, session_iface** se)
 {
-	std::lock_guard<std::mutex> lock(m_accept_mutex);
-	session_t* session = m_pool.malloc();
+	session_t* session = get_session();
 	if (!session)
 	{
 		m_socket->close_fd(data->m_fd);
@@ -98,10 +121,10 @@ void server_wrap<session_t, control_t>::post_request(session_iface* session, mem
 template<class session_t, class control_t>
 void server_wrap<session_t, control_t>::on_close_session(session_iface* session)
 {
-	if (!m_running)
-		return;
+	std::lock_guard<std::mutex> lock(m_session_mutex);
+	m_session_pool.free(dynamic_cast<session_t*>(session));
 
-	std::lock_guard<std::mutex> lock(m_accept_mutex);
-	m_pool.free(dynamic_cast<session_t*>(session));
+	if (!m_running && m_session_pool.used() == 0)
+		m_can_stop.set_value(true);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

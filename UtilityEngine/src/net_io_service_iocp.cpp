@@ -304,8 +304,9 @@ io_service_iocp::process_event(void)
 				addrClient = &addr;
 #endif
 				process_accept(server, data, addrClient, &session);
-				post_accept_event(server, data);
 				if (session) track_session(session);
+
+				post_accept_event(server, data);
 			}
 			break;
 		}// switch
@@ -318,17 +319,21 @@ io_service_iocp::process_event(void)
 void
 io_service_iocp::post_accept_event(server_iface* server, per_io_data* data)
 {
-	if (!server->is_running())
-		return;
-
 	memset(&data->m_ol, 0, sizeof(data->m_ol));
 	memset(data->m_buffer.buf, 0, data->m_buffer.len);
-	data->m_fd = server->get_socket()->create_fd();
+	socket_iface* socket = server->get_socket();
+	data->m_fd = socket->create_fd();
 	DWORD byteReceived = 0;
 	DWORD addrLen = sizeof(sockaddr_storage) + 16;
 	if (m_accept(server->get_fd(), data->m_fd, data->m_buffer.buf, 0,
 		addrLen, addrLen, &byteReceived, (LPOVERLAPPED)data) == FALSE)
 	{
+		if (!server->is_running())
+		{
+			socket->close_fd(data->m_fd);
+			return;
+		}
+
 		int err = WSAGetLastError();
 		if (ERROR_IO_PENDING != err){
 			Clog::error_throw(errors::system, "AcceptEx error errno=%d!", err);

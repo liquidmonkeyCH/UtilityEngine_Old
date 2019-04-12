@@ -260,17 +260,20 @@ io_service_epoll::process_event(epoll_event* m_events)
 				server = static_cast<server_iface*>(data->m_owner);
 				socket = server->get_socket();
 				fd = socket->get_fd();
+				if(fd == INVALID_SOCKET)
+					continue;
+
 				do{
 					addrlen = sizeof(sockaddr_storage);
 					data->m_fd = accept(fd,(sockaddr*)&addr,&addrlen);
 					if(data->m_fd == INVALID_SOCKET)
 					{
-						if(errno == EAGAIN)
-							break;
-
 						if(errno == EINTR)
 							continue;
-						
+
+						if(errno == EAGAIN || errno == EWOULDBLOCK || !server->is_running())
+							break;
+
 						Clog::error_throw(errors::system, "epoll accept error!(%d)",errno);
 					}
 
@@ -283,6 +286,9 @@ io_service_epoll::process_event(epoll_event* m_events)
 				
 				if(!epoll_control(EPOLL_CTL_MOD,fd,&_ev))
 				{
+					if(!server->is_running())
+						continue;
+
 					server->stop();
 					Clog::error_throw(errors::system, "server:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
 				}	

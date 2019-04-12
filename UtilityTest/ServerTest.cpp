@@ -38,7 +38,7 @@ class GameServer : public net::server_wrap <GameSession, msg::plan0::controler>
 public:
 	virtual void on_start(void)
 	{
-		m_max_session = m_pool.size();
+		m_max_session = m_session_pool.size();
 		m_connected = 0;
 		m_last_connect = 0;
 		m_max_per_connect = 0;
@@ -57,7 +57,7 @@ private:
 		while (m_run)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-			m_connected = m_pool.used();
+			m_connected = m_session_pool.used();
 			int per = m_connected - m_last_connect;
 			m_max_per_connect = m_max_per_connect < per ? per : m_max_per_connect;
 			if (per == 0) continue;
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 
 		
 			Server.init(nCount, &io_service, &dispatcher);
-			Server.start( "10.0.0.35", 55552);
+			Server.start( "127.0.0.1", 55552);
 		
 	
 		std::string str;
@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
 	
 
 	io_service.stop();
-
+	dispatcher.stop();
 
 	}
 	catch (utility_error e){
