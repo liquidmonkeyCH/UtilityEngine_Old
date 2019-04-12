@@ -56,6 +56,10 @@ private:
 	unsigned long m_lastread;
 	unsigned long m_size;
 
+#ifndef NDEBUG
+	unsigned long m_last_malloc;
+#endif
+
 	std::mutex m_mutex;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////

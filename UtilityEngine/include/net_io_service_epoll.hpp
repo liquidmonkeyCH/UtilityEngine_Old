@@ -49,7 +49,7 @@ private:
 	bool epoll_control(int op,fd_t fd,epoll_event* ev);
 private:
 	void create_epoll(void);
-	void process_event(void);
+	void process_event(epoll_event* m_events);
 	void close(void);
 private:
 	std::atomic_int m_state;

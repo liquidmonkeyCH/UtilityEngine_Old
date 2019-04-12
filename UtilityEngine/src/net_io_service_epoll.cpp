@@ -112,7 +112,10 @@ io_service_epoll::start(std::uint32_t nthread)
 	m_events_pool.init(nthread);
 
 	for (std::uint32_t i = 0; i < nthread; ++i)
-		m_threads.push_back(std::thread(std::bind(&io_service_epoll::process_event, this)));
+	{
+		epoll_event* m_events  = m_events_pool.malloc()->m_data;
+		m_threads.push_back(std::thread(std::bind(&io_service_epoll::process_event, this, m_events)));
+	}
 
 	m_state = static_cast<int>(state::running);
 	EPOLL_DEBUG("epoll running! threads=%u", nthread);
@@ -217,7 +220,7 @@ io_service_epoll::untrack_session(session_iface* session)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-io_service_epoll::process_event(void)
+io_service_epoll::process_event(epoll_event* m_events)
 {
 	per_io_data* data,*sdata;
 	session_iface* session = nullptr;
@@ -225,7 +228,6 @@ io_service_epoll::process_event(void)
 	socket_iface* socket = nullptr;
 	fd_t fd;
 
-	epoll_event* m_events  = m_events_pool.malloc()->m_data;
 	epoll_event *end,*it;
 	int size,len;
 

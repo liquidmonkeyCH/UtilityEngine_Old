@@ -19,6 +19,9 @@ rotative_buffer::rotative_buffer(void)
 , m_reader(nullptr)
 , m_final(nullptr)
 , m_size(0)
+#ifndef NDEBUG
+, m_last_malloc(0)
+#endif
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,6 +29,19 @@ rotative_buffer::~rotative_buffer(void)
 {
 	delete[] m_buffer;
 	m_buffer = nullptr;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void
+rotative_buffer::clear(void)
+{
+	m_lastcopy = 0;
+	m_lastread = 0;
+	m_writer = m_buffer;
+	m_reader = m_buffer;
+	m_final = m_buffer + m_size;
+#ifndef NDEBUG
+	m_last_malloc = 0;
+#endif
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -104,6 +120,7 @@ rotative_buffer::read(unsigned long& size)
 void
 rotative_buffer::commit_read(unsigned long size)
 {
+	assert(size <= m_lastread);
 	std::lock_guard<std::mutex> lock(m_mutex);
 	m_reader += size;
 	//! reader touch finial
@@ -142,6 +159,9 @@ rotative_buffer::write(unsigned long& size)
 	//! head     reader				  writer   final        tail
 	unsigned long left = (m_writer >= m_reader) ? m_size - (m_writer - m_reader) : m_reader - m_writer;
 	(--left > size) ? (left = size) : (size = left);
+#ifndef NDEBUG
+	m_last_malloc = size;
+#endif
 	return m_writer;
 	//!
 	//! ¡ý*********¡ý**********¡ý******¡ý*********¡ý
@@ -152,6 +172,10 @@ bool
 rotative_buffer::commit_write(unsigned long size)
 {
 	std::lock_guard<std::mutex> lock(m_mutex);
+#ifndef NDEBUG
+	assert(m_last_malloc >= size);
+	m_last_malloc = 0;
+#endif
 	m_writer += size;
 
 	//! writer touch finial
@@ -167,16 +191,6 @@ rotative_buffer::commit_write(unsigned long size)
 	}
 
 	return (m_lastread == 0); 
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void
-rotative_buffer::clear(void)
-{
-	m_lastcopy = 0;
-	m_lastread = 0;
-	m_writer = m_buffer;
-	m_reader = m_buffer;
-	m_final = m_buffer + m_size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace mem

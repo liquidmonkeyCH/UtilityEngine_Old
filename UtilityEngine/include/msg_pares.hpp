@@ -34,13 +34,23 @@ inline const char* pares_len(mem::buffer_iface* buffer, unsigned long& size)
 inline const char* pares_zero(mem::buffer_iface* buffer, unsigned long& size)
 {
 	const char* p = nullptr;
-	unsigned long len = 0;
+	std::size_t len = 0;
 	do{
 		size = 0;
 		p = buffer->read(size);
-		if (size == 0) return nullptr;
-		if (strlen(p) < size) return p;
-		if (++size > MAX_PACKET_LEN) return nullptr;
+		if (size == 0) 
+			return nullptr;
+
+		len = strlen(p);
+		if (len < size)
+		{
+			size = len + 1;
+			return p;
+		}
+
+		if (++size > MAX_PACKET_LEN) 
+			return nullptr;
+
 	} while (buffer->readable_size(size));
 
 	return nullptr;
