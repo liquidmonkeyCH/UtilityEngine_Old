@@ -38,8 +38,8 @@ PreprocessOnlySwitch   :=-E
 ObjectsFileList        :="/root/UtilityEngine_New/trunk/codelite/UtilityEngine/UtilityEngine.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-CmpOptions             := -g -ggdb -fPIC -std=c++0x  $(Preprocessors)
-C_CmpOptions           := -g -ggdb -fPIC -std=c++0x  $(Preprocessors)
+CmpOptions             := -g -ggdb -fPIC -std=c++0x -gstabs  $(Preprocessors)
+C_CmpOptions           := -g -ggdb -fPIC -std=c++0x -gstabs  $(Preprocessors)
 LinkOptions            :=  
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)../../UtilityEngine/include 
 IncludePCH             := 

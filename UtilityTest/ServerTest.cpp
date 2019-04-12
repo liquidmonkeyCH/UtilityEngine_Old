@@ -26,7 +26,7 @@ public:
 
 int handler(task::object_iface* obj, const char* msg, void* ptr)
 {
-	Clog::info("recv msg: %s", msg);
+	//Clog::info("recv msg: %s", msg);
 	GameSession* session = dynamic_cast<GameSession*>(obj);
 	session->send(msg, strlen(msg) + 1);
 	
