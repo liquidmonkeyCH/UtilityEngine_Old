@@ -308,7 +308,7 @@ io_service_epoll::process_event(epoll_event* m_events)
 				EPOLL_DEBUG("epoll in & out");
 			}
 
-			if(it->events & EPOLLIN)
+			while(it->events & EPOLLIN)
 			{
 				if(m_mulit_threads)
 				{
@@ -316,7 +316,7 @@ io_service_epoll::process_event(epoll_event* m_events)
 					if(!data->m_ol.m_inuse.compare_exchange_strong(b_exp,true))
 					{
 						EPOLL_DEBUG("duplicate read");
-						continue;
+						break;
 					}	
 				}
 				session = static_cast<session_iface*>(data->m_owner);
@@ -368,6 +368,7 @@ io_service_epoll::process_event(epoll_event* m_events)
 						Clog::error_throw(errors::system, "recv:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
 					}
 				}
+				break;
 			}//EPOLLIN
 
 			if(it->events & EPOLLOUT)

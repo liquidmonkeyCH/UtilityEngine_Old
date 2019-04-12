@@ -113,6 +113,7 @@ rotative_buffer::read(unsigned long& size)
 	left = size - m_lastread;
 	memcpy(m_final + m_lastcopy, m_buffer + m_lastcopy, left);
 	m_lastcopy += left;
+	m_lastread = size;
 
 	return m_reader;
 }
