@@ -95,7 +95,6 @@ bool session_wrap<st, buffer_t>::process_send(unsigned long size)
 	m_send_data.m_buffer.len = MAX_PACKET_LEN;
 	m_send_data.m_buffer.buf = const_cast<char*>(m_send_buffer.read(m_send_data.m_buffer.len));
 
-	std::lock_guard<std::recursive_mutex> lock(m_close_mutex);
 	return (m_send_data.m_buffer.len > 0) && (m_state == static_cast<int>(state::connected));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +121,6 @@ bool session_wrap<st, buffer_t>::process_recv(unsigned long size)
 		return false;
 	}
 
-	std::lock_guard<std::recursive_mutex> lock(m_close_mutex);
 	return (m_state == static_cast<int>(state::connected));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
