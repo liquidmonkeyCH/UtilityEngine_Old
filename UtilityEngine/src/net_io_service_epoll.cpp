@@ -363,6 +363,9 @@ io_service_epoll::process_event(epoll_event* m_events)
 					
 					if(!epoll_control(EPOLL_CTL_MOD,data->m_fd,&_ev))
 					{
+						if (errno == EBADF || errno == ENOENT)
+							continue;
+
 						session->close(close_state::cs_service_stop);
 						Clog::error_throw(errors::system, "recv:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
 					}
@@ -397,6 +400,9 @@ io_service_epoll::process_event(epoll_event* m_events)
 					
 					if(!epoll_control(EPOLL_CTL_MOD,data->m_fd,&_ev))
 					{
+						if (errno == EBADF || errno == ENOENT)
+							continue;
+
 						session->close(close_state::cs_service_stop);
 						Clog::error_throw(errors::system, "send:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
 					}
@@ -421,6 +427,9 @@ io_service_epoll::process_send(per_io_data* data,per_io_data* _data)
 		struct epoll_event _ev{EPOLLIN|EPOLLRDHUP|EPOLLET|EPOLLONESHOT,{static_cast<void*>(_data)}};
 		if(!epoll_control(EPOLL_CTL_MOD,_data->m_fd,&_ev))
 		{
+			if (errno == EBADF || errno == ENOENT)
+				return false;
+
 			session->close(close_state::cs_service_stop);
 			Clog::error_throw(errors::system, "send: epoll_ctl(EPOLL_CTL_MOD) failure!(%d)", errno);
 		}
@@ -428,7 +437,7 @@ io_service_epoll::process_send(per_io_data* data,per_io_data* _data)
 	
 	do
 	{
-		len = socket->write(data->m_buffer.buf, data->m_buffer.len);
+		len = write(data->m_fd,data->m_buffer.buf, data->m_buffer.len);
 		if (len <= 0)
 		{
 			if (errno == EINTR)
@@ -436,6 +445,9 @@ io_service_epoll::process_send(per_io_data* data,per_io_data* _data)
 
 			if (errno == EAGAIN)
 				return true;
+
+			if (errno == EBADF)
+				return false;
 
 			if (errno == ECONNABORTED || errno == ECONNRESET)
 			{
@@ -473,6 +485,9 @@ io_service_epoll::post_send_event(per_io_data* data)
 	
 	if(!epoll_control(EPOLL_CTL_MOD,_data->m_fd,&_ev))
 	{
+		if (errno == EBADF || errno == ENOENT)
+			return;
+
 		session->close(close_state::cs_service_stop);
 		Clog::error_throw(errors::system, "send: epoll_ctl(EPOLL_CTL_MOD) failure!(%d)", errno);
 	}
