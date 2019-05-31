@@ -39,15 +39,18 @@ void
 controler::post_request(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr)
 {
 	unsigned long len = 0;
-	const char* p = m_pares(buffer, len);
-	if (!p)
+	const char* p = nullptr;
+	if (buffer)
 	{
-		if (len > MAX_PACKET_LEN)
-			obj->handle_error(compkey);
+		p = m_pares(buffer, len);
+		if (!p)
+		{
+			if (len > MAX_PACKET_LEN)
+				obj->handle_error(compkey);
 
-		return;
+			return;
+		}
 	}
-
 	m_dispatcher->dispatch({ this, compkey, buffer, len, obj, p, ptr });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
