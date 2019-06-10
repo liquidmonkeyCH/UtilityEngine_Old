@@ -26,24 +26,24 @@ public:
 
 	//! Returns: total writable size
 	virtual unsigned long writable_size(void) = 0;
-	//! Reg write operator
+	//! Reg write operation
 	//! Param:(in-out)size [0~MAX_PACKET_LEN]
 	virtual char* write(unsigned long& size) = 0;
-	//! Commit write operator
+	//! Commit write operation
 	//! Returns: |true [m_lastread = 0]|false [m_lastread != 0]|
 	//!	Next:	 |Need notify readable |No need notify readable|
 	virtual bool commit_write(unsigned long size) = 0;
 
-	//! Returns: total readable size or 0 when readable size less-than exp.
+	//! Returns: total readable size, 0 when readable size less-than exp.
 	//! Change member [m_lastread] to 0 when readable size less-than exp.
 	//! Next: readable size less-than exp [m_lastread = 0]. Need wait for readable notify.
 	virtual unsigned long readable_size(unsigned long exp = 0) = 0;
-	//! Reg read operator
+	//! Reg read operation
 	//! Param:(in-out)size [0~MAX_PACKET_LEN]
 	//! Always change member [m_lastread]
 	virtual const char* read(unsigned long& size) = 0;
-	//! Commit read operator
-	//! Release space for write operator
+	//! Commit read operation
+	//! Release space for write operation
 	virtual void commit_read(unsigned long size) = 0;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
