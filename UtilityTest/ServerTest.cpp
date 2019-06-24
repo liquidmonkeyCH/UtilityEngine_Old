@@ -8,10 +8,13 @@
 #include "net_io_service_iocp.hpp"
 #include "msg_controler_plan0.hpp"
 #include "mem_rotative_buffer.hpp"
+#include "mem_stream_buffer.hpp"
 #include "net_server.hpp"
 
+#include "mem_pool.hpp"
+
 using namespace Utility;
-class GameSession : public net::session_wrap < net::socket_type::tcp, mem::rotative_buffer >
+class GameSession : public net::session_wrap < net::socket_type::tcp, mem::rotative_buffer>
 {
 public:
 	void on_connect(void)
@@ -84,6 +87,8 @@ int main(int argc, char* argv[])
 	io_service.start();
 	GameServer::dispatch_t dispatcher;
 	dispatcher.start(10);
+
+	mem::stream_buffer::pool_t::alloc_cache(100);
 
 	int nCount;
 	std::cin >> nCount;

@@ -34,7 +34,6 @@ public:
 	void init(dispatch_t* dispatcher);
 
 	void post_request(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr);
-	void post_close(task::object_iface* obj);
 private:
 	void handle_wrap(std::uint32_t compkey, mem::buffer_iface* buffer, unsigned long m_len,
 					 task::object_iface* obj, const char* msg, void* ptr);

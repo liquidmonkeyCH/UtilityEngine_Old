@@ -12,6 +12,9 @@
 #include <limits>
 #include <climits>
 #include <vector>
+#include <mutex>
+#include <queue>
+#include <atomic>
 
 namespace Utility
 {
@@ -76,22 +79,17 @@ protected:
 #endif
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class T, size_t N>
-class _chunk_release_model;
-////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T, size_t N = 0>
 class memory_pool : public _chunk_base<N>
 {
 private:
 	typedef _chunk_base<N> base;
 	typedef typename base::size_type size_type;
-	friend class _chunk_release_model<T, N>;
+	template<class,size_t,class> friend class _chunk_release_model;
 
 	T				_data[N];
 	size_type		_offset[N];
 	size_type		_first, _left;
-
-	void _free(T* p);
 public:
 	memory_pool(void);
 	~memory_pool(void);
@@ -101,6 +99,9 @@ public:
 
 	memory_pool(const memory_pool&&) = delete;
 	memory_pool& operator=(const memory_pool&&) = delete;
+
+	// do nothing
+	void init(size_t size) {}
 
 	T*	malloc(void);
 	bool free(T* p);
@@ -116,11 +117,11 @@ class memory_pool<T, 0> : public _chunk_base<0>
 private:
 	typedef _chunk_base<0> base;
 	typedef typename base::size_type size_type;
-	friend class _chunk_release_model<T, 0>;
+	template<class, size_t, class> friend class _chunk_release_model;
 
 	T*				_data;
 	size_type*		_offset;
-	size_type		_first, _left, _size;
+	size_type		_first, _size, _left;
 public:
 	memory_pool(void);
 	~memory_pool(void);
@@ -141,35 +142,81 @@ protected:
 	std::ptrdiff_t npos(T* p);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace alloc_mode
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//default: new & delete
+template<class T, size_t N, size_t H>
+class normal
+{
+	using chunk = memory_pool<T, N>;
+public:
+	void init(size_t size) {}
+	memory_pool<T, N>* malloc(size_t size);
+	void free(memory_pool<T, N>* p);
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// cache some chunk in free operation for malloc operation
+template<class T, size_t N, size_t H>
+class cache
+{
+	using chunk = memory_pool<T, N>;
+public:
+	cache(void) { m_head = m_cache - 1; m_tail = m_cache + H - 1; }
+
+	void init(size_t size) {}
+	memory_pool<T, N>* malloc(size_t size);
+	void free(memory_pool<T, N>* p);
+private:
+	std::mutex m_mutex;
+	chunk*	m_cache[H];
+	chunk** m_head;
+	chunk** m_tail;
+};
+
 template<class T, size_t N>
+class cache<T, N, 0>
+{
+	using chunk = memory_pool<T, N>;
+public:
+	cache(void) :_size(0) {}
+
+	void init(size_t size) { _size = size; }
+	memory_pool<T, N>* malloc(size_t size);
+	void free(memory_pool<T, N>* p);
+private:
+	std::mutex m_mutex;
+	std::queue<chunk*> m_cache;
+	std::atomic<size_t> _size;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}//namespace alloc_mode
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class T, size_t N, class alloc>
 class _chunk_release_model
 {
 protected:
 	typedef memory_pool<T, N> chunk;
 	typedef std::vector<chunk*> chunks;
-	typedef typename chunks::iterator Ckiter;
-	typedef typename chunks::reverse_iterator RCiter;
 
 	chunks	_chunks;
 	size_t	_alloc_chunk;
 	size_t	_dealloc_chunk;
+	size_t	_size;
 
 	_chunk_release_model(void);
 	~_chunk_release_model(void);
-
-	_chunk_release_model(const _chunk_release_model&) = delete;
-	_chunk_release_model& operator=(const _chunk_release_model&) = delete;
-
-	_chunk_release_model(const _chunk_release_model&&) = delete;
-	_chunk_release_model& operator=(const _chunk_release_model&&) = delete;
 
 	size_t _forward(size_t n, size_t i, size_t total) { n = n + i; return n >= total ? n - total : n; }
 	size_t _backward(size_t n, size_t i, size_t total) { return n >= i ? n - i : total + n - i; }
 
 	std::ptrdiff_t _npos(T* p, size_t& n);
-
-	size_t _chunk_size(size_t n) { return _chunks[n]->_left; }
+	static alloc* chunk_alloc(void) { static alloc _alloc; return &_alloc; }
+	size_t _chunk_size(size_t n) { return size_t(_chunks[n]->_left); }
 public:
+	void init(size_t size);
+	static void alloc_cache(size_t size) { chunk_alloc()->init(size); }
+
 	void clear(void);
 	T* malloc(void);
 };
@@ -177,30 +224,40 @@ public:
 namespace release_mode
 { 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class T, size_t N>
-struct hold : public _chunk_release_model<T, N>
+// hold all chunks
+template<class T, size_t N, class alloc>
+class hold : public _chunk_release_model<T, N, alloc>
 {
-	typedef _chunk_release_model<T, N> base;
-	std::ptrdiff_t npos(T* p) { size_t i; std::ptrdiff_t pos = _npos(p, i); return pos<0 ? -1 : pos + i*N; }
-	void free(T* p);
+private:
+	typedef _chunk_release_model<T, N, alloc> base;
+public:
+	bool free(T* p);
 };
-
-template<class T, size_t N>
-struct auto1 : public _chunk_release_model<T, N>
+// hold only one empty chunk
+template<class T, size_t N, class alloc>
+class auto1chunk : public _chunk_release_model<T, N, alloc>
 {
-	typedef _chunk_release_model<T, N> base;
-	void free(T* p);
+private:
+	typedef _chunk_release_model<T, N, alloc> base;
+public:
+	void clear(void);
+	bool free(T* p);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace release_mode
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class T, size_t N = 254, template<class, size_t> class Release = release_mode::auto1>
-struct memory_pool_ex : public Release<T, N>
+// T:data type 
+// N:data num in one chunk  
+// R:chunk release policy
+// alloc:chunk alloc&free policy 
+// H:chunk cache size 
+template<class T, size_t N = 0, template<class, size_t, class> class R = release_mode::auto1chunk,
+	template<class, size_t, size_t> class alloc = alloc_mode::normal, size_t H = 0>
+class memory_pool_ex : public R<T, N, alloc<T,N,H>>
 {
-	static_assert(N, "N can not be 0!");
-
-	memory_pool_ex(void) {}
-	~memory_pool_ex(void) {}
+public:
+	memory_pool_ex(void) = default;
+	~memory_pool_ex(void) = default;
 
 	memory_pool_ex(const memory_pool_ex&) = delete;
 	memory_pool_ex& operator=(const memory_pool_ex&) = delete;

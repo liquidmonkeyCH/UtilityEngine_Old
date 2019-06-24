@@ -8,6 +8,7 @@
 
 #include "mem_buffer.hpp"
 #include "mem_pool.hpp"
+#include "base_defines.hpp"
 #include <mutex>
 
 namespace Utility
@@ -48,15 +49,26 @@ public:
 	//! Commit read operation
 	//! Release space for write operation
 	void commit_read(unsigned long size);
+public:
+	struct node
+	{
+		node() { m_buffer[MAX_PACKET_LEN] = 0; }
+		char	m_buffer[MAX_PACKET_LEN + 1];
+		node*	m_next;
+	};
+
+	using pool_t = memory_pool_ex<node, 0, mem::release_mode::auto1chunk, mem::alloc_mode::cache>;
 private:
-	char*	m_buffer;
+	node*	m_head;
+	node*	m_tail;
+	pool_t	m_pool;
+
 	char*	m_reader;
 	char*	m_writer;
-	char*	m_final;
-	unsigned long m_lastcopy;
-	unsigned long m_lastread;
-	unsigned long m_size;
+	size_t	m_readable;
+	size_t	m_block;
 
+	unsigned long m_lastread;
 #ifndef NDEBUG
 	unsigned long m_last_malloc;
 #endif
