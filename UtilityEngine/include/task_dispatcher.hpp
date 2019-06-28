@@ -20,16 +20,14 @@ public:
 	struct task_info
 	{
 		msg::controler_iface*		m_controler;
+		task::object_iface*			m_obj;
 		std::uint32_t				m_compkey;
 		mem::buffer_iface*			m_buffer;
-		unsigned long				m_len;
-		task::object_iface*			m_obj;
-		const char*					m_msg;
 		void*						m_userdata;
 
 		void run(void)
 		{
-			m_controler->handle_wrap(m_compkey, m_buffer, m_len, m_obj, m_msg, m_userdata);
+			m_controler->handle_wrap(m_obj, m_compkey, m_buffer, m_userdata);
 		}
 	};
 public:

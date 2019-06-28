@@ -6,13 +6,15 @@
 #ifndef __MEM_BUFFER_HPP__
 #define __MEM_BUFFER_HPP__
 
+#include "mem_message.hpp"
+
 namespace Utility
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace mem
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class buffer_iface
+class buffer_iface : public message
 {
 public:
 	buffer_iface(void) = default;
@@ -45,6 +47,9 @@ public:
 	//! Commit read operation
 	//! Release space for write operation
 	virtual void commit_read(unsigned long size) = 0;
+	//! for message
+	void set_read_limit(unsigned long size) { m_read_limit = size; m_pos = 0; }
+	unsigned long get_read_limit(void) { return m_read_limit; }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace mem

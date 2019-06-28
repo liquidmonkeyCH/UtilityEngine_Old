@@ -49,6 +49,9 @@ public:
 	//! Commit read operation
 	//! Release space for write operation
 	void commit_read(unsigned long size);
+
+	//! message iface
+	const char* next(unsigned long& size);
 public:
 	struct node
 	{

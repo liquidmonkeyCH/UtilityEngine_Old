@@ -35,8 +35,7 @@ public:
 
 	void post_request(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr);
 private:
-	void handle_wrap(std::uint32_t compkey, mem::buffer_iface* buffer, unsigned long m_len,
-		task::object_iface* obj, const char* msg, void* ptr);
+	void handle_wrap(task::object_iface* obj,  std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr);
 
 	std::uint32_t& key_pares_t(const char* msg);
 	pares_t m_pares = msg::pares_zero;

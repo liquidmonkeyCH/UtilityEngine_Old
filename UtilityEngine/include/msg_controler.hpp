@@ -19,8 +19,7 @@ namespace msg
 class controler_iface
 {
 	friend class task::dispatcher_iface;
-	virtual void handle_wrap(std::uint32_t compkey, mem::buffer_iface* buffer,unsigned long m_len, 
-							 task::object_iface* obj, const char* msg, void* ptr) = 0;
+	virtual void handle_wrap(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr) = 0;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace task

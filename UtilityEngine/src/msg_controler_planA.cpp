@@ -50,13 +50,13 @@ controler::post_request(task::object_iface* obj, std::uint32_t compkey, mem::buf
 
 			return;
 		}
+		buffer->set_read_limit(len);
 	}
-	m_dispatcher->dispatch({ this, compkey, buffer, len, obj, p, ptr });
+	m_dispatcher->dispatch({ this, obj, compkey, buffer, ptr });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-controler::handle_wrap(std::uint32_t compkey, mem::buffer_iface* buffer, unsigned long len,
-					   task::object_iface* obj, const char* msg, void* ptr)
+controler::handle_wrap(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr)
 {
 	if (!buffer)
 	{
@@ -67,14 +67,15 @@ controler::handle_wrap(std::uint32_t compkey, mem::buffer_iface* buffer, unsigne
 	if (obj->compkey() != compkey)
 		return;
 
-	handler_t handle = get_handle(key_pares_t(msg));
-	if (!handle || handle(obj, msg, ptr) != 0)
+	unsigned long size = buffer->get_read_limit();
+	handler_t handle = get_handle(key_pares_t(buffer->read(size)));
+	if (!handle || handle(obj, buffer, ptr) != 0)
 	{
 		obj->handle_error(compkey);
 		return;
 	}
 
-	buffer->commit_read(len);
+	buffer->commit_read(buffer->get_read_limit());
 	post_request(obj, compkey, buffer, ptr);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
