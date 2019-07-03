@@ -69,7 +69,7 @@ controler::handle_wrap(task::object_iface* obj, std::uint32_t compkey, mem::buff
 		return;
 	}
 
-	buffer->commit_read(buffer->get_read_limit());
+	buffer->commit_read(buffer->get_limit());
 	post_request(obj, compkey, buffer, ptr);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

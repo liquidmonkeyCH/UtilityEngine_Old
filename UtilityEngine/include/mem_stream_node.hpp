@@ -17,10 +17,10 @@ namespace mem
 struct stream_node
 {
 public:
-	stream_node(void) = default;
+	stream_node(void) :m_next(nullptr) { memset(m_buffer,0,MAX_PACKET_LEN); }
 	~stream_node(void) = default;
 public:
-	char m_buffer[MAX_PACKET_LEN + 1];
+	char m_buffer[MAX_PACKET_LEN];
 	stream_node* m_next;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////

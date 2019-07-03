@@ -5,6 +5,7 @@
 */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
+inline
 container<T>::container(void)
 : m_data(nullptr)
 , m_offset(nullptr)
@@ -15,6 +16,7 @@ container<T>::container(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
+inline
 container<T>::~container(void)
 {
 	delete[] m_data;
@@ -25,7 +27,8 @@ container<T>::~container(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-void container<T>::clear(void)
+inline void 
+container<T>::clear(void)
 {
 	m_next = 0;
 	m_left = m_size;
@@ -33,7 +36,8 @@ void container<T>::clear(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-void container<T>::init(size_t size)
+inline void 
+container<T>::init(size_t size)
 {
 	assert(size != 0);
 	assert(size <= size_t(-1) - 2);
@@ -60,7 +64,8 @@ void container<T>::init(size_t size)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-std::ptrdiff_t container<T>::npos(T* p)
+inline std::ptrdiff_t 
+container<T>::npos(T* p)
 {
 	if (!m_data || p < m_data || p >= m_data + m_size) return -1;
 
@@ -68,7 +73,8 @@ std::ptrdiff_t container<T>::npos(T* p)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-T* container<T>::malloc(void)
+inline T* 
+container<T>::malloc(void)
 {
 	if (!m_left) return nullptr;
 
@@ -81,7 +87,8 @@ T* container<T>::malloc(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-bool container<T>::free(T* p)
+inline bool 
+container<T>::free(T* p)
 {
 	std::ptrdiff_t _pos = npos(p);
 	if(_pos < 0) return false;
@@ -96,7 +103,8 @@ bool container<T>::free(T* p)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-typename container<T>::iterator container<T>::used_begin(void)
+inline typename container<T>::iterator 
+container<T>::used_begin(void)
 {
 	if (m_offset[0] == _used) return{ this, 0 };
 	if (m_offset[0] == 0) return{ this, m_size };
@@ -106,13 +114,15 @@ typename container<T>::iterator container<T>::used_begin(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-typename container<T>::iterator container<T>::used_end(void)
+inline typename container<T>::iterator 
+container<T>::used_end(void)
 {
 	return{ this, m_size };
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-size_t container<T>::head_zero(void)
+inline size_t 
+container<T>::head_zero(void)
 {
 	size_t head = 0;
 	size_t tail = m_size;
@@ -135,7 +145,7 @@ size_t container<T>::head_zero(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-typename container<T>::iterator&
+inline typename container<T>::iterator&
 container<T>::iterator::operator++(void)
 {
 	while (m_pos < m_parent->m_size && m_parent->m_offset[++m_pos] != m_parent->_used){
@@ -149,7 +159,7 @@ container<T>::iterator::operator++(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-typename container<T>::iterator
+inline typename container<T>::iterator
 container<T>::iterator::operator++(int)
 {
 	iterator it = *this;
@@ -158,7 +168,7 @@ container<T>::iterator::operator++(int)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-typename container<T>::iterator&
+inline typename container<T>::iterator&
 container<T>::iterator::operator--(void)
 {
 	if (m_parent->m_offset[0] == 0) return *this;
@@ -169,7 +179,7 @@ container<T>::iterator::operator--(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-typename container<T>::iterator
+inline typename container<T>::iterator
 container<T>::iterator::operator--(int)
 {
 	iterator it = *this;

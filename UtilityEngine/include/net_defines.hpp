@@ -80,7 +80,7 @@ enum class socket_type { tcp, };
 
 struct per_io_data
 {
-	OVERLAPPED m_ol;                 // ÖØµþ½á¹¹
+	OVERLAPPED m_ol;
 	WSABUF m_buffer;
 	io_op m_op;
 	void* m_owner;

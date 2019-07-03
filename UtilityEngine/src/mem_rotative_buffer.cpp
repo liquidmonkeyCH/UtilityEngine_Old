@@ -18,6 +18,8 @@ rotative_buffer::rotative_buffer(void)
 , m_writer(nullptr)
 , m_reader(nullptr)
 , m_final(nullptr)
+, m_lastread(0)
+, m_lastcopy(0)
 , m_size(0)
 #ifndef NDEBUG
 , m_last_malloc(0)
@@ -197,8 +199,13 @@ rotative_buffer::commit_write(unsigned long size)
 const char*
 rotative_buffer::next(unsigned long& size)
 {
-	size = m_read_limit - m_pos;
-	const char* p = size > 0 ? read(size): nullptr;
+	if (m_limit <= m_pos)
+	{
+		size = 0;
+		return nullptr;
+	}
+	size = m_limit - m_pos;
+	const char* p = read(size);
 	m_pos += size;
 	return p;
 }

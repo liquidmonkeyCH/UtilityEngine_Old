@@ -23,12 +23,15 @@ public:
 };
 
 
-int handler(task::object_iface* obj, const char* msg, void* ptr)
+int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 {
-	Clog::info("recv msg: %s", msg);
-	std::string str(msg);
+	unsigned long len = 0;
+	const char* p = msg->next(len);
+
+	Clog::info("recv msg: %s", p);
+	std::string str(p);
 	if (str.size() < MAX_PACKET_LEN/2 -10)
-		str += msg;
+		str += p;
 
 	GameSession* session = dynamic_cast<GameSession*>(obj);
 	session->send(str.c_str(), str.size() + 1);

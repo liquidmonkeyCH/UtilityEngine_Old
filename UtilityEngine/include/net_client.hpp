@@ -20,7 +20,7 @@ class client_iface : public framework
 public:
 	enum class state{ none, starting, connecting, connected, timeout, stopping };
 
-	client_iface(void) = default;
+	client_iface(void) :m_io_service(nullptr) {}
 	virtual ~client_iface(void) = default;
 
 	client_iface(const client_iface&) = delete;

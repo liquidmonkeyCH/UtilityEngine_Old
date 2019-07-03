@@ -12,3 +12,8 @@
 vs2013/UtilityEngine/Debug/UtilityEngine.lib
 *.opensdf
 vs2015
+*.db
+*.opendb
+*.ipch
+*.db-shm
+*.db-wal

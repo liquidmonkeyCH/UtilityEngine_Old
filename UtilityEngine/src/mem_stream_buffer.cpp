@@ -13,12 +13,15 @@ namespace mem
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 stream_buffer::stream_buffer(void)
-	: m_head(nullptr)
-	, m_tail(nullptr)
-	, m_writer(nullptr)
-	, m_reader(nullptr)
+: m_head(nullptr)
+, m_tail(nullptr)
+, m_next(nullptr)
+, m_writer(nullptr)
+, m_reader(nullptr)
+, m_readable(0)
+, m_lastread(0)
 #ifndef NDEBUG
-	, m_last_malloc(0)
+, m_last_malloc(0)
 #endif
 {
 }
@@ -35,6 +38,7 @@ stream_buffer::clear(void)
 	m_head = m_pool.malloc();
 	m_head->m_next = nullptr;
 	m_tail = m_head;
+	m_next = m_head;
 
 	m_writer = m_head->m_buffer;
 	m_reader = m_head->m_buffer;
@@ -68,9 +72,10 @@ stream_buffer::readable_size(unsigned long exp)
 const char*
 stream_buffer::read(unsigned long& size)
 {
-	size = m_head->m_buffer + MAX_PACKET_LEN - m_reader;
+	unsigned long len = m_head->m_buffer + MAX_PACKET_LEN - m_reader;
 	std::lock_guard<std::mutex> lock(m_mutex);
-	size = size > m_readable ? m_readable : size;
+	len = len > m_readable ? m_readable : len;
+	size = size > len ? len : size;
 	m_lastread = size;
 	return m_reader;
 }
@@ -78,16 +83,28 @@ stream_buffer::read(unsigned long& size)
 void
 stream_buffer::commit_read(unsigned long size)
 {
-	assert(size <= m_lastread);
+	assert(size <= m_readable);
 	std::lock_guard<std::mutex> lock(m_mutex);
-	m_reader += size;
 	m_readable -= size;
-	if (m_reader >= m_head->m_buffer + MAX_PACKET_LEN) {
-		node* tmp = m_head;
-		m_head = m_head->m_next;
-		m_reader = m_head->m_buffer;
-		m_pool.free(tmp);
-	}
+	unsigned long len = m_head->m_buffer + MAX_PACKET_LEN - m_reader;
+	node* tmp;
+	do
+	{
+		if (size >= len)
+		{
+			size -= len;
+			tmp = m_head;
+			m_head = m_head->m_next;
+			m_reader = m_head->m_buffer;
+			m_pool.free(tmp);
+			len = m_head == m_tail ? m_writer - m_reader : MAX_PACKET_LEN;
+		}
+		else
+		{
+			size = 0;
+			m_reader += len;
+		}
+	} while (size != 0);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long
@@ -129,12 +146,38 @@ stream_buffer::commit_write(unsigned long size)
 	return (m_lastread == 0);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+void
+stream_buffer::reset(void)
+{
+	m_pos = 0;
+	m_next = m_head;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 const char*
 stream_buffer::next(unsigned long& size)
 {
-	size = m_read_limit - m_pos;
-	const char* p = read(size);
-	m_read_limit -= size;
+	if (m_limit <= m_pos)
+	{
+		size = 0;
+		return nullptr;
+	}
+
+	unsigned long left = m_limit - m_pos;
+	const char* p = m_next->m_buffer;
+	
+	if (m_next == m_head)
+	{
+		size = m_head->m_buffer + MAX_PACKET_LEN - m_reader;
+		p = m_reader;
+	}
+	else if (m_next == m_tail)
+		size = m_writer - m_tail->m_buffer;
+	else
+		size = MAX_PACKET_LEN;
+
+	size = size > left ? left : size;
+	m_pos += size;
+	m_next = m_next->m_next;
 	return p;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

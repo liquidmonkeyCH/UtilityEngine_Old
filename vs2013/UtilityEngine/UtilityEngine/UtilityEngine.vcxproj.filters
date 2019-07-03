@@ -100,6 +100,24 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_epoll.hpp">
       <Filter>Core\net</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_message.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_buffer.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_node.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_ostream.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_pool.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_confirmer.hpp">
+      <Filter>Core\msg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
@@ -113,6 +131,9 @@
     </None>
     <None Include="..\..\..\UtilityEngine\include\net_session.inl">
       <Filter>Core\net</Filter>
+    </None>
+    <None Include="..\..\..\UtilityEngine\include\mem_pool.inl">
+      <Filter>Core\mem</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_epoll.cpp">
       <Filter>Core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\mem_stream_buffer.cpp">
+      <Filter>Core\mem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

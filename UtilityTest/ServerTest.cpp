@@ -27,11 +27,13 @@ public:
 };
 
 
-int handler(task::object_iface* obj, const char* msg, void* ptr)
+int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 {
 	//Clog::info("recv msg: %s", msg);
 	GameSession* session = dynamic_cast<GameSession*>(obj);
-	session->send(msg, strlen(msg) + 1);
+	unsigned long len = 0;
+	const char* p = msg->next(len);
+	session->send(p, len);
 	
 	return 0;
 }

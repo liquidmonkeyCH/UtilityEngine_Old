@@ -15,13 +15,15 @@ namespace mem
 class message
 {
 public:
-	message(void) = default;
+	message(void) :m_limit(0), m_pos(0) {}
 	~message(void) = default;
   
 	virtual const char* next(unsigned long &size) = 0;
-	void reset(void) { m_pos = 0; }
+	virtual void reset(void) { m_pos = 0; }
+	void set_limit(unsigned long size) { m_limit = size; m_pos = 0; }
+	unsigned long get_limit(void) { return m_limit; }
 protected:
-	unsigned long m_read_limit;
+	unsigned long m_limit;
 	unsigned long m_pos;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -35,7 +35,7 @@ protected:
 
 	static_assert(N <= LLONG_MAX, "size out of range!");
 	const static size_type _used = static_cast<size_type>(1) << (std::numeric_limits<size_type>::digits - 1);
-	const static size_type _zero = _used - 1;
+	const static size_type _zero = ~_used;
 
 	static void _set(size_type& _first, size_type _offset[])
 	{
@@ -215,6 +215,7 @@ protected:
 	size_t _chunk_size(size_t n) { return size_t(_chunks[n]->_left); }
 public:
 	void init(size_t size);
+	// set cache size for H == 0
 	static void alloc_cache(size_t size) { chunk_alloc()->init(size); }
 
 	void clear(void);

@@ -8,7 +8,7 @@
 
 #include "mem_buffer.hpp"
 #include "mem_pool.hpp"
-#include "base_defines.hpp"
+#include "mem_stream_node.hpp"
 #include <mutex>
 
 namespace Utility
@@ -51,25 +51,19 @@ public:
 	void commit_read(unsigned long size);
 
 	//! message iface
+	void reset(void) override;
 	const char* next(unsigned long& size);
 public:
-	struct node
-	{
-		node() { m_buffer[MAX_PACKET_LEN] = 0; }
-		char	m_buffer[MAX_PACKET_LEN + 1];
-		node*	m_next;
-	};
-
-	using pool_t = memory_pool_ex<node, 0, mem::release_mode::auto1chunk, mem::alloc_mode::cache>;
+	using pool_t = memory_pool_ex<stream_node, 0, mem::release_mode::auto1chunk, mem::alloc_mode::cache>;
 private:
-	node*	m_head;
-	node*	m_tail;
-	pool_t	m_pool;
+	stream_node*	m_head;
+	stream_node*	m_tail;
+	stream_node*	m_next;
+	pool_t			m_pool;
 
 	char*	m_reader;
 	char*	m_writer;
 	size_t	m_readable;
-	size_t	m_block;
 
 	unsigned long m_lastread;
 #ifndef NDEBUG

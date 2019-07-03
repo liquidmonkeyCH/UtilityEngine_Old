@@ -1,12 +1,13 @@
 /**
-* @file msg_pares.hpp
+* @file msg_comfirmer.hpp
 *
 * @author Hourui (liquidmonkey)
 */
-#ifndef __MSG_PARES_HPP__
-#define __MSG_PARES_HPP__
+#ifndef __MSG_COMFIRMER_HPP__
+#define __MSG_COMFIRMER_HPP__
 
 #include "msg_defines.hpp"
+#include "mem_buffer.hpp"
 
 namespace Utility
 {
@@ -14,7 +15,23 @@ namespace Utility
 namespace msg
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-inline const char* pares_len(mem::buffer_iface* buffer, unsigned long& size)
+class separator_iface
+{
+public:
+	virtual const char* prepare(mem::buffer_iface* buffer, unsigned long& size) = 0;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class buffer_type,class separator,int MAX_MSG_LEN = MAX_PACKET_LEN>
+class comfirmer_wrap : public separator
+{
+public:
+	using buffer_t = buffer_type;
+	const char* prepare(mem::buffer_iface* buffer, unsigned long& size);
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class buffer_type, class separator, int MAX_MSG_LEN>
+inline const char*
+comfirmer_wrap<buffer_type, separator, MAX_MSG_LEN>::prepare(mem::buffer_iface* buffer, unsigned long& size)
 {
 	size = sizeof(std::uint32_t);
 	if (!buffer->readable_size(size))
@@ -30,13 +47,10 @@ inline const char* pares_len(mem::buffer_iface* buffer, unsigned long& size)
 	if (!buffer->readable_size(size))
 		return nullptr;
 
-	buffer->set_limit(size);
+	buffer->set_read_limit(size);
 
 	return p;
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-inline const char* pares_zero(mem::buffer_iface* buffer, unsigned long& size)
-{
+
 	const char* p = nullptr;
 	std::size_t len = 0;
 	unsigned long last_readable = buffer->readable_size(0);
@@ -52,7 +66,7 @@ inline const char* pares_zero(mem::buffer_iface* buffer, unsigned long& size)
 		if (len < size)
 		{
 			size = len + 1;
-			buffer->set_limit(size);
+			buffer->set_read_limit(size);
 			return p;
 		}
 		// out of bounds
