@@ -87,7 +87,7 @@ stream_buffer::commit_read(unsigned long size)
 	std::lock_guard<std::mutex> lock(m_mutex);
 	m_readable -= size;
 	unsigned long len = m_head->m_buffer + MAX_PACKET_LEN - m_reader;
-	node* tmp;
+	stream_node* tmp;
 	do
 	{
 		if (size >= len)
@@ -101,8 +101,8 @@ stream_buffer::commit_read(unsigned long size)
 		}
 		else
 		{
+			m_reader += size;
 			size = 0;
-			m_reader += len;
 		}
 	} while (size != 0);
 }
@@ -156,6 +156,8 @@ stream_buffer::reset(void)
 const char*
 stream_buffer::next(unsigned long& size)
 {
+	unsigned long limit = readable_size(0);
+
 	if (m_limit <= m_pos)
 	{
 		size = 0;

@@ -1,12 +1,14 @@
 /**
-* @file mem_stream_node.hpp
+* @file mem_stream.hpp
 *
 * @author Hourui (liquidmonkey)
 */
-#ifndef __MEM_STREAM_NODE_HPP__
-#define __MEM_STREAM_NODE_HPP__
+#ifndef __MEM_STREAM_HPP__
+#define __MEM_STREAM_HPP__
 
-#include "base_defines.hpp"
+#include "mem_stream_node.hpp"
+#include "mem_buffer.hpp"
+#include <iostream>
 
 namespace Utility
 {
@@ -14,24 +16,22 @@ namespace Utility
 namespace mem
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-struct stream_node
+class _stream_impl
 {
-	stream_node(void) :m_next(nullptr) { memset(m_buffer,0,MAX_PACKET_LEN); }
-	~stream_node(void) = default;
-
-	char m_buffer[MAX_PACKET_LEN];
-	stream_node* m_next;
+public:
+	_stream_impl(buffer_iface* buffer) :m_buffer(buffer) {}
+	~_stream_impl(void) = default;
+protected:
+	template<class T>
+	bool push(T& data);
+protected:
+	buffer_iface* m_buffer;
+	std::cout
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-struct _stream_node
+class ostream : public _stream_impl
 {
-	_stream_node(void) :m_next(nullptr), m_buffer(nullptr), m_size(0){}
-	_stream_node(const char* p, size_t size, stream_node* next = nullptr) :m_next(next), m_buffer(p), m_size(size) {}
-	~_stream_node(void) = default;
 
-	const char* m_buffer;
-	size_t m_size;
-	stream_node* m_next;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace mem
