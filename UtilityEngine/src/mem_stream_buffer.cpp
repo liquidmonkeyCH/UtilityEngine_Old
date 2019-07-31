@@ -156,15 +156,15 @@ stream_buffer::reset(void)
 const char*
 stream_buffer::next(unsigned long& size)
 {
-	unsigned long limit = readable_size(0);
+	unsigned long limit = m_limit > 0 ? m_limit : readable_size(0);
 
-	if (m_limit <= m_pos)
+	if (limit <= m_pos)
 	{
 		size = 0;
 		return nullptr;
 	}
 
-	unsigned long left = m_limit - m_pos;
+	unsigned long left = limit - m_pos;
 	const char* p = m_next->m_buffer;
 	
 	if (m_next == m_head)

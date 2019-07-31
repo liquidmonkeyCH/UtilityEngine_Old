@@ -73,7 +73,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_container.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_message.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\mem_ostream.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_pool.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_rotative_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_buffer.hpp" />

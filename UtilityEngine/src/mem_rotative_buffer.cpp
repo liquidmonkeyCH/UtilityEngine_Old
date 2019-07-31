@@ -199,12 +199,13 @@ rotative_buffer::commit_write(unsigned long size)
 const char*
 rotative_buffer::next(unsigned long& size)
 {
-	if (m_limit <= m_pos)
+	unsigned long limit = m_limit > 0 ? m_limit : readable_size(0);
+	if (limit <= m_pos)
 	{
 		size = 0;
 		return nullptr;
 	}
-	size = m_limit - m_pos;
+	size = limit - m_pos;
 	const char* p = read(size);
 	m_pos += size;
 	return p;
