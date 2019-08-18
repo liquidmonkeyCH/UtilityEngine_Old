@@ -18,6 +18,7 @@ stream_buffer::stream_buffer(void)
 , m_next(nullptr)
 , m_writer(nullptr)
 , m_reader(nullptr)
+, m_out(nullptr)
 , m_readable(0)
 , m_lastread(0)
 #ifndef NDEBUG
@@ -42,7 +43,10 @@ stream_buffer::clear(void)
 
 	m_writer = m_head->m_buffer;
 	m_reader = m_head->m_buffer;
+	m_out = m_reader;
 
+	m_pos = 0;
+	m_limit = 0;
 	m_lastread = 0;
 	m_readable = 0;
 #ifndef NDEBUG
@@ -151,6 +155,7 @@ stream_buffer::reset(void)
 {
 	m_pos = 0;
 	m_next = m_head;
+	m_out = m_reader;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const char*
@@ -165,21 +170,26 @@ stream_buffer::next(unsigned long& size)
 	}
 
 	unsigned long left = limit - m_pos;
-	const char* p = m_next->m_buffer;
-	
-	if (m_next == m_head)
+	if (size > left)
 	{
-		size = m_head->m_buffer + MAX_PACKET_LEN - m_reader;
-		p = m_reader;
+		size = left;
+		return nullptr;
 	}
-	else if (m_next == m_tail)
-		size = m_writer - m_tail->m_buffer;
-	else
-		size = MAX_PACKET_LEN;
+	
+	const char* p = m_out;
 
-	size = size > left ? left : size;
+	limit = m_next->m_buffer + MAX_PACKET_LEN - m_out;
+	limit = limit > left ? left : limit;
+	size = (size == 0 || size > limit) ? limit : size;
+
 	m_pos += size;
-	m_next = m_next->m_next;
+	m_out += size;
+	if (m_out - m_next->m_buffer == MAX_PACKET_LEN)
+	{
+		m_next = m_next->m_next;
+		m_out = m_next->m_buffer;
+	}
+	
 	return p;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

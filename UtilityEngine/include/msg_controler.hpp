@@ -27,7 +27,7 @@ class controler_wrap : public confirmer
 {
 public:
 	friend class task::dispatcher_iface;
-	using buffer_t = typename confirmer::buffer_t
+	using buffer_t = typename confirmer::buffer_t;
 private:
 	void handle_wrap(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr);
 };

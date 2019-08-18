@@ -205,7 +205,16 @@ rotative_buffer::next(unsigned long& size)
 		size = 0;
 		return nullptr;
 	}
-	size = limit - m_pos;
+
+	limit -= m_pos;
+	if (size > limit)
+	{
+		size = limit;
+		return nullptr;
+	}
+
+	size = size == 0 ? limit : size;
+
 	const char* p = read(size);
 	m_pos += size;
 	return p;

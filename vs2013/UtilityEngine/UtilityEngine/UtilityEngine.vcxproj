@@ -123,6 +123,7 @@
     <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_balance.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_pool.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\task_object.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

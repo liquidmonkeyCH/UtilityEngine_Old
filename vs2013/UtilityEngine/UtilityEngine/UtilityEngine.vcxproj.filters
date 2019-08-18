@@ -109,14 +109,14 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_node.hpp">
       <Filter>Core\mem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\mem_ostream.hpp">
-      <Filter>Core\mem</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_pool.hpp">
       <Filter>Core\mem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_confirmer.hpp">
       <Filter>Core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_stream_buffer.cpp">
       <Filter>Core\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\test.cpp">
+      <Filter>Core\msg</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

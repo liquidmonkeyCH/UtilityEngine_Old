@@ -50,7 +50,7 @@ controler::post_request(task::object_iface* obj, std::uint32_t compkey, mem::buf
 
 			return;
 		}
-		buffer->set_limit(len);
+		buffer->set_read_limit(len);
 	}
 	m_dispatcher->dispatch({ this, obj, compkey, buffer, ptr });
 }
@@ -67,7 +67,7 @@ controler::handle_wrap(task::object_iface* obj, std::uint32_t compkey, mem::buff
 	if (obj->compkey() != compkey)
 		return;
 
-	unsigned long size = buffer->get_limit();
+	unsigned long size = buffer->get_read_limit();
 	handler_t handle = get_handle(key_pares_t(buffer->read(size)));
 	if (!handle || handle(obj, buffer, ptr) != 0)
 	{
@@ -75,7 +75,7 @@ controler::handle_wrap(task::object_iface* obj, std::uint32_t compkey, mem::buff
 		return;
 	}
 
-	buffer->commit_read(buffer->get_limit());
+	buffer->commit_read(buffer->get_read_limit());
 	post_request(obj, compkey, buffer, ptr);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

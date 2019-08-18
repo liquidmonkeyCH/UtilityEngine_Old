@@ -20,8 +20,10 @@ public:
   
 	virtual const char* next(unsigned long &size) = 0;
 	virtual void reset(void) { m_pos = 0; }
-	void set_limit(unsigned long size) { m_limit = size; m_pos = 0; }
-	unsigned long get_limit(void) { return m_limit; }
+
+	unsigned long get_pos(void) { return m_pos; }
+	void set_read_limit(unsigned long limit) { m_limit = limit; }
+	unsigned long get_read_limit(void) { return m_limit; }
 protected:
 	unsigned long m_limit;
 	unsigned long m_pos;

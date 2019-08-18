@@ -63,6 +63,7 @@ private:
 
 	char*	m_reader;
 	char*	m_writer;
+	char*	m_out;
 	size_t	m_readable;
 
 	unsigned long m_lastread;

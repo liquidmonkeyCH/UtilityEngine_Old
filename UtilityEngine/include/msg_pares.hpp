@@ -30,7 +30,7 @@ inline const char* pares_len(mem::buffer_iface* buffer, unsigned long& size)
 	if (!buffer->readable_size(size))
 		return nullptr;
 
-	buffer->set_limit(size);
+	buffer->set_read_limit(size);
 
 	return p;
 }
@@ -52,7 +52,7 @@ inline const char* pares_zero(mem::buffer_iface* buffer, unsigned long& size)
 		if (len < size)
 		{
 			size = len + 1;
-			buffer->set_limit(size);
+			buffer->set_read_limit(size);
 			return p;
 		}
 		// out of bounds
