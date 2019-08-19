@@ -200,22 +200,21 @@ const char*
 rotative_buffer::next(unsigned long& size)
 {
 	unsigned long limit = m_limit > 0 ? m_limit : readable_size(0);
-	if (limit <= m_pos)
+	if (limit <= m_pos)		// 正常不会出现此状况,应在调用next之前已检查可读总数
 	{
 		size = 0;
 		return nullptr;
 	}
 
 	limit -= m_pos;
-	if (size > limit)
+	if (size > limit)		// 正常不会出现此状况,应在调用next之前已检查可读总数
 	{
 		size = limit;
 		return nullptr;
 	}
 
 	size = size == 0 ? limit : size;
-
-	const char* p = read(size);
+	const char* p = read(size) + m_pos;
 	m_pos += size;
 	return p;
 }

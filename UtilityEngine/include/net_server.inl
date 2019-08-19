@@ -4,8 +4,8 @@
 * @author Hourui (liquidmonkey)
 */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t,class control_t>
-void server_wrap<session_t,control_t>::init(size_t max_session, io_service_iface* io_service, dispatch_t* dispatcher)
+template<class session_t, class handler_manager, class dispatcher>
+void server_wrap<session_t, handler_manager, dispatcher>::init(size_t max_session, io_service_iface* io_service, dispatch_t* dispatcher)
 {
 	if (m_io_service)
 		Clog::error_throw(errors::logic, "server initialized!");
@@ -20,8 +20,8 @@ void server_wrap<session_t,control_t>::init(size_t max_session, io_service_iface
 	m_controler.init(dispatcher);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class control_t>
-void server_wrap<session_t, control_t>::start(const char* host, std::uint32_t port)
+template<class session_t, class handler_manager, class dispatcher>
+void server_wrap<session_t, handler_manager, dispatcher>::start(const char* host, std::uint32_t port)
 {
 	bool exp = false;
 	if (!m_running.compare_exchange_strong(exp, true))
@@ -39,8 +39,8 @@ void server_wrap<session_t, control_t>::start(const char* host, std::uint32_t po
 	m_io_service->track_server(this);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class control_t>
-void server_wrap<session_t, control_t>::stop(void)
+template<class session_t, class handler_manager, class dispatcher>
+void server_wrap<session_t, handler_manager, dispatcher>::stop(void)
 {
 	bool exp = true;
 	if (!m_running.compare_exchange_strong(exp, false))
@@ -78,14 +78,14 @@ void server_wrap<session_t, control_t>::stop(void)
 	framework::net_free();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class control_t>
-accept_data* server_wrap<session_t, control_t>::get_accept_data(void)
+template<class session_t, class handler_manager, class dispatcher>
+accept_data* server_wrap<session_t, handler_manager, dispatcher>::get_accept_data(void)
 {
 	return m_accept_data.malloc();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class control_t>
-session_t* server_wrap<session_t, control_t>::get_session(void)
+template<class session_t, class handler_manager, class dispatcher>
+session_t* server_wrap<session_t, handler_manager, dispatcher>::get_session(void)
 {
 	std::lock_guard<std::mutex> lock(m_session_mutex);
 	if (!m_running)
@@ -94,8 +94,8 @@ session_t* server_wrap<session_t, control_t>::get_session(void)
 	return m_session_pool.malloc();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class control_t>
-void server_wrap<session_t, control_t>::process_accept(per_io_data* data, sockaddr_storage* addr, session_iface** se)
+template<class session_t, class handler_manager, class dispatcher>
+void server_wrap<session_t, handler_manager, dispatcher>::process_accept(per_io_data* data, sockaddr_storage* addr, session_iface** se)
 {
 	session_t* session = get_session();
 	if (!session)
@@ -112,14 +112,14 @@ void server_wrap<session_t, control_t>::process_accept(per_io_data* data, sockad
 	*se = session;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class control_t>
-void server_wrap<session_t, control_t>::post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr)
+template<class session_t, class handler_manager, class dispatcher>
+void server_wrap<session_t, handler_manager, dispatcher>::post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr)
 {
 	m_controler.post_request(session, session->compkey(), buffer, ptr);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class control_t>
-void server_wrap<session_t, control_t>::on_close_session(session_iface* session)
+template<class session_t, class handler_manager, class dispatcher>
+void server_wrap<session_t, handler_manager, dispatcher>::on_close_session(session_iface* session)
 {
 	std::lock_guard<std::mutex> lock(m_session_mutex);
 	m_session_pool.free(dynamic_cast<session_t*>(session));

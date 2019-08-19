@@ -17,9 +17,6 @@
     <Filter Include="Core\task">
       <UniqueIdentifier>{daa3c4f2-ab9f-49e4-be4f-7e0482d85d4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\msg\plans">
-      <UniqueIdentifier>{76ccba35-280d-4b87-8890-db52b5420d90}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
@@ -41,9 +38,6 @@
       <Filter>Core\msg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_map.hpp">
-      <Filter>Core\msg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_pares.hpp">
       <Filter>Core\msg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\base_defines.hpp">
@@ -91,12 +85,6 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\thread_pool.hpp">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_plan0.hpp">
-      <Filter>Core\msg\plans</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_planA.hpp">
-      <Filter>Core\msg\plans</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_epoll.hpp">
       <Filter>Core\net</Filter>
     </ClInclude>
@@ -112,11 +100,11 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_pool.hpp">
       <Filter>Core\mem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_confirmer.hpp">
-      <Filter>Core\msg</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream.hpp">
-      <Filter>Core</Filter>
+      <Filter>Core\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_message.hpp">
+      <Filter>Core\msg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,20 +155,11 @@
     <ClCompile Include="..\..\..\UtilityEngine\src\task_object.cpp">
       <Filter>Core\task</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_plan0.cpp">
-      <Filter>Core\msg\plans</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp">
-      <Filter>Core\msg\plans</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_epoll.cpp">
       <Filter>Core\net</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_stream_buffer.cpp">
       <Filter>Core\mem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\UtilityEngine\src\test.cpp">
-      <Filter>Core\msg</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

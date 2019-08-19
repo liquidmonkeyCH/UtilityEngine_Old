@@ -10,7 +10,7 @@
 #include <string>
 #include "base_defines.hpp"
 #include "task_object.hpp"
-#include "mem_buffer.hpp"
+#include "mem_message.hpp"
 
 namespace Utility
 {
@@ -18,7 +18,6 @@ namespace Utility
 namespace msg
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-using pares_t = const char*(*)(mem::buffer_iface*, unsigned long&);
 using handler_t = int(*)(task::object_iface*, mem::message*, void*);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace msg

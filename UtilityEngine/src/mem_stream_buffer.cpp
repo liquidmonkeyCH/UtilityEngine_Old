@@ -162,15 +162,14 @@ const char*
 stream_buffer::next(unsigned long& size)
 {
 	unsigned long limit = m_limit > 0 ? m_limit : readable_size(0);
-
-	if (limit <= m_pos)
+	if (limit <= m_pos)			// 正常不会出现此状况,应在调用next之前已检查可读总数
 	{
 		size = 0;
 		return nullptr;
 	}
 
 	unsigned long left = limit - m_pos;
-	if (size > left)
+	if (size > left)			// 正常不会出现此状况,应在调用next之前已检查可读总数
 	{
 		size = left;
 		return nullptr;

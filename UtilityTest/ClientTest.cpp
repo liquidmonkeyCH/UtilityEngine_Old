@@ -7,13 +7,20 @@
 #include <memory>
 
 #include "net_io_service_iocp.hpp"
-#include "msg_controler_plan0.hpp"
-#include "mem_rotative_buffer.hpp"
 #include "net_client.hpp"
+
+#include "mem_rotative_buffer.hpp"
+#include "mem_stream_buffer.hpp"
+#include "msg_message.hpp"
+
+#include "msg_handler_manager_map.hpp"
+#include "msg_handler_manager_deque.hpp"
+
+#include "task_dispatcher_balance.hpp"
 
 using namespace Utility;
 
-class GameSession : public net::session_wrap < net::socket_type::tcp, mem::rotative_buffer >
+class GameSession : public net::session_wrap < net::socket_type::tcp, msg::len::message_wrap<mem::rotative_buffer, MAX_PACKET_LEN> >
 {
 public:
 	void on_connect(void)
@@ -38,7 +45,7 @@ int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 	return 0;
 }
 
-class NetClient : public net::client_wrap <GameSession, msg::plan0::controler>
+class NetClient : public net::client_wrap <GameSession, msg::handler_manager_deque, task::dispatcher_balance>
 {
 public:
 	void on_start(void)

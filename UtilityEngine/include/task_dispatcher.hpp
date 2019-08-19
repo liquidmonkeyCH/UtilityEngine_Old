@@ -22,12 +22,12 @@ public:
 		msg::controler_iface*		m_controler;
 		task::object_iface*			m_obj;
 		std::uint32_t				m_compkey;
-		mem::buffer_iface*			m_buffer;
+		mem::message*				m_message;
 		void*						m_userdata;
 
 		void run(void)
 		{
-			m_controler->handle_wrap(m_obj, m_compkey, m_buffer, m_userdata);
+			m_controler->handle_wrap(m_obj, m_compkey, m_message, m_userdata);
 		}
 	};
 public:

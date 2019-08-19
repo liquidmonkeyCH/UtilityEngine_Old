@@ -15,18 +15,18 @@ namespace Utility
 namespace msg
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class msg_handler_manager_deque
+class handler_manager_deque
 {
 public:
 	using map_t = std::deque<handler_t>;
 public:
-	msg_handler_manager_deque(void) = default;
-	~msg_handler_manager_deque(void) = default;
+	handler_manager_deque(void) = default;
+	virtual ~handler_manager_deque(void) = default;
 
-	msg_handler_manager_deque(const msg_handler_manager_deque&) = delete;
-	msg_handler_manager_deque& operator=(const msg_handler_manager_deque&) = delete;
+	handler_manager_deque(const handler_manager_deque&) = delete;
+	handler_manager_deque& operator=(const handler_manager_deque&) = delete;
 public:
-	handler_t get_handle(void);
+	handler_t get_handle(mem::message* msg = nullptr);
 	bool attach(handler_t handle);
 	bool detach(void);
 private:
@@ -34,7 +34,7 @@ private:
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 inline handler_t 
-msg_handler_manager_deque::get_handle(void)
+handler_manager_deque::get_handle(mem::message* msg)
 {
 	if (m_map.empty())
 		return nullptr;
@@ -43,14 +43,14 @@ msg_handler_manager_deque::get_handle(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 inline bool 
-msg_handler_manager_deque::attach(handler_t handle)
+handler_manager_deque::attach(handler_t handle)
 {
 	m_map.push_back(handle);
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 inline bool
-msg_handler_manager_deque::detach(void)
+handler_manager_deque::detach(void)
 {
 	m_map.pop_front();
 }

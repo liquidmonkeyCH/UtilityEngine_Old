@@ -1,5 +1,6 @@
-#include "msg_confirmer_rotative_buffer.hpp"
+#include "msg_message.hpp"
 #include "mem_stream_buffer.hpp"
+#include "mem_rotative_buffer.hpp"
 
 #include <vector>
 
@@ -21,12 +22,13 @@ namespace Utility
 	{
 		void test()
 		{
-			comfirmer_len<mem::rotative_buffer, 4096> aasdasdasd;
-			mem::rotative_buffer m_buffer;
-			unsigned long size = 1000;
-			aasdasdasd.is_done(&m_buffer, size);
+			len::message_wrap<mem::rotative_buffer, 4096> aasdasdasd;
+			unsigned long size;
+			aasdasdasd.comfirm(size);
+			aasdasdasd.commit();
+			aasdasdasd.get_pos
 
-			comfirmer_len<mem::stream_buffer, 4096> confirmer1;
+			
 			//comfirmer_delimiter<mem::rotative_buffer, 4096> confirmer;
 		}
 	}

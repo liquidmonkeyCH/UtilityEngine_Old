@@ -9,6 +9,7 @@
 #include <future>
 #include "mem_container.hpp"
 #include "net_session.hpp"
+#include "msg_controler.hpp"
 
 namespace Utility
 {
@@ -41,7 +42,7 @@ protected:
 	std::promise<bool> m_can_stop;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t,class control_t>
+template<class session_t, class handler_manager, class dispatcher>
 class server_wrap : public server_iface
 {
 public:
@@ -52,7 +53,8 @@ public:
 	server_iface& operator=(const server_wrap&) = delete;
 
 	using sokcet_mode = typename session_t::socket_mode;
-	using dispatch_t = typename control_t::dispatch_t;
+	using dispatch_t = dispatcher;
+	using message_t = typename session_t::message_t;
 public:
 	void init(size_t max_session, io_service_iface* io_service, dispatch_t* dispatcher);
 
@@ -76,7 +78,7 @@ protected:
 	unsigned long				m_recv_buffer_size;
 	unsigned long				m_send_buffer_size;
 	//! for hanlder
-	control_t					m_controler;
+	msg::controler_wrap< message_t, handler_manager, dispatcher> m_controler;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "net_server.inl"

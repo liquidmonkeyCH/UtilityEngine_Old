@@ -31,8 +31,8 @@ public:
 	};
 	enum class state{ none,connected,closing };
 	friend class io_service_iface;
-	template<class session_t,class control_t> friend class server_wrap;
-	template<class session_t, class control_t> friend class client_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class server_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class client_wrap;
 public:
 	session_iface(void);
 	virtual ~session_iface(void) = default;
@@ -60,13 +60,14 @@ protected:
 	std::recursive_mutex m_close_mutex;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
+template<socket_type st, class message_wrap>
 class session_wrap : public session_iface
 {
 public:
 	using socket_mode = socket_wrap<st> ;
-	template<class session_t, class control_t> friend class server_wrap;
-	template<class session_t, class control_t> friend class client_wrap;
+	using message_t = message_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class server_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class client_wrap;
 public:
 	session_wrap(void);
 	virtual ~session_wrap(void);
@@ -84,8 +85,8 @@ public:
 	void send(const char* packet, unsigned long size);
 protected:
 	socket_wrap<st> m_socket_impl;
-	buffer_t m_recv_buffer;
-	buffer_t m_send_buffer;
+	message_t m_recv_buffer;
+	message_t m_send_buffer;
 	std::mutex m_send_mutex;
 };
 #include "net_session.inl"

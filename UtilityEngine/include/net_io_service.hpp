@@ -33,9 +33,9 @@ public:
 	io_service_iface(const io_service_iface&) = delete;
 	io_service_iface& operator=(const io_service_iface&) = delete;
 
-	template<class session_t,class control_t> friend class server_wrap;
-	template<class session_t, class control_t> friend class client_wrap;
-	template<socket_type st,class buffer_t> friend class session_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class server_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class client_wrap;
+	template<socket_type st,class message_wrap> friend class session_wrap;
 	friend class session_iface;
 public:
 	virtual void start(std::uint32_t nthread) = 0;

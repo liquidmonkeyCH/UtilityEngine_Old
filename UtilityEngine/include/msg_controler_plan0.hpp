@@ -33,9 +33,9 @@ public:
 public:
 	void init(dispatch_t* dispatcher);
 
-	void post_request(task::object_iface* obj, std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr);
+	void post_request(task::object_iface* obj, std::uint32_t compkey, mem::message* buffer, void* ptr);
 private:
-	void handle_wrap(task::object_iface* obj,  std::uint32_t compkey, mem::buffer_iface* buffer, void* ptr);
+	void handle_wrap(task::object_iface* obj,  std::uint32_t compkey, mem::message* buffer, void* ptr);
 
 	std::uint32_t& key_pares_t(const char* msg);
 	pares_t m_pares = msg::pares_zero;

@@ -21,7 +21,7 @@ class stream_buffer : public buffer_iface
 {
 public:
 	stream_buffer(void);
-	~stream_buffer(void);
+	virtual ~stream_buffer(void);
 
 	//! Set size and initialize 
 	void init(unsigned long size);

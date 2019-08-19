@@ -18,7 +18,7 @@ class buffer_iface : public message
 {
 public:
 	buffer_iface(void) = default;
-	~buffer_iface(void) = default;
+	virtual ~buffer_iface(void) = default;
 
 	//! Set size and initialize  
 	virtual void init(unsigned long size) = 0;

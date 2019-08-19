@@ -78,14 +78,11 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_rotative_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_node.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_confirmer.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\msg_message.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_plan0.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_controler_planA.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_defines.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_deque.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_map.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\msg_pares.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_client.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_defines.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_framework.hpp" />
@@ -112,8 +109,6 @@
     <ClCompile Include="..\..\..\UtilityEngine\src\logger.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_rotative_buffer.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_stream_buffer.cpp" />
-    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_plan0.cpp" />
-    <ClCompile Include="..\..\..\UtilityEngine\src\msg_controler_planA.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_framework.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\net_io_service_epoll.cpp" />
@@ -123,7 +118,6 @@
     <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_balance.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_pool.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\task_object.cpp" />
-    <ClCompile Include="..\..\..\UtilityEngine\src\test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

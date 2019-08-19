@@ -19,7 +19,7 @@ class rotative_buffer : public buffer_iface
 {
 public:
 	rotative_buffer(void);
-	~rotative_buffer(void);
+	virtual ~rotative_buffer(void);
 
 	//! Set size and initialize 
 	void init(unsigned long size);
@@ -64,6 +64,12 @@ private:
 #endif
 
 	std::mutex m_mutex;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<unsigned long MAX_MSG_LEN>
+struct message_assert<rotative_buffer, MAX_MSG_LEN>
+{
+	static void check(void) { static_assert(MAX_MSG_LEN <= MAX_PACKET_LEN, "MAX_MSG_LEN out of bound!"); }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace mem

@@ -16,18 +16,20 @@ class message
 {
 public:
 	message(void) :m_limit(0), m_pos(0) {}
-	~message(void) = default;
+	virtual ~message(void) = default;
   
 	virtual const char* next(unsigned long &size) = 0;
 	virtual void reset(void) { m_pos = 0; }
 
-	unsigned long get_pos(void) { return m_pos; }
 	void set_read_limit(unsigned long limit) { m_limit = limit; }
 	unsigned long get_read_limit(void) { return m_limit; }
 protected:
 	unsigned long m_limit;
 	unsigned long m_pos;
 };
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class buffer_type, unsigned long MAX_MSG_LEN>
+struct message_assert{ static void check(void) {} };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace mem
 ////////////////////////////////////////////////////////////////////////////////////////////////////
