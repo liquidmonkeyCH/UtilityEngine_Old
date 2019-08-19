@@ -17,3 +17,5 @@ vs2015
 *.ipch
 *.db-shm
 *.db-wal
+vs2013/UtilityEngine/ClientTest/ClientTest/Debug/ClientTest.vcxproj.FileListAbsolute.txt
+vs2013/UtilityEngine/ServerTest/ServerTest/Debug/ServerTest.vcxproj.FileListAbsolute.txt
