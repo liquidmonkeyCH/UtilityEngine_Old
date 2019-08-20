@@ -15,6 +15,7 @@
 #include <mutex>
 #include <queue>
 #include <atomic>
+#include <string.h>
 
 namespace Utility
 {
