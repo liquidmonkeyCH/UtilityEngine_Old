@@ -28,17 +28,17 @@ public:
 
 	void commit(void)
 	{
-		commit_read(m_size);
+		this->commit_read(m_size);
 		m_size = 0;
-		reset();
-		set_read_limit(0);
+		this->reset();
+		this->set_read_limit(0);
 	}
 
 	void clear(void)
 	{
 		m_size = 0;
-		reset();
-		set_read_limit(0);
+		this->reset();
+		this->set_read_limit(0);
 		buffer_type::clear();
 	}
 protected:
@@ -62,10 +62,10 @@ public:
 
 	bool comfirm(unsigned long& size)
 	{
-		if (m_size == 0)
+		if (this->m_size == 0)
 		{
 			size = sizeof(std::uint32_t);
-			if (!readable_size(size))	// 消息长度不足
+			if (!this->readable_size(size))	// 消息长度不足
 			{
 				size = 0;
 				return false;
@@ -74,7 +74,7 @@ public:
 			unsigned long len = size, pos = 0;
 			const char* p;
 			do {
-				p = next(len);
+				p = this->next(len);
 				memcpy(&m_size + pos, p, len);
 				pos += len;
 				if (pos >= size) break;
@@ -89,14 +89,14 @@ public:
 		}
 
 		//  last_read == 0
-		if (!readable_size(m_size))	// 消息长度不足
+		if (!this->readable_size(this->m_size))	// 消息长度不足
 		{
 			size = 0;
 			return false;
 		}
 
-		size = m_size;
-		set_read_limit(m_size);		// 消息完整 
+		size = this->m_size;
+		this->set_read_limit(size);		// 消息完整 
 		return true;
 	}
 };
@@ -119,7 +119,7 @@ public:
 	{
 		const char* p = nullptr;
 		unsigned long len;
-		unsigned long last_readable = readable_size(0);
+		unsigned long last_readable = this->readable_size(0);
 		do {
 			// no new data
 			if (last_readable == 0)
@@ -130,32 +130,32 @@ public:
 
 			do {
 				len = 0;
-				p = next(len);
+				p = this->next(len);
 				if (!p) break;
 				size = strlen(p);
 
 				if (size < len)
 				{
-					m_size = m_size + size + 1;
-					size = m_size;
+					size = this->m_size + size + 1;
+					this->m_size = size;
 
 					if (size > MAX_MSG_LEN)
 						return false;
 
-					set_read_limit(m_size);
-					reset();
+					this->set_read_limit(size);
+					this->reset();
 
 					return true;
 				}
 
-				size = m_size + len;
-				m_size = size;
+				size = this->m_size + len;
+				this->m_size = size;
 
 				if (size > MAX_MSG_LEN)
 					return false;
 
 			} while (true);
-			last_readable = readable_size(++last_readable);
+			last_readable = this->readable_size(++last_readable);
 		} while (true);
 	}
 };
@@ -196,7 +196,7 @@ public:
 	{ 
 		const char* p = nullptr;
 		std::size_t len;
-		unsigned long last_readable = readable_size(0);
+		unsigned long last_readable = this->readable_size(0);
 		do{
 			// no new data
 			if (last_readable == 0)
@@ -207,7 +207,7 @@ public:
 
 			do {
 				len = 0;
-				p = next(len);
+				p = this->next(len);
 				if (!p) break;
 				
 				for (std::size_t i = 0; i < len; ++i)
@@ -216,13 +216,13 @@ public:
 					{
 						if (++m_hit == m_len)
 						{
-							size = m_size + m_hit;
+							size = this->m_size + m_hit;
 							if (size > MAX_MSG_LEN)
 								return false;
 
-							m_size = size;
-							set_read_limit(m_size);
-							reset();
+							this->m_size = size;
+							this->set_read_limit(size);
+							this->reset();
 							return true;
 						}
 						continue;
@@ -230,21 +230,21 @@ public:
 
 					forward();
 
-					size = m_size + m_hit;
+					size = this->m_size + m_hit;
 					if (size > MAX_MSG_LEN)
 						return false;
 
 					i = 0;
 				}
 
-				size = m_size + len;
-				m_size = size - m_hit;
+				size = this->m_size + len;
+				this->m_size = size - m_hit;
 
 				if (size > MAX_MSG_LEN)
 					return false;
 
 			} while (true);
-			last_readable = readable_size(++last_readable);
+			last_readable = this->readable_size(++last_readable);
 		} while (true);
 	}
 private:
@@ -266,7 +266,7 @@ private:
 			m_hit = 0;
 		}
 
-		m_size += head;
+		this->m_size += head;
 	}
 private:
 	std::size_t m_hit;
