@@ -77,7 +77,7 @@ private:
 		if (obj->compkey() != compkey)
 			return;
 
-		handler_t handle = get_handle(msg);
+		handler_t handle = this->get_handle(msg);
 		if (!handle || handle(obj, message, ptr) != 0)
 		{
 			obj->handle_error(compkey);
