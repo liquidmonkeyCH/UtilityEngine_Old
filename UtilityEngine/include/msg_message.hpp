@@ -75,13 +75,13 @@ public:
 			const char* p;
 			do {
 				p = this->next(len);
-				memcpy(&m_size + pos, p, len);
+				memcpy(&this->m_size + pos, p, len);
 				pos += len;
 				if (pos >= size) break;
 				len = size - pos;
 			} while (true);
 			
-			if (m_size < sizeof(std::uint32_t) || m_size > MAX_MSG_LEN)
+			if (this->m_size < sizeof(std::uint32_t) || this->m_size > MAX_MSG_LEN)
 			{
 				size = -1;
 				return false;
