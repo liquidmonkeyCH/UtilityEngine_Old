@@ -90,25 +90,21 @@ stream_buffer::commit_read(unsigned long size)
 	assert(size <= m_readable);
 	std::lock_guard<std::mutex> lock(m_mutex);
 	m_readable -= size;
-	unsigned long len = m_head->m_buffer + MAX_PACKET_LEN - m_reader;
+	unsigned long len = m_head == m_tail ? m_writer - m_reader : m_head->m_buffer + MAX_PACKET_LEN - m_reader;
 	stream_node* tmp;
 	do
 	{
-		if (size >= len)
-		{
-			size -= len;
-			tmp = m_head;
-			m_head = m_head->m_next;
-			m_reader = m_head->m_buffer;
-			m_pool.free(tmp);
-			len = m_head == m_tail ? m_writer - m_reader : MAX_PACKET_LEN;
-		}
-		else
-		{
-			m_reader += size;
-			size = 0;
-		}
-	} while (size != 0);
+		m_reader += size;
+		if (m_reader < m_head->m_buffer + MAX_PACKET_LEN) break;
+		
+		size -= len;
+		tmp = m_head;
+		m_head = m_head->m_next;
+		m_reader = m_head->m_buffer;
+		m_pool.free(tmp);
+		len = m_head == m_tail ? m_writer - m_reader : MAX_PACKET_LEN;
+		
+	} while (true);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long

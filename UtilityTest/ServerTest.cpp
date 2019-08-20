@@ -20,7 +20,7 @@
 #include "mem_pool.hpp"
 
 using namespace Utility;
-class GameSession : public net::session_wrap < net::socket_type::tcp, msg::len::message_wrap<mem::rotative_buffer,MAX_PACKET_LEN>>
+class GameSession : public net::session_wrap < net::socket_type::tcp, msg::zero::message_wrap<mem::stream_buffer,MAX_PACKET_LEN>>
 {
 public:
 	void on_connect(void)
@@ -35,11 +35,21 @@ public:
 
 int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 {
-	//Clog::info("recv msg: %s", msg);
+	char buffer[MAX_PACKET_LEN + 1];
 	GameSession* session = dynamic_cast<GameSession*>(obj);
-	unsigned long len = 0;
-	const char* p = msg->next(len);
-	session->send(p, len);
+	unsigned long limit = msg->get_read_limit();
+	unsigned long len = 0,size = 0;
+	while (true) {
+		const char* p = msg->next(len);
+		if (!p) break;
+		
+		memcpy(buffer + size, p, len);
+		size += len;
+		len = 0;
+	}
+	
+	Clog::info("recv msg: %s", buffer);
+	session->send(buffer, size);
 	
 	return 0;
 }

@@ -206,15 +206,15 @@ rotative_buffer::next(unsigned long& size)
 		return nullptr;
 	}
 
-	limit -= m_pos;
-	if (size > limit)		// 正常不会出现此状况,应在调用next之前已检查可读总数
+	unsigned long left = limit - m_pos;
+	if (size > left)		// 正常不会出现此状况,应在调用next之前已检查可读总数
 	{
-		size = limit;
+		size = left;
 		return nullptr;
 	}
 
-	size = size == 0 ? limit : size;
-	const char* p = read(size) + m_pos;
+	size = size == 0 ? left : size;
+	const char* p = read(limit) + m_pos;
 	m_pos += size;
 	return p;
 }

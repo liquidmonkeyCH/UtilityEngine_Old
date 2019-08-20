@@ -15,29 +15,51 @@ namespace Utility
 namespace msg
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace len
-{
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class buffer_type, unsigned long MAX_MSG_LEN>
-class message_wrap : public buffer_type
+template<class buffer_type,unsigned long MAX_MSG_LEN>
+class message_impl : public buffer_type
 {
 public:
-	using buffer_t = buffer_type;
-
-	message_wrap(void):m_size(0)
-	{ 
-		static_assert(MAX_MSG_LEN > sizeof(std::uint32_t), "MAX_MSG_LEN out of range!");
+	message_impl(void) :m_size(0)
+	{
+		static_assert(MAX_MSG_LEN > 0, "MAX_MSG_LEN out of range!");
 		mem::message_assert<buffer_type, MAX_MSG_LEN>::check();
 	}
-	virtual ~message_wrap(void) = default;
+	virtual ~message_impl(void) = default;
 
-	void commit(void) 
+	void commit(void)
 	{
 		commit_read(m_size);
 		m_size = 0;
 		reset();
 		set_read_limit(0);
 	}
+
+	void clear(void)
+	{
+		m_size = 0;
+		reset();
+		set_read_limit(0);
+		buffer_type::clear();
+	}
+protected:
+	std::uint32_t m_size;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace len
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class buffer_type, unsigned long MAX_MSG_LEN>
+class message_wrap : public message_impl<buffer_type, MAX_MSG_LEN>
+{
+public:
+	using buffer_t = buffer_type;
+
+	message_wrap(void)
+	{ 
+		static_assert(MAX_MSG_LEN > sizeof(std::uint32_t), "MAX_MSG_LEN out of range!");
+	}
+	virtual ~message_wrap(void) = default;
+
 	bool comfirm(unsigned long& size)
 	{
 		if (m_size == 0)
@@ -77,37 +99,97 @@ public:
 		set_read_limit(m_size);		// 消息完整 
 		return true;
 	}
-private:
-	std::uint32_t m_size;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace len
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace zero
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<class buffer_type, unsigned long MAX_MSG_LEN>
+class message_wrap : public message_impl<buffer_type, MAX_MSG_LEN>
+{
+public:
+	using buffer_t = buffer_type;
+
+	message_wrap(void) = default;
+	virtual ~message_wrap(void) = default;
+
+	bool comfirm(unsigned long& size)
+	{
+		const char* p = nullptr;
+		unsigned long len;
+		unsigned long last_readable = readable_size(0);
+		do {
+			// no new data
+			if (last_readable == 0)
+			{
+				size = 0;
+				return false;
+			}
+
+			do {
+				len = 0;
+				p = next(len);
+				if (!p) break;
+				size = strlen(p);
+
+				if (size < len)
+				{
+					m_size = m_size + size + 1;
+					size = m_size;
+
+					if (size > MAX_MSG_LEN)
+						return false;
+
+					set_read_limit(m_size);
+					reset();
+
+					return true;
+				}
+
+				size = m_size + len;
+				m_size = size;
+
+				if (size > MAX_MSG_LEN)
+					return false;
+
+			} while (true);
+			last_readable = readable_size(++last_readable);
+		} while (true);
+	}
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}//namespace zero
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace delimiter
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class buffer_type, unsigned long MAX_MSG_LEN,const char* Delimiter>
-class message_wrap : public buffer_type
+class message_wrap : public message_impl<buffer_type, MAX_MSG_LEN>
 {
 public:
 	using buffer_t = buffer_type;
+	using base_t = message_impl<buffer_type, MAX_MSG_LEN>;
 	const static std::size_t m_len = strlen(Delimiter);
 
-	message_wrap(void) : m_hit(0), m_size(0)
+	message_wrap(void) : m_hit(0)
 	{ 
 		static_assert(Delimiter && strlen(Delimiter), "Empty Delimiter!");
-		static_assert(MAX_MSG_LEN > 0, "MAX_MSG_LEN out of range!");
-		mem::message_assert<buffer_type, MAX_MSG_LEN>::check();
 	}
 
 	virtual ~message_wrap(void) = default;
 
 	void commit(void)
 	{
-		commit_read(m_size);
-		m_len = 0;
-		reset();
-		set_read_limit(0);
+		base_t::commit();
+		m_hit = 0;
+	}
+
+	void clear(void)
+	{
+		base_t::clear();
+		m_hit = 0;
 	}
 
 	bool comfirm(unsigned long& size)
@@ -188,7 +270,6 @@ private:
 	}
 private:
 	std::size_t m_hit;
-	unsigned long m_size;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace delimiter
