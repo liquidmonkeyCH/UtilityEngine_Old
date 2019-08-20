@@ -16,10 +16,10 @@ namespace mem
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 struct stream_node
 {
-	stream_node(void) :m_next(nullptr) { memset(m_buffer,0,MAX_PACKET_LEN); }
+	stream_node(void) :m_next(nullptr) { m_buffer[MAX_PACKET_LEN]=0; }
 	~stream_node(void) = default;
 
-	char m_buffer[MAX_PACKET_LEN];
+	char m_buffer[MAX_PACKET_LEN+1];
 	stream_node* m_next;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
