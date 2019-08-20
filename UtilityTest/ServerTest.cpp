@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 
 	net::io_service_iocp io_service;
 	io_service.start();
-	GameServer::dispatch_t dispatcher;
+	GameServer::dispatcher_t dispatcher;
 	dispatcher.start(10);
 
 	mem::stream_buffer::pool_t::alloc_cache(100);

@@ -5,7 +5,7 @@
 */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void responder<session_t, handler_manager, dispatcher>::init(size_t max_session, io_service_iface* io_service, dispatch_t* dispatcher)
+void responder<session_t, handler_manager, dispatcher>::init(size_t max_session, io_service_iface* io_service, dispatcher_t* _dispatcher)
 {
 	if (m_io_service)
 		Clog::error_throw(errors::logic, "server initialized!");
@@ -17,7 +17,7 @@ void responder<session_t, handler_manager, dispatcher>::init(size_t max_session,
 	m_send_buffer_size = MAX_PACKET_LEN * 10;
 
 	m_io_service = io_service;
-	m_controler.init(dispatcher);
+	m_controler.init(_dispatcher);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>

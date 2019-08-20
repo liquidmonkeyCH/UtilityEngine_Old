@@ -28,7 +28,7 @@ class controler_wrap : public handler_manager,public controler_iface
 public:
 	friend class task::dispatcher_iface;
 	using message_t = message_wrap;
-	using dispatch_t = dispatcher;
+	using dispatcher_t = dispatcher;
 public:
 	controler_wrap(void) : m_dispatcher(nullptr){}
 	~controler_wrap(void) = default;
@@ -36,12 +36,12 @@ public:
 	controler_wrap(const controler_wrap&) = delete;
 	controler_wrap& operator=(const controler_wrap&) = delete;
 public:
-	void init(dispatch_t* dispatcher)
+	void init(dispatcher_t* _dispatcher)
 	{
 		if (m_dispatcher)
 			Clog::error_throw(errors::logic, "controler initialized!");
 
-		m_dispatcher = dispatcher;
+		m_dispatcher = _dispatcher;
 	}
 
 	void post_request(task::object_iface* obj, std::uint32_t compkey, mem::message* message, void* ptr)
@@ -87,7 +87,7 @@ private:
 		post_request(obj, compkey, message, ptr);
 	}
 private:
-	dispatch_t* m_dispatcher;
+	dispatcher_t* m_dispatcher;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace task

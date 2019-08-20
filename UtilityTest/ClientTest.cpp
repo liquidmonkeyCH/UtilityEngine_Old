@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 	net::io_service_iocp io_service;
 	io_service.start();
 
-	NetClient::dispatch_t dispatcher;
+	NetClient::dispatcher_t dispatcher;
 	dispatcher.start(2);
 
 	int nCount;

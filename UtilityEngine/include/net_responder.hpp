@@ -53,10 +53,10 @@ public:
 	responder_iface& operator=(const responder&) = delete;
 
 	using sokcet_mode = typename session_t::socket_mode;
-	using dispatch_t = dispatcher;
+	using dispatcher_t = dispatcher;
 	using message_t = typename session_t::message_t;
 public:
-	void init(size_t max_session, io_service_iface* io_service, dispatch_t* dispatcher);
+	void init(size_t max_session, io_service_iface* io_service, dispatcher_t* _dispatcher);
 
 	void start(const char* host, std::uint32_t port);
 	void stop(void);
