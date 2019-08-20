@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=root
-Date                   :=
+Date                   := 
 CodeLitePath           :="/root/.codelite"
 LinkerName             :=g++-5
 ArchiveTool            :=ar rcus
@@ -52,8 +52,8 @@ LibPath                := $(LibraryPathSwitch).
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects=$(IntermediateDirectory)/src_logger$(ObjectSuffix) $(IntermediateDirectory)/src_mem_rotative_buffer$(ObjectSuffix) $(IntermediateDirectory)/src_msg_controler_plan0$(ObjectSuffix) $(IntermediateDirectory)/src_msg_controler_planA$(ObjectSuffix) $(IntermediateDirectory)/src_net_framework$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service_iocp$(ObjectSuffix) $(IntermediateDirectory)/src_net_session$(ObjectSuffix) $(IntermediateDirectory)/src_net_socket$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service_epoll$(ObjectSuffix) \
-	$(IntermediateDirectory)/src_task_dispatcher_balance$(ObjectSuffix) $(IntermediateDirectory)/src_task_dispatcher_pool$(ObjectSuffix) $(IntermediateDirectory)/src_task_object$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/src_logger$(ObjectSuffix) $(IntermediateDirectory)/src_mem_rotative_buffer$(ObjectSuffix) $(IntermediateDirectory)/src_mem_stream_buffer$(ObjectSuffix) $(IntermediateDirectory)/src_net_framework$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service_iocp$(ObjectSuffix) $(IntermediateDirectory)/src_net_session$(ObjectSuffix) $(IntermediateDirectory)/src_net_socket$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service_epoll$(ObjectSuffix) $(IntermediateDirectory)/src_task_dispatcher_balance$(ObjectSuffix) \
+	$(IntermediateDirectory)/src_task_dispatcher_pool$(ObjectSuffix) $(IntermediateDirectory)/src_task_object$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -94,21 +94,13 @@ $(IntermediateDirectory)/src_mem_rotative_buffer$(DependSuffix): ../../UtilityEn
 $(IntermediateDirectory)/src_mem_rotative_buffer$(PreprocessSuffix): ../../UtilityEngine/src/mem_rotative_buffer.cpp
 	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_mem_rotative_buffer$(PreprocessSuffix) "/root/UtilityEngine_New/trunk/UtilityEngine/src/mem_rotative_buffer.cpp"
 
-$(IntermediateDirectory)/src_msg_controler_plan0$(ObjectSuffix): ../../UtilityEngine/src/msg_controler_plan0.cpp $(IntermediateDirectory)/src_msg_controler_plan0$(DependSuffix)
-	$(CompilerName) $(IncludePCH) $(SourceSwitch) "/root/UtilityEngine_New/trunk/UtilityEngine/src/msg_controler_plan0.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_msg_controler_plan0$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/src_msg_controler_plan0$(DependSuffix): ../../UtilityEngine/src/msg_controler_plan0.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_msg_controler_plan0$(ObjectSuffix) -MF$(IntermediateDirectory)/src_msg_controler_plan0$(DependSuffix) -MM "/root/UtilityEngine_New/trunk/UtilityEngine/src/msg_controler_plan0.cpp"
+$(IntermediateDirectory)/src_mem_stream_buffer$(ObjectSuffix): ../../UtilityEngine/src/mem_stream_buffer.cpp $(IntermediateDirectory)/src_mem_stream_buffer$(DependSuffix)
+	$(CompilerName) $(IncludePCH) $(SourceSwitch) "/root/UtilityEngine_New/trunk/UtilityEngine/src/mem_stream_buffer.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_mem_stream_buffer$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_mem_stream_buffer$(DependSuffix): ../../UtilityEngine/src/mem_stream_buffer.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_mem_stream_buffer$(ObjectSuffix) -MF$(IntermediateDirectory)/src_mem_stream_buffer$(DependSuffix) -MM "/root/UtilityEngine_New/trunk/UtilityEngine/src/mem_stream_buffer.cpp"
 
-$(IntermediateDirectory)/src_msg_controler_plan0$(PreprocessSuffix): ../../UtilityEngine/src/msg_controler_plan0.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_msg_controler_plan0$(PreprocessSuffix) "/root/UtilityEngine_New/trunk/UtilityEngine/src/msg_controler_plan0.cpp"
-
-$(IntermediateDirectory)/src_msg_controler_planA$(ObjectSuffix): ../../UtilityEngine/src/msg_controler_planA.cpp $(IntermediateDirectory)/src_msg_controler_planA$(DependSuffix)
-	$(CompilerName) $(IncludePCH) $(SourceSwitch) "/root/UtilityEngine_New/trunk/UtilityEngine/src/msg_controler_planA.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_msg_controler_planA$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/src_msg_controler_planA$(DependSuffix): ../../UtilityEngine/src/msg_controler_planA.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_msg_controler_planA$(ObjectSuffix) -MF$(IntermediateDirectory)/src_msg_controler_planA$(DependSuffix) -MM "/root/UtilityEngine_New/trunk/UtilityEngine/src/msg_controler_planA.cpp"
-
-$(IntermediateDirectory)/src_msg_controler_planA$(PreprocessSuffix): ../../UtilityEngine/src/msg_controler_planA.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_msg_controler_planA$(PreprocessSuffix) "/root/UtilityEngine_New/trunk/UtilityEngine/src/msg_controler_planA.cpp"
+$(IntermediateDirectory)/src_mem_stream_buffer$(PreprocessSuffix): ../../UtilityEngine/src/mem_stream_buffer.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_mem_stream_buffer$(PreprocessSuffix) "/root/UtilityEngine_New/trunk/UtilityEngine/src/mem_stream_buffer.cpp"
 
 $(IntermediateDirectory)/src_net_framework$(ObjectSuffix): ../../UtilityEngine/src/net_framework.cpp $(IntermediateDirectory)/src_net_framework$(DependSuffix)
 	$(CompilerName) $(IncludePCH) $(SourceSwitch) "/root/UtilityEngine_New/trunk/UtilityEngine/src/net_framework.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_net_framework$(ObjectSuffix) $(IncludePath)
@@ -194,12 +186,9 @@ clean:
 	$(RM) $(IntermediateDirectory)/src_mem_rotative_buffer$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/src_mem_rotative_buffer$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/src_mem_rotative_buffer$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/src_msg_controler_plan0$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/src_msg_controler_plan0$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/src_msg_controler_plan0$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/src_msg_controler_planA$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/src_msg_controler_planA$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/src_msg_controler_planA$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/src_mem_stream_buffer$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/src_mem_stream_buffer$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/src_mem_stream_buffer$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/src_net_framework$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/src_net_framework$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/src_net_framework$(PreprocessSuffix)

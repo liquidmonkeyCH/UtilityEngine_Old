@@ -18,23 +18,22 @@
       <File Name="../../UtilityEngine/include/mem_container.inl"/>
       <File Name="../../UtilityEngine/src/mem_rotative_buffer.cpp"/>
       <File Name="../../UtilityEngine/include/mem_rotative_buffer.hpp"/>
+      <File Name="../../UtilityEngine/include/mem_message.hpp"/>
+      <File Name="../../UtilityEngine/include/mem_pool.hpp"/>
+      <File Name="../../UtilityEngine/include/mem_pool.inl"/>
+      <File Name="../../UtilityEngine/include/mem_stream.hpp"/>
+      <File Name="../../UtilityEngine/include/mem_stream_buffer.hpp"/>
+      <File Name="../../UtilityEngine/include/mem_stream_node.hpp"/>
+      <File Name="../../UtilityEngine/src/mem_stream_buffer.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="msg">
       <File Name="../../UtilityEngine/include/msg_controler.hpp"/>
       <File Name="../../UtilityEngine/include/msg_defines.hpp"/>
       <File Name="../../UtilityEngine/include/msg_handler_manager_deque.hpp"/>
       <File Name="../../UtilityEngine/include/msg_handler_manager_map.hpp"/>
-      <File Name="../../UtilityEngine/include/msg_pares.hpp"/>
-      <VirtualDirectory Name="plans">
-        <File Name="../../UtilityEngine/src/msg_controler_plan0.cpp"/>
-        <File Name="../../UtilityEngine/include/msg_controler_plan0.hpp"/>
-        <File Name="../../UtilityEngine/src/msg_controler_planA.cpp"/>
-        <File Name="../../UtilityEngine/include/msg_controler_planA.hpp"/>
-      </VirtualDirectory>
+      <File Name="../../UtilityEngine/include/msg_message.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="net">
-      <File Name="../../UtilityEngine/include/net_client.hpp"/>
-      <File Name="../../UtilityEngine/include/net_client.inl"/>
       <File Name="../../UtilityEngine/include/net_defines.hpp"/>
       <File Name="../../UtilityEngine/src/net_framework.cpp"/>
       <File Name="../../UtilityEngine/include/net_framework.hpp"/>
@@ -42,8 +41,6 @@
       <File Name="../../UtilityEngine/include/net_io_service.hpp"/>
       <File Name="../../UtilityEngine/src/net_io_service_iocp.cpp"/>
       <File Name="../../UtilityEngine/include/net_io_service_iocp.hpp"/>
-      <File Name="../../UtilityEngine/include/net_server.hpp"/>
-      <File Name="../../UtilityEngine/include/net_server.inl"/>
       <File Name="../../UtilityEngine/src/net_session.cpp"/>
       <File Name="../../UtilityEngine/include/net_session.hpp"/>
       <File Name="../../UtilityEngine/include/net_session.inl"/>
@@ -51,6 +48,10 @@
       <File Name="../../UtilityEngine/include/net_socket.hpp"/>
       <File Name="../../UtilityEngine/include/net_io_service_epoll.hpp"/>
       <File Name="../../UtilityEngine/src/net_io_service_epoll.cpp"/>
+      <File Name="../../UtilityEngine/include/net_requester.hpp"/>
+      <File Name="../../UtilityEngine/include/net_requester.inl"/>
+      <File Name="../../UtilityEngine/include/net_responder.hpp"/>
+      <File Name="../../UtilityEngine/include/net_responder.inl"/>
     </VirtualDirectory>
     <VirtualDirectory Name="task">
       <File Name="../../UtilityEngine/include/task_dispatcher.hpp"/>
@@ -81,7 +82,8 @@
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="../lib/lib$(ProjectName).a" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[
+      ]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
@@ -118,6 +120,7 @@
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName).so" IntermediateDirectory="./Release" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[
+      
       
       ]]>
       </Environment>
