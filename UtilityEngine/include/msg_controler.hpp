@@ -7,6 +7,7 @@
 #define __MSG_CONTROLER_HPP__
 
 #include "msg_defines.hpp"
+#include "logger.hpp"
 
 namespace Utility
 {
