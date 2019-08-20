@@ -351,16 +351,16 @@ bool auto1chunk<T, N, alloc>::free(T* p)
 	base::_chunks[n]->free(p);
 	base::_dealloc_chunk = n;
 
-	if (base::_chunk_size(n) < _size)
+	if (base::_chunk_size(n) < this->_size)
 		return true;
 
 	n = base::_chunks.size() - 1;
 	if (n == base::_dealloc_chunk)
 		return true;
 
-	if (base::_chunk_size(n) >= _size)
+	if (base::_chunk_size(n) >= this->_size)
 	{
-		chunk_alloc()->free(base::_chunks[n]);
+		this->chunk_alloc()->free(base::_chunks[n]);
 		base::_chunks.pop_back();
 		if (base::_alloc_chunk == n)
 			base::_alloc_chunk = 0;
@@ -382,7 +382,7 @@ inline
 void auto1chunk<T, N, alloc>::clear(void)
 {
 	typename base::chunk* _chunk = nullptr;
-	alloc* _alloc = chunk_alloc();
+	alloc* _alloc = this->chunk_alloc();
 	while (base::_chunks.size() > 1)
 	{
 		_chunk = base::_chunks.back();
@@ -391,8 +391,8 @@ void auto1chunk<T, N, alloc>::clear(void)
 		_alloc->free(_chunk);
 	}
 	base::_chunks.back()->clear();
-	_alloc_chunk = 0;
-	_dealloc_chunk = 0;
+	this->_alloc_chunk = 0;
+	this->_dealloc_chunk = 0;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace release_mode
