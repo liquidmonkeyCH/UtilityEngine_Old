@@ -83,13 +83,13 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_defines.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_deque.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_handler_manager_map.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\net_client.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_requester.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_defines.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_framework.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_epoll.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_iocp.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\net_server.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_responder.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_session.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\net_socket.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher.hpp" />
@@ -101,8 +101,8 @@
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl" />
     <None Include="..\..\..\UtilityEngine\include\mem_pool.inl" />
-    <None Include="..\..\..\UtilityEngine\include\net_client.inl" />
-    <None Include="..\..\..\UtilityEngine\include\net_server.inl" />
+    <None Include="..\..\..\UtilityEngine\include\net_requester.inl" />
+    <None Include="..\..\..\UtilityEngine\include\net_responder.inl" />
     <None Include="..\..\..\UtilityEngine\include\net_session.inl" />
   </ItemGroup>
   <ItemGroup>

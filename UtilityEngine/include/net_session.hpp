@@ -31,8 +31,8 @@ public:
 	};
 	enum class state{ none,connected,closing };
 	friend class io_service_iface;
-	template<class session_t, class handler_manager, class dispatcher> friend class server_wrap;
-	template<class session_t, class handler_manager, class dispatcher> friend class client_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class responder;
+	template<class session_t, class handler_manager, class dispatcher> friend class requester;
 public:
 	session_iface(void);
 	virtual ~session_iface(void) = default;
@@ -60,14 +60,14 @@ protected:
 	std::recursive_mutex m_close_mutex;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class message_wrap>
+template<socket_type st, class pares_message_wrap>
 class session_wrap : public session_iface
 {
 public:
 	using socket_mode = socket_wrap<st> ;
-	using message_t = message_wrap;
-	template<class session_t, class handler_manager, class dispatcher> friend class server_wrap;
-	template<class session_t, class handler_manager, class dispatcher> friend class client_wrap;
+	using message_t = pares_message_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class responder;
+	template<class session_t, class handler_manager, class dispatcher> friend class requester;
 public:
 	session_wrap(void);
 	virtual ~session_wrap(void);

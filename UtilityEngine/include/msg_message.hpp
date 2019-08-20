@@ -16,15 +16,15 @@ namespace msg
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class buffer_type,unsigned long MAX_MSG_LEN>
-class message_impl : public buffer_type
+class _message_impl : public buffer_type
 {
 public:
-	message_impl(void) :m_size(0)
+	_message_impl(void) :m_size(0)
 	{
 		static_assert(MAX_MSG_LEN > 0, "MAX_MSG_LEN out of range!");
 		mem::message_assert<buffer_type, MAX_MSG_LEN>::check();
 	}
-	virtual ~message_impl(void) = default;
+	virtual ~_message_impl(void) = default;
 
 	void commit(void)
 	{
@@ -45,11 +45,11 @@ protected:
 	std::uint32_t m_size;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace len
+namespace pares_len
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class buffer_type, unsigned long MAX_MSG_LEN>
-class message_wrap : public message_impl<buffer_type, MAX_MSG_LEN>
+class message_wrap : public _message_impl<buffer_type, MAX_MSG_LEN>
 {
 public:
 	using buffer_t = buffer_type;
@@ -101,13 +101,13 @@ public:
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-}//namespace len
+}//namespace pares_len
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace zero
+namespace pares_zero
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class buffer_type, unsigned long MAX_MSG_LEN>
-class message_wrap : public message_impl<buffer_type, MAX_MSG_LEN>
+class message_wrap : public _message_impl<buffer_type, MAX_MSG_LEN>
 {
 public:
 	using buffer_t = buffer_type;
@@ -160,17 +160,17 @@ public:
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-}//namespace zero
+}//namespace pares_zero
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace delimiter
+namespace pares_delimiter
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class buffer_type, unsigned long MAX_MSG_LEN,const char* Delimiter>
-class message_wrap : public message_impl<buffer_type, MAX_MSG_LEN>
+class message_wrap : public _message_impl<buffer_type, MAX_MSG_LEN>
 {
 public:
 	using buffer_t = buffer_type;
-	using base_t = message_impl<buffer_type, MAX_MSG_LEN>;
+	using base_t = _message_impl<buffer_type, MAX_MSG_LEN>;
 	const static std::size_t m_len = strlen(Delimiter);
 
 	message_wrap(void) : m_hit(0)
@@ -272,7 +272,7 @@ private:
 	std::size_t m_hit;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-}//namespace delimiter
+}//namespace pares_delimiter
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace msg
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -6,7 +6,7 @@
 #ifndef _WIN32
 #include "net_io_service_epoll.hpp"
 #include "net_session.hpp"
-#include "net_server.hpp"
+#include "net_responder.hpp"
 #include <sys/sysinfo.h>
 
 #define EPOLL_LOG
@@ -134,7 +134,7 @@ io_service_epoll::epoll_control(int op,fd_t fd,epoll_event* ev)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-io_service_epoll::track_server(server_iface* server)
+io_service_epoll::track_server(responder_iface* server)
 {
 	if (m_state != static_cast<int>(state::running))
 		return;
@@ -164,7 +164,7 @@ io_service_epoll::track_server(server_iface* server)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-io_service_epoll::untrack_server(server_iface* server)
+io_service_epoll::untrack_server(responder_iface* server)
 {
 	struct epoll_event _ev{0,{0}};
 	if(!epoll_control(EPOLL_CTL_DEL,server->get_fd(),&_ev))
@@ -222,7 +222,7 @@ io_service_epoll::process_event(epoll_event* m_events)
 {
 	per_io_data* data,*sdata;
 	session_iface* session = nullptr;
-	server_iface* server = nullptr;
+	responder_iface* server = nullptr;
 	socket_iface* socket = nullptr;
 	fd_t fd;
 
@@ -255,7 +255,7 @@ io_service_epoll::process_event(epoll_event* m_events)
 			data = static_cast<per_io_data*>(it->data.ptr);
 			if(data->m_op == io_op::accept)
 			{
-				server = static_cast<server_iface*>(data->m_owner);
+				server = static_cast<responder_iface*>(data->m_owner);
 				socket = server->get_socket();
 				fd = socket->get_fd();
 				if(fd == INVALID_SOCKET)

@@ -1,10 +1,10 @@
 /**
-* @file net_server.hpp
+* @file net_responder.hpp
 *
 * @author Hourui (liquidmonkey)
 */
-#ifndef __NET_SERVER_HPP__
-#define __NET_SERVER_HPP__
+#ifndef __NET_RESPONDER_HPP__
+#define __NET_RESPONDER_HPP__
 
 #include <future>
 #include "mem_container.hpp"
@@ -17,14 +17,14 @@ namespace Utility
 namespace net
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class server_iface : public framework
+class responder_iface : public framework
 {
 public:
-	server_iface(void) :m_socket(nullptr), m_io_service(nullptr), m_running({ false }){}
-	virtual ~server_iface(void) = default;
+	responder_iface(void) :m_socket(nullptr), m_io_service(nullptr), m_running({ false }){}
+	virtual ~responder_iface(void) = default;
 
-	server_iface(const server_iface&) = delete;
-	server_iface& operator=(const server_iface&) = delete;
+	responder_iface(const responder_iface&) = delete;
+	responder_iface& operator=(const responder_iface&) = delete;
 
 	friend class io_service_iface;
 public:
@@ -43,14 +43,14 @@ protected:
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-class server_wrap : public server_iface
+class responder : public responder_iface
 {
 public:
-	server_wrap(void){ m_socket = &m_socket_impl; }
-	virtual ~server_wrap(void) = default;
+	responder(void){ m_socket = &m_socket_impl; }
+	virtual ~responder(void) = default;
 
-	server_wrap(const server_wrap&) = delete;
-	server_iface& operator=(const server_wrap&) = delete;
+	responder(const responder&) = delete;
+	responder_iface& operator=(const responder&) = delete;
 
 	using sokcet_mode = typename session_t::socket_mode;
 	using dispatch_t = dispatcher;
@@ -81,9 +81,9 @@ protected:
 	msg::controler_wrap< message_t, handler_manager, dispatcher> m_controler;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "net_server.inl"
+#include "net_responder.inl"
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace Utility 
-#endif //__NET_SERVER_HPP__
+#endif //__NET_RESPONDER_HPP__

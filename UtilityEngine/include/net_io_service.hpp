@@ -15,7 +15,7 @@ namespace net
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class session_iface;
-class server_iface;
+class responder_iface;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class io_service_iface
 {
@@ -33,8 +33,8 @@ public:
 	io_service_iface(const io_service_iface&) = delete;
 	io_service_iface& operator=(const io_service_iface&) = delete;
 
-	template<class session_t, class handler_manager, class dispatcher> friend class server_wrap;
-	template<class session_t, class handler_manager, class dispatcher> friend class client_wrap;
+	template<class session_t, class handler_manager, class dispatcher> friend class responder;
+	template<class session_t, class handler_manager, class dispatcher> friend class requester;
 	template<socket_type st,class message_wrap> friend class session_wrap;
 	friend class session_iface;
 public:
@@ -43,8 +43,8 @@ public:
 protected:
 	//! after start!
 	//! after server socket create!
-	virtual void track_server(server_iface*) = 0;
-	virtual void untrack_server(server_iface*){};
+	virtual void track_server(responder_iface*) = 0;
+	virtual void untrack_server(responder_iface*){};
 	//! after start!
 	//! after session connected!
 	virtual void track_session(session_iface*) = 0;
@@ -59,9 +59,9 @@ protected:
 	bool process_recv(session_iface* session, unsigned long size);
 	bool process_send(session_iface* session, unsigned long size);
 	
-	// server_iface
-	void process_accept(server_iface* server, per_io_data* data, sockaddr_storage* addr, session_iface** session);
-	accept_data* get_accept_data(server_iface* server);
+	// responder_iface
+	void process_accept(responder_iface* server, per_io_data* data, sockaddr_storage* addr, session_iface** session);
+	accept_data* get_accept_data(responder_iface* server);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net

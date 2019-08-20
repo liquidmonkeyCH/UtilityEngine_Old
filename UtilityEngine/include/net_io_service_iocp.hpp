@@ -34,14 +34,14 @@ public:
 private:
 	//! after start!
 	//! after server socket create!
-	void track_server(server_iface*);
+	void track_server(responder_iface*);
 	//! after start!
 	//! after session connected!
 	void track_session(session_iface*);
 private:
 	void post_recv_event(per_io_data* data);
 	void post_send_event(per_io_data* data);
-	void post_accept_event(server_iface* server, per_io_data* data);
+	void post_accept_event(responder_iface* server, per_io_data* data);
 private:
 	void create_iocp(void);
 	void process_event(void);

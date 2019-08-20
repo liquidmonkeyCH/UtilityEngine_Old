@@ -1,10 +1,10 @@
 /**
-* @file net_client.hpp
+* @file net_requester.hpp
 *
 * @author Hourui (liquidmonkey)
 */
-#ifndef __NET_CLIENT_HPP__
-#define __NET_CLIENT_HPP__
+#ifndef __NET_REQUESTER_HPP__
+#define __NET_REQUESTER_HPP__
 
 #include <future>
 #include "net_session.hpp"
@@ -16,29 +16,29 @@ namespace Utility
 namespace net
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class client_iface : public framework
+class requester_iface : public framework
 {
 public:
 	enum class state{ none, starting, connecting, connected, timeout, stopping };
 
-	client_iface(void) :m_io_service(nullptr) {}
-	virtual ~client_iface(void) = default;
+	requester_iface(void) :m_io_service(nullptr) {}
+	virtual ~requester_iface(void) = default;
 
-	client_iface(const client_iface&) = delete;
-	client_iface& operator=(const client_iface&) = delete;
+	requester_iface(const requester_iface&) = delete;
+	requester_iface& operator=(const requester_iface&) = delete;
 protected:
 	io_service_iface*		m_io_service;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-class client_wrap : public client_iface
+class requester : public requester_iface
 {
 public:
-	client_wrap(void) = default;
-	virtual ~client_wrap(void) = default;
+	requester(void) = default;
+	virtual ~requester(void) = default;
 
-	client_wrap(const client_wrap&) = delete;
-	client_wrap& operator=(const client_wrap&) = delete;
+	requester(const requester&) = delete;
+	requester& operator=(const requester&) = delete;
 
 	using sokcet_mode = typename session_t::socket_mode;
 	using dispatch_t = dispatcher;
@@ -73,9 +73,9 @@ protected:
 	std::promise<bool>		m_can_stop;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "net_client.inl"
+#include "net_requester.inl"
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace Utility 
-#endif //__NET_CLIENT_HPP__
+#endif //__NET_REQUESTER_HPP__

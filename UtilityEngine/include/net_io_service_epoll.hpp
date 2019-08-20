@@ -34,8 +34,8 @@ public:
 private:
 	//! after start!
 	//! after server socket create!
-	void track_server(server_iface*);
-	void untrack_server(server_iface*);
+	void track_server(responder_iface*);
+	void untrack_server(responder_iface*);
 	//! after start!
 	//! after session connected!
 	void track_session(session_iface*);
@@ -43,7 +43,7 @@ private:
 private:
 	void post_recv_event(per_io_data* data);
 	void post_send_event(per_io_data* data);
-	void post_accept_event(server_iface* server, per_io_data* data);
+	void post_accept_event(responder_iface* server, per_io_data* data);
 private:
 	bool process_send(per_io_data* data,per_io_data* _data = nullptr);
 	bool epoll_control(int op,fd_t fd,epoll_event* ev);

@@ -6,7 +6,7 @@
 #ifdef _WIN32
 #include "net_io_service_iocp.hpp"
 #include "net_session.hpp"
-#include "net_server.hpp"
+#include "net_responder.hpp"
 #pragma comment(lib, "Mswsock.lib") 
 
 //#define IOCP_LOG
@@ -124,7 +124,7 @@ io_service_iocp::start(std::uint32_t nthread)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-io_service_iocp::track_server(server_iface* server)
+io_service_iocp::track_server(responder_iface* server)
 {
 	if (m_state != static_cast<int>(state::running))
 		return;
@@ -207,7 +207,7 @@ io_service_iocp::process_event(void)
 	per_io_data* data;
 	BOOL bRet;
 	DWORD err;
-	server_iface* server = nullptr;
+	responder_iface* server = nullptr;
 	session_iface* session = nullptr;
 	struct sockaddr_storage* addrClient = nullptr, *addrLocal = nullptr;
 	int client_len, local_len, addrlen;
@@ -224,7 +224,7 @@ io_service_iocp::process_event(void)
 				if (data->m_op == io_op::accept)
 				{
 					IOCP_DEBUG("accept wait timeout!");
-					server = static_cast<server_iface*>(data->m_owner);
+					server = static_cast<responder_iface*>(data->m_owner);
 					server->get_socket()->close_fd(data->m_fd);
 					post_accept_event(server, data);
 					break;
@@ -236,7 +236,7 @@ io_service_iocp::process_event(void)
 				if (data->m_op == io_op::accept)
 				{
 					IOCP_DEBUG("client close socket befor accept completing!");
-					server = static_cast<server_iface*>(data->m_owner);
+					server = static_cast<responder_iface*>(data->m_owner);
 					server->get_socket()->close_fd(data->m_fd);
 					post_accept_event(server, data);
 					break;
@@ -285,7 +285,7 @@ io_service_iocp::process_event(void)
 			break;
 		case io_op::accept:
 			{
-				server = static_cast<server_iface*>(data->m_owner);
+				server = static_cast<responder_iface*>(data->m_owner);
 				setsockopt(data->m_fd, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&(socket), sizeof(socket));
 
 				client_len = sizeof(sockaddr_storage), local_len = sizeof(sockaddr_storage), addrlen = sizeof(sockaddr_storage) + 16;
@@ -315,7 +315,7 @@ io_service_iocp::process_event(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-io_service_iocp::post_accept_event(server_iface* server, per_io_data* data)
+io_service_iocp::post_accept_event(responder_iface* server, per_io_data* data)
 {
 	memset(&data->m_ol, 0, sizeof(data->m_ol));
 	memset(data->m_buffer.buf, 0, data->m_buffer.len);

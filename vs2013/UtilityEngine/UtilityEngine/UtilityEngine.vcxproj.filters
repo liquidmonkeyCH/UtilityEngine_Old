@@ -46,9 +46,6 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\logger.hpp">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\net_client.hpp">
-      <Filter>Core\net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\net_defines.hpp">
       <Filter>Core\net</Filter>
     </ClInclude>
@@ -59,9 +56,6 @@
       <Filter>Core\net</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_iocp.hpp">
-      <Filter>Core\net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\net_server.hpp">
       <Filter>Core\net</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\net_session.hpp">
@@ -106,22 +100,28 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\msg_message.hpp">
       <Filter>Core\msg</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_responder.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\net_requester.hpp">
+      <Filter>Core\net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
       <Filter>Core\mem</Filter>
-    </None>
-    <None Include="..\..\..\UtilityEngine\include\net_client.inl">
-      <Filter>Core\net</Filter>
-    </None>
-    <None Include="..\..\..\UtilityEngine\include\net_server.inl">
-      <Filter>Core\net</Filter>
     </None>
     <None Include="..\..\..\UtilityEngine\include\net_session.inl">
       <Filter>Core\net</Filter>
     </None>
     <None Include="..\..\..\UtilityEngine\include\mem_pool.inl">
       <Filter>Core\mem</Filter>
+    </None>
+    <None Include="..\..\..\UtilityEngine\include\net_responder.inl">
+      <Filter>Core\net</Filter>
+    </None>
+    <None Include="..\..\..\UtilityEngine\include\net_requester.inl">
+      <Filter>Core\net</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

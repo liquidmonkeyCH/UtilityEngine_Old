@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "net_io_service_iocp.hpp"
-#include "net_client.hpp"
+#include "net_requester.hpp"
 
 #include "mem_rotative_buffer.hpp"
 #include "mem_stream_buffer.hpp"
@@ -20,7 +20,7 @@
 
 using namespace Utility;
 
-class GameSession : public net::session_wrap < net::socket_type::tcp, msg::zero::message_wrap<mem::rotative_buffer, MAX_PACKET_LEN> >
+class GameSession : public net::session_wrap < net::socket_type::tcp, msg::pares_zero::message_wrap<mem::rotative_buffer, MAX_PACKET_LEN> >
 {
 public:
 	void on_connect(void)
@@ -45,7 +45,7 @@ int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 	return 0;
 }
 
-class NetClient : public net::client_wrap <GameSession, msg::handler_manager_deque, task::dispatcher_balance>
+class NetClient : public net::requester <GameSession, msg::handler_manager_deque, task::dispatcher_balance>
 {
 public:
 	void on_start(void)
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 	{
 		std::shared_ptr<NetClient> client(new NetClient);
 		client->init(&io_service, &dispatcher);
-		if (client->start("127.0.0.1", 55552,1000) == net::client_iface::state::timeout)
+		if (client->start("127.0.0.1", 55552,1000) == net::requester_iface::state::timeout)
 		{
 			Clog::debug("connect timeout!");
 			continue;

@@ -6,7 +6,7 @@
 
 #include "logger.hpp"
 #include "net_io_service_iocp.hpp"
-#include "net_server.hpp"
+#include "net_responder.hpp"
 
 #include "mem_rotative_buffer.hpp"
 #include "mem_stream_buffer.hpp"
@@ -20,7 +20,7 @@
 #include "mem_pool.hpp"
 
 using namespace Utility;
-class GameSession : public net::session_wrap < net::socket_type::tcp, msg::zero::message_wrap<mem::stream_buffer,MAX_PACKET_LEN>>
+class GameSession : public net::session_wrap < net::socket_type::tcp, msg::pares_zero::message_wrap<mem::stream_buffer,MAX_PACKET_LEN>>
 {
 public:
 	void on_connect(void)
@@ -54,7 +54,7 @@ int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 	return 0;
 }
 
-class GameServer : public net::server_wrap <GameSession, msg::handler_manager_deque, task::dispatcher_balance>
+class GameServer : public net::responder <GameSession, msg::handler_manager_deque, task::dispatcher_balance>
 {
 public:
 	virtual void on_start(void)

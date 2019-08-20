@@ -4,20 +4,20 @@
 * @author Hourui (liquidmonkey)
 */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-session_wrap<st, buffer_t>::session_wrap(void)
+template<socket_type st, class pares_message_wrap>
+session_wrap<st, pares_message_wrap>::session_wrap(void)
 {
 	m_socket = &m_socket_impl;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-session_wrap<st, buffer_t>::~session_wrap(void)
+template<socket_type st, class pares_message_wrap>
+session_wrap<st, pares_message_wrap>::~session_wrap(void)
 {
 	m_socket_impl.close();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-void session_wrap<st, buffer_t>::init_buffer(unsigned long recv_buffer_size, unsigned long send_buffer_size)
+template<socket_type st, class pares_message_wrap>
+void session_wrap<st, pares_message_wrap>::init_buffer(unsigned long recv_buffer_size, unsigned long send_buffer_size)
 {
 	m_recv_buffer.init(recv_buffer_size);
 	m_send_buffer.init(send_buffer_size);
@@ -26,8 +26,8 @@ void session_wrap<st, buffer_t>::init_buffer(unsigned long recv_buffer_size, uns
 	m_recv_data.m_buffer.buf = m_recv_buffer.write(m_recv_data.m_buffer.len);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-void session_wrap<st, buffer_t>::clear(void)
+template<socket_type st, class pares_message_wrap>
+void session_wrap<st, pares_message_wrap>::clear(void)
 {
 	m_recv_buffer.clear();
 	m_send_buffer.clear();
@@ -36,8 +36,8 @@ void session_wrap<st, buffer_t>::clear(void)
 	m_recv_data.m_buffer.buf = m_recv_buffer.write(m_recv_data.m_buffer.len);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-void session_wrap<st, buffer_t>::do_close(void* ptr)
+template<socket_type st, class pares_message_wrap>
+void session_wrap<st, pares_message_wrap>::do_close(void* ptr)
 {
 	on_close(*(reason*)(ptr));
 
@@ -45,8 +45,8 @@ void session_wrap<st, buffer_t>::do_close(void* ptr)
 	m_parent->on_close_session(this);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-void session_wrap<st, buffer_t>::send(const char* packet, unsigned long size)
+template<socket_type st, class pares_message_wrap>
+void session_wrap<st, pares_message_wrap>::send(const char* packet, unsigned long size)
 {
 	if (m_state != static_cast<int>(state::connected))
 		return;
@@ -85,8 +85,8 @@ void session_wrap<st, buffer_t>::send(const char* packet, unsigned long size)
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-bool session_wrap<st, buffer_t>::process_send(unsigned long size)
+template<socket_type st, class pares_message_wrap>
+bool session_wrap<st, pares_message_wrap>::process_send(unsigned long size)
 {
 	if (m_state != static_cast<int>(state::connected))
 		return false;
@@ -98,8 +98,8 @@ bool session_wrap<st, buffer_t>::process_send(unsigned long size)
 	return (m_send_data.m_buffer.len > 0) && (m_state == static_cast<int>(state::connected));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class buffer_t>
-bool session_wrap<st, buffer_t>::process_recv(unsigned long size)
+template<socket_type st, class pares_message_wrap>
+bool session_wrap<st, pares_message_wrap>::process_recv(unsigned long size)
 {
 	if (m_state != static_cast<int>(state::connected))
 		return false;

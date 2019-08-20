@@ -1,11 +1,11 @@
 /**
-* @file net_client.inl
+* @file net_requester.inl
 *
 * @author Hourui (liquidmonkey)
 */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void client_wrap<session_t, handler_manager, dispatcher>::init(io_service_iface* io_service, dispatch_t* dispatcher)
+void requester<session_t, handler_manager, dispatcher>::init(io_service_iface* io_service, dispatch_t* dispatcher)
 {
 	if (m_io_service)
 		Clog::error_throw(errors::logic, "client initialized!");
@@ -17,7 +17,7 @@ void client_wrap<session_t, handler_manager, dispatcher>::init(io_service_iface*
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-client_iface::state client_wrap<session_t, handler_manager, dispatcher>::start(const char* host, std::uint32_t port, std::uint32_t timeout_msecs)
+requester_iface::state requester<session_t, handler_manager, dispatcher>::start(const char* host, std::uint32_t port, std::uint32_t timeout_msecs)
 {
 	int exp = static_cast<int>(state::none);
 	if (!m_state.compare_exchange_strong(exp, static_cast<int>(state::starting)))
@@ -34,7 +34,7 @@ client_iface::state client_wrap<session_t, handler_manager, dispatcher>::start(c
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-bool client_wrap<session_t, handler_manager, dispatcher>::connect(const char* host, std::uint32_t port, std::uint32_t timeout_msecs)
+bool requester<session_t, handler_manager, dispatcher>::connect(const char* host, std::uint32_t port, std::uint32_t timeout_msecs)
 {
 	int exp = static_cast<int>(state::starting);
 	if (!m_state.compare_exchange_strong(exp, static_cast<int>(state::connecting)))
@@ -60,7 +60,7 @@ bool client_wrap<session_t, handler_manager, dispatcher>::connect(const char* ho
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void client_wrap<session_t, handler_manager, dispatcher>::stop(void)
+void requester<session_t, handler_manager, dispatcher>::stop(void)
 {
 	int exp = static_cast<int>(state::connected);
 	if (!m_state.compare_exchange_strong(exp, static_cast<int>(state::stopping)))
@@ -74,19 +74,19 @@ void client_wrap<session_t, handler_manager, dispatcher>::stop(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void client_wrap<session_t, handler_manager, dispatcher>::join(void)
+void requester<session_t, handler_manager, dispatcher>::join(void)
 {
 	m_can_stop.get_future().get();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void client_wrap<session_t, handler_manager, dispatcher>::post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr)
+void requester<session_t, handler_manager, dispatcher>::post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr)
 {
 	m_controler.post_request(session, session->compkey(), buffer, ptr);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void client_wrap<session_t, handler_manager, dispatcher>::on_close_session(session_iface* session)
+void requester<session_t, handler_manager, dispatcher>::on_close_session(session_iface* session)
 {
 	m_can_stop.set_value(true);
 }
