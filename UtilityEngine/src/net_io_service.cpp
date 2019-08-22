@@ -15,7 +15,7 @@ namespace net
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // session_iface
-void io_service_iface::bind(session_iface* session){ session->m_io_service = this; }
+void io_service_iface::bind(session_iface* session) { session->m_io_service = this; session->clear(); }
 per_io_data* io_service_iface::get_recv_data(session_iface* session){ return &session->m_recv_data; }
 per_io_data* io_service_iface::get_send_data(session_iface* session){ return &session->m_send_data; }
 bool io_service_iface::process_recv(session_iface* session, unsigned long size){ return session->process_recv(size); }

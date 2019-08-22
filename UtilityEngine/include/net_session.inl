@@ -40,8 +40,6 @@ template<socket_type st, class pares_message_wrap>
 void session_wrap<st, pares_message_wrap>::do_close(void* ptr)
 {
 	on_close(*(reason*)(ptr));
-
-	clear();
 	m_parent->on_close_session(this);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +77,6 @@ void session_wrap<st, pares_message_wrap>::send(const char* packet, unsigned lon
 		m_send_data.m_buffer.len = MAX_PACKET_LEN;
 		m_send_data.m_buffer.buf = const_cast<char*>(m_send_buffer.read(m_send_data.m_buffer.len));
 
-		std::lock_guard<std::recursive_mutex> lock(m_close_mutex);
 		if (m_state == static_cast<int>(state::connected))
 			m_io_service->post_send_event(&m_send_data);
 	}
@@ -92,10 +89,15 @@ bool session_wrap<st, pares_message_wrap>::process_send(unsigned long size)
 		return false;
 
 	m_send_buffer.commit_read(size);
-	m_send_data.m_buffer.len = MAX_PACKET_LEN;
-	m_send_data.m_buffer.buf = const_cast<char*>(m_send_buffer.read(m_send_data.m_buffer.len));
+	size = MAX_PACKET_LEN;
+	const char* p = m_send_buffer.read(size);
 
-	return (m_send_data.m_buffer.len > 0) && (m_state == static_cast<int>(state::connected));
+	if (size == 0 || m_state != static_cast<int>(state::connected))
+		return false;
+
+	m_send_data.m_buffer.buf = const_cast<char*>(p);
+	m_send_data.m_buffer.len = size;
+	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<socket_type st, class pares_message_wrap>

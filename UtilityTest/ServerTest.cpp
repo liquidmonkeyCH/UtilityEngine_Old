@@ -32,7 +32,7 @@ public:
 	}
 };
 
-std::atomic_uint64_t total_msg = 0;
+std::atomic<std::uint64_t> total_msg(0);
 int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 {
 	++total_msg;

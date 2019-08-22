@@ -45,6 +45,7 @@ protected:
 	void set_connected(framework* parent,fd_t fd, sockaddr_storage* addr);
 	void handle_error(std::uint32_t compkey);
 	//! for wrap
+	virtual void clear(void) = 0;
 	virtual bool process_recv(unsigned long size) = 0;
 	virtual bool process_send(unsigned long size) = 0;
 protected:

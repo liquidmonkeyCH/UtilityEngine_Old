@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 	{
 		std::shared_ptr<NetClient> client(new NetClient);
 		client->init(&io_service, &dispatcher);
-		if (client->start("192.168.56.102", 55552,1000) == net::requester_iface::state::timeout)
+		if (client->start("127.0.0.1", 55552,1000) == net::requester_iface::state::timeout)
 		{
 			Clog::debug("connect timeout!");
 			continue;
