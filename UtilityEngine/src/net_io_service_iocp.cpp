@@ -382,6 +382,12 @@ io_service_iocp::post_send_event(per_io_data* data)
 			return;
 		}
 
+		if (err == WSAENOTSOCK)
+		{
+			Clog::warn("fd invalid!");
+			return;
+		}
+
 		if (err != WSA_IO_PENDING)
 		{
 			Clog::error_throw(errors::system, "WSASend error! erron=%d", err);
