@@ -17,6 +17,9 @@
     <Filter Include="Core\task">
       <UniqueIdentifier>{daa3c4f2-ab9f-49e4-be4f-7e0482d85d4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\main">
+      <UniqueIdentifier>{cc032fa9-be29-446e-901e-d82acd73cbc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
@@ -106,6 +109,9 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\net_requester.hpp">
       <Filter>Core\net</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\application.hpp">
+      <Filter>Core\main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_stream_buffer.cpp">
       <Filter>Core\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\application.cpp">
+      <Filter>Core\main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

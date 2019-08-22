@@ -68,6 +68,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\UtilityEngine\include\application.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\base_defines.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\logger.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp" />
@@ -106,6 +107,7 @@
     <None Include="..\..\..\UtilityEngine\include\net_session.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\UtilityEngine\src\application.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\logger.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_rotative_buffer.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\mem_stream_buffer.cpp" />
