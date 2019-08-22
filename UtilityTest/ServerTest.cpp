@@ -20,7 +20,7 @@
 #include "mem_pool.hpp"
 
 using namespace Utility;
-class GameSession : public net::session_wrap < net::socket_type::tcp, msg::pares_zero::message_wrap<mem::stream_buffer,MAX_PACKET_LEN>>
+class GameSession : public net::session_wrap < net::socket_type::tcp, msg::pares_zero::message_wrap<mem::rotative_buffer,MAX_PACKET_LEN>>
 {
 public:
 	void on_connect(void)
@@ -32,9 +32,10 @@ public:
 	}
 };
 
-
+std::atomic_uint64_t total_msg = 0;
 int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 {
+	++total_msg;
 	char buffer[MAX_PACKET_LEN + 1];
 	GameSession* session = dynamic_cast<GameSession*>(obj);
 	unsigned long limit = msg->get_read_limit();
@@ -48,7 +49,7 @@ int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 		len = 0;
 	}
 	
-	Clog::info("recv msg: %s", buffer);
+	//Clog::info("recv msg: %s", buffer);
 	session->send(buffer, size);
 	
 	return 0;
@@ -75,12 +76,20 @@ public:
 private:
 	void run(void)
 	{
+		std::uint64_t total = 0;
+		std::uint64_t per_msg = 0;
+		std::uint64_t max = 0;
 		while (m_run)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			m_connected = m_session_pool.used();
 			int per = m_connected - m_last_connect;
 			m_max_per_connect = m_max_per_connect < per ? per : m_max_per_connect;
+			per_msg = total_msg.load();
+			total_msg = 0;
+			max = max < per_msg ? per_msg : max;
+			total += per_msg;
+			Clog::debug("total:%lld ,now:%lld/s, max:%lld/s", total, per_msg, max);
 			if (per == 0) continue;
 			Clog::debug("last connected:%d ,now connected:%d per:%d max:%d", m_last_connect, m_connected, per, m_max_per_connect);
 			m_last_connect = m_connected;

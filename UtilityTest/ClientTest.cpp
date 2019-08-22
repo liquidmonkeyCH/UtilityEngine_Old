@@ -34,13 +34,16 @@ int handler(task::object_iface* obj, mem::message* msg, void* ptr)
 {
 	unsigned long len = 0;
 	const char* p = msg->next(len);
+	GameSession* session = dynamic_cast<GameSession*>(obj);
 
-	Clog::info("recv msg: %s", p);
+	session->send(p, len);
+	return 0;
+	//Clog::info("recv msg: %s", p);
 	std::string str(p);
 	if (str.size() < MAX_PACKET_LEN/2 -10)
 		str += p;
 
-	GameSession* session = dynamic_cast<GameSession*>(obj);
+	
 	session->send(str.c_str(), str.size() + 1);
 	return 0;
 }
@@ -67,7 +70,7 @@ int main(int argc, char* argv[])
 	io_service.start();
 
 	NetClient::dispatcher_t dispatcher;
-	dispatcher.start(2);
+	dispatcher.start(10);
 
 	int nCount;
 	
@@ -79,7 +82,7 @@ int main(int argc, char* argv[])
 	{
 		std::shared_ptr<NetClient> client(new NetClient);
 		client->init(&io_service, &dispatcher);
-		if (client->start("127.0.0.1", 55552,1000) == net::requester_iface::state::timeout)
+		if (client->start("192.168.56.102", 55552,1000) == net::requester_iface::state::timeout)
 		{
 			Clog::debug("connect timeout!");
 			continue;
