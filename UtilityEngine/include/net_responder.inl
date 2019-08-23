@@ -113,9 +113,9 @@ void responder<session_t, handler_manager, dispatcher>::process_accept(per_io_da
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void responder<session_t, handler_manager, dispatcher>::post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr)
+void responder<session_t, handler_manager, dispatcher>::post_request(session_iface* session, mem::message* msg, void* ptr)
 {
-	m_controler.post_request(session, session->compkey(), buffer, ptr);
+	m_controler.post_request(session, session->compkey(), msg, ptr);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>

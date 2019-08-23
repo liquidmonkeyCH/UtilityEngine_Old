@@ -13,6 +13,8 @@
 #include <map>
 #include <vector>
 
+#include "base_defines.hpp"
+
 namespace Utility
 {
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +39,7 @@ public:
 	application(void) = default;
 	~application(void) = default;
 	using param_list = std::vector<std::string>;
-	using param_map = std::map<const char*,int>;
+	using param_map = std::map<const char*,int,strless>;
 	friend void on_signal(int n);
 public:
 	bool Start(int param_num, char* params[]);

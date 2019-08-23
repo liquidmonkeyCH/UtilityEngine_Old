@@ -52,7 +52,7 @@ public:
 	void send(const char* msg, unsigned long len) { m_session.send(msg,len); }
 	bool is_connected(void){ return m_session.is_connected(); }
 protected:
-	void post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr);
+	void post_request(session_iface* session, mem::message* msg, void* ptr);
 	bool connect(const char* host, std::uint32_t port, std::uint32_t timeout_msecs);
 
 	void on_close_session(session_iface* session);

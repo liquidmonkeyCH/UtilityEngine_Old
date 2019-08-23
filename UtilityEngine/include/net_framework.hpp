@@ -7,7 +7,7 @@
 #define __NET_FRAME_WORK_HPP__
 
 #include "net_defines.hpp"
-#include "mem_buffer.hpp"
+#include "mem_message.hpp"
 
 namespace Utility
 {
@@ -31,7 +31,7 @@ public:
 	static void net_free(void);
 protected:
 	virtual void on_close_session(session_iface* session) = 0;
-	virtual void post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr) = 0;
+	virtual void post_request(session_iface* session, mem::message* msg, void* ptr) = 0;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }//namespace net

@@ -63,7 +63,7 @@ public:
 private:
 	void process_accept(per_io_data*, sockaddr_storage*, session_iface**);
 	accept_data* get_accept_data(void);
-	void post_request(session_iface* session, mem::buffer_iface* buffer,void* ptr);
+	void post_request(session_iface* session, mem::message* msg,void* ptr);
 	session_t* get_session(void);
 	void on_close_session(session_iface* session);
 protected:

@@ -20,6 +20,9 @@
     <Filter Include="Core\main">
       <UniqueIdentifier>{cc032fa9-be29-446e-901e-d82acd73cbc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\tool">
+      <UniqueIdentifier>{2b1f581e-34c0-4bde-92a0-0f2f95854d19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
@@ -112,6 +115,9 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\application.hpp">
       <Filter>Core\main</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\tool_md5.hpp">
+      <Filter>Core\tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
@@ -169,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\UtilityEngine\src\application.cpp">
       <Filter>Core\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\UtilityEngine\src\tool_md5.cpp">
+      <Filter>Core\tool</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

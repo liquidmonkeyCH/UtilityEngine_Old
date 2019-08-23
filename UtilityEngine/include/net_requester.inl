@@ -80,9 +80,9 @@ void requester<session_t, handler_manager, dispatcher>::join(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-void requester<session_t, handler_manager, dispatcher>::post_request(session_iface* session, mem::buffer_iface* buffer, void* ptr)
+void requester<session_t, handler_manager, dispatcher>::post_request(session_iface* session, mem::message* msg, void* ptr)
 {
-	m_controler.post_request(session, session->compkey(), buffer, ptr);
+	m_controler.post_request(session, session->compkey(), msg, ptr);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
