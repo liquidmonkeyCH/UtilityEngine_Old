@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><DEFECTS><DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\user\Documents\GitHub\UtilityEngine\UtilityEngine\src\</FILEPATH>
+      <FILENAME>net_session.cpp</FILENAME>
+      <LINE>24</LINE>
+      <COLUMN>15</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>未初始化变量 Utility::net::session_iface::m_recv_data。始终初始化成员变量(type.6)。</DESCRIPTION>
+    <FUNCTION>Utility::net::session_iface::{ctor}</FUNCTION>
+    <DECORATED>??0session_iface@net@Utility@@QAE@XZ</DECORATED>
+    <FUNCLINE>24</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Utility::net::session_iface::m_recv_data</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT></DEFECTS>
