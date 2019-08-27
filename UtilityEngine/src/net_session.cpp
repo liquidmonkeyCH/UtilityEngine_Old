@@ -27,8 +27,6 @@ session_iface::session_iface(void)
 , m_socket(nullptr)
 , m_state({ static_cast<int>(state::none) })
 {
-	memset(&m_recv_data, 0, sizeof(per_io_data));
-	memset(&m_send_data, 0, sizeof(per_io_data));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 fd_t
