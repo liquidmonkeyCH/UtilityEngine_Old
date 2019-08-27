@@ -83,7 +83,8 @@ protected:
 	bool process_recv(unsigned long size);
 	bool process_send(unsigned long size);
 public:
-	void send(const char* packet, unsigned long size);
+	bool send(const char* packet, unsigned long size);
+	bool send(mem::message* message);
 protected:
 	socket_wrap<st> m_socket_impl;
 	message_t m_recv_buffer;

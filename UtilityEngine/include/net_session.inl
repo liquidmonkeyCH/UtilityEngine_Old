@@ -44,45 +44,6 @@ void session_wrap<st, pares_message_wrap>::do_close(void* ptr)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<socket_type st, class pares_message_wrap>
-void session_wrap<st, pares_message_wrap>::send(const char* packet, unsigned long size)
-{
-	if (m_state != static_cast<int>(state::connected))
-		return;
-
-	std::lock_guard<std::mutex> lock(m_send_mutex);
-
-	unsigned long len = m_send_buffer.writable_size();
-
-	if (len < size)
-	{
-		// buffer overflow 
-		close(reason::cs_send_buffer_overflow);
-		return;
-	}
-
-	char* p = nullptr;
-	unsigned long left = size;
-	bool b_send = false;
-	do{
-		len = left;
-		p = m_send_buffer.write(len);
-		memcpy(p, packet, len);
-		b_send = m_send_buffer.commit_write(len);
-		packet += len;
-		left -= len;
-	} while (left != 0);
-
-	if (b_send)
-	{
-		m_send_data.m_buffer.len = MAX_PACKET_LEN;
-		m_send_data.m_buffer.buf = const_cast<char*>(m_send_buffer.read(m_send_data.m_buffer.len));
-
-		if (m_state == static_cast<int>(state::connected))
-			m_io_service->post_send_event(&m_send_data);
-	}
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template<socket_type st, class pares_message_wrap>
 bool session_wrap<st, pares_message_wrap>::process_send(unsigned long size)
 {
 	if (m_state != static_cast<int>(state::connected))
@@ -124,5 +85,60 @@ bool session_wrap<st, pares_message_wrap>::process_recv(unsigned long size)
 	}
 
 	return (m_state == static_cast<int>(state::connected));
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<socket_type st, class pares_message_wrap>
+bool session_wrap<st, pares_message_wrap>::send(const char* packet, unsigned long size)
+{
+	if (m_state != static_cast<int>(state::connected))
+		return false;
+
+	std::lock_guard<std::mutex> lock(m_send_mutex);
+
+	unsigned long len = m_send_buffer.writable_size();
+
+	if (len < size)
+	{
+		// buffer overflow 
+		close(reason::cs_send_buffer_overflow);
+		return false;
+	}
+
+	char* p = nullptr;
+	unsigned long left = size;
+	bool b_send = false;
+	do {
+		len = left;
+		p = m_send_buffer.write(len);
+		memcpy(p, packet, len);
+		b_send = m_send_buffer.commit_write(len);
+		packet += len;
+		left -= len;
+	} while (left != 0);
+
+	if (b_send)
+	{
+		m_send_data.m_buffer.len = MAX_PACKET_LEN;
+		m_send_data.m_buffer.buf = const_cast<char*>(m_send_buffer.read(m_send_data.m_buffer.len));
+
+		if (m_state == static_cast<int>(state::connected))
+			m_io_service->post_send_event(&m_send_data);
+	}
+	return true;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<socket_type st, class pares_message_wrap>
+bool session_wrap<st, pares_message_wrap>::send(mem::message* message)
+{
+	unsigned long len = 0;
+	const char* p = nullptr;
+	do{
+		len = 0;
+		p = message->next(len);
+		if (!p) break;
+		if (!send(p, len)) return false;
+	} while (true);
+
+	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

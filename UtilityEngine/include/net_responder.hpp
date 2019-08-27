@@ -75,8 +75,8 @@ protected:
 	mem::container<session_t>	m_session_pool;
 	std::mutex					m_session_mutex;
 	//! for session
-	unsigned long				m_recv_buffer_size;
-	unsigned long				m_send_buffer_size;
+	unsigned long				m_recv_buffer_size = MAX_PACKET_LEN * 10;
+	unsigned long				m_send_buffer_size = MAX_PACKET_LEN * 10;
 	//! for hanlder
 	msg::controler_wrap< message_t, handler_manager, dispatcher> m_controler;
 };

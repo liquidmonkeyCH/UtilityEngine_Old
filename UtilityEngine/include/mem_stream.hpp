@@ -1,6 +1,7 @@
 /**
 * @file mem_stream.hpp
 *
+* cons
 * @author Hourui (liquidmonkey)
 */
 #ifndef __MEM_STREAM_HPP__
@@ -21,17 +22,18 @@ class _stream_impl
 public:
 	enum class state_t
 	{
-		SST_ERROR_UNPACK = -2,	// 解包错误数据
-		SST_EOF = -1,			// 解包遇到文件尾
-		SST_OK = 0,				// 正常
-		SST_OVERFLOW,			// 压包溢出
-		SST_ERROR_PACK,			// 压包错误数据
+		err_unpcak = -2,	// 解包错误数据
+		eof = -1,			// 解包遇到文件尾
+		good = 0,			// 正常
+		over_flow,			// 压包溢出
+		err_pack,			// 压包错误数据
 	};
 public:
-	_stream_impl(buffer_iface* buffer) :m_buffer(buffer), m_state(state_t::SST_OK){}
+	_stream_impl(buffer_iface* buffer) :m_buffer(buffer), m_state(state_t::good){}
 	~_stream_impl(void) = default;
 
 	state_t state(void) { return m_state; }
+	bool good(void) { return m_state == state_t::good; }
 protected:
 	buffer_iface* m_buffer;
 	state_t	m_state;
@@ -51,12 +53,7 @@ public:
 	ostream& operator >> (T& data);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class stream_view : virtual public _stream_impl
-{
-public:
-	template<class T>
-	stream_view& operator >> (T& data);
-};
+class iostream : public istream, public ostream {};
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
 istream& istream::operator<<(T& kData)
@@ -65,7 +62,7 @@ istream& istream::operator<<(T& kData)
 
 	if (m_buffer->writable_size() < size)
 	{
-		m_state = state_t::SST_OVERFLOW;
+		m_state = state_t::over_flow;
 		return *this;
 	}
 
@@ -90,7 +87,7 @@ ostream& ostream::operator>>(T& kData)
 
 	if (m_buffer->readable_size() < size)
 	{
-		m_state = state_t::SST_EOF;
+		m_state = state_t::eof;
 		return *this;
 	}
 
@@ -104,30 +101,6 @@ ostream& ostream::operator>>(T& kData)
 		m_buffer->commit_read(len);
 		pos += len;
 	} while (pos < size);
-
-	return *this;
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class T>
-stream_view& stream_view::operator>>(T& kData)
-{
-	std::uint32_t size = sizeof(T);
-	std::uint32_t len = size,pos = 0;
-	const char* p = m_buffer->next(len);
-
-	if (!p)
-	{
-		m_state = state_t::SST_EOF;
-		return *this;
-	}
-
-	do {
-		memcpy(&kData+pos, p, len);
-		pos += len;
-		if (pos >= size) break;
-		len = size - pos;
-		p = m_buffer->next(len);
-	} while (true);
 
 	return *this;
 }

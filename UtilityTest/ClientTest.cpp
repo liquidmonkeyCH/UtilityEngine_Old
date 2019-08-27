@@ -17,6 +17,7 @@
 #include "msg_handler_manager_deque.hpp"
 
 #include "task_dispatcher_balance.hpp"
+#include "com_service_manager.hpp"
 
 using namespace Utility;
 
@@ -59,8 +60,32 @@ public:
 	}
 };
 
+using ServiceManager = Utility::com::iface::ServiceManager;
+class ServiceTest : public com::iface::Service
+{
+	DECLARE_SERVICE_ID(ServiceTest);
+};
+
+ServiceTest::ServiceTest() {}
+ServiceTest::~ServiceTest() {}
+void ServiceTest::LoadFromDatabase(void) {}
+
+using ServiceManager2 = Utility::com::wrap::ServiceManager;
+struct Test {
+	int init(int i) { return 1; }
+	void init2() {}
+};
+
 int main(int argc, char* argv[])
 {
+	ServiceManager::Attach<ServiceTest>();
+	ServiceTest* pService = ServiceManager::GetService<ServiceTest>();
+	ServiceManager::Detach<ServiceTest>();
+
+	ServiceManager2::Attach<Test>(&Test::init2);
+	com::wrap::Service<Test>* pSvr = ServiceManager2::GetService<Test>();
+	ServiceManager2::Detach<Test>(&Test::init, 1);
+
 	net::framework::net_init();
 
 	logger klogger(logger::log_level::debug);
@@ -138,4 +163,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-

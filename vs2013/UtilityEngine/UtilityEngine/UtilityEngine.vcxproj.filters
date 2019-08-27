@@ -23,6 +23,9 @@
     <Filter Include="Core\code">
       <UniqueIdentifier>{2b1f581e-34c0-4bde-92a0-0f2f95854d19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\com">
+      <UniqueIdentifier>{3452bc2d-8a50-47bb-bac7-43112383d001}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
@@ -117,6 +120,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\code_md5.hpp">
       <Filter>Core\code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_service.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_service_manager.hpp">
+      <Filter>Core\com</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

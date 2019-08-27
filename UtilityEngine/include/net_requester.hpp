@@ -64,8 +64,8 @@ protected:
 protected:
 	session_t				m_session;
 	//! for session
-	unsigned long			m_recv_buffer_size;
-	unsigned long			m_send_buffer_size;
+	unsigned long			m_recv_buffer_size = MAX_PACKET_LEN * 10;
+	unsigned long			m_send_buffer_size = MAX_PACKET_LEN * 10;
 	//! for msg handle
 	msg::controler_wrap< message_t, handler_manager, dispatcher> m_controler;
 
