@@ -10,6 +10,7 @@
 
 #include "logger.hpp"
 #include "com_service.hpp"
+#include <type_traits>
 
 namespace Utility
 {
@@ -17,74 +18,24 @@ namespace Utility
 namespace com
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace iface
+namespace _impl 
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ServiceManager
+template<class T>
+struct service_refence
 {
-public:
-	enum class error
-	{
-		not_found = 0,
-		duplicate_attach,
-		duplicate_detach,
-	};
+	using param_t = typename std::conditional<std::is_base_of<iface::Service, T>::value, T, wrap::Service<T>>::type;
 
-	template<class T>
-	struct refence
-	{
-		refence(void) :_data(nullptr) {}
-		~refence(void) { clear(); }
+	service_refence(void) :_data(nullptr) {}
+	~service_refence(void) { destory(); }
 
-		void clear(void) { delete _data; _data = nullptr; }
-		void init(void) { T* t = new T; t->LoadFromDatabase(); _data = t; }
+	void create(void) { _data = new param_t; }
+	void destory(void) { delete _data; _data = nullptr; }
 
-		T* _data;
-	};
-private:
-	template<class T>
-	static refence<T>* _refence(void)
-	{
-		static refence<T> res;
-		return &res;
-	}
-public:
-	template<class T>
-	static T* GetService(void)
-	{
-		refence<T>* res = _refence<T>();
-		if (res->_data)
-			return res->_data;
-
-		Clog::error("Service not found (%s)",T::ID());
-		return nullptr;
-	}
-
-	template<class T>
-	static void Attach(void)
-	{
-		refence<T>* res = _refence<T>();
-		if (res->_data)
-			Clog::error_throw_no(error::duplicate_attach, "Service duplicate attach (%s)", T::ID());
-
-		res->init();
-	}
-
-	template<class T>
-	static void Detach(void)
-	{
-		refence<T>* res = _refence<T>();
-		if (!res->_data)
-			Clog::error_throw_no(error::duplicate_detach, "Service duplicate detach (%s)", T::ID());
-
-		res->clear();
-	}
+	param_t* _data;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-}// namespace iface
-////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace wrap
-{
+}//namespace _impl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ServiceManager
 {
@@ -95,17 +46,9 @@ public:
 		duplicate_attach,
 		duplicate_detach,
 	};
-private:
+protected:
 	template<typename T>
-	struct refence
-	{
-		refence(void) :_data(nullptr) {}
-		~refence(void) { clear(); }
-
-		void clear(void) { delete _data; _data = nullptr; }
-
-		Service<T>* _data;
-	};
+	using refence = _impl::service_refence<T>;
 
 	template<typename T>
 	static refence<T>* _refence()
@@ -113,20 +56,20 @@ private:
 		static refence<T> res;
 		return &res;
 	}
-private:
+protected:
 	template<typename T, typename... Args>
 	struct _bind_function;
 
 	template<typename T>
 	struct _bind_function<T>
 	{
-		static void run(Service<T>* service){}
+		static void run(T* service) {}
 	};
 
 	template<class T, class F, typename... Args>
 	struct _bind_function<T, F, Args...>
 	{
-		static auto run(Service<T>* service, F&& f, Args&&... args)->decltype(std::bind(std::forward<F>(f), std::placeholders::_1, std::forward<Args>(args)...)((T*)(nullptr)))
+		static auto run(T* service, F&& f, Args&& ... args)->decltype(std::bind(std::forward<F>(f), std::placeholders::_1, std::forward<Args>(args)...)((T*)(nullptr)))
 		{
 			return std::bind(std::forward<F>(f), std::placeholders::_1, std::forward<Args>(args)...)(service);
 		}
@@ -136,46 +79,46 @@ private:
 	struct guard
 	{
 		guard(refence<T>* res) :_res(res) {}
-		~guard(void) { _res->clear(); }
+		~guard(void) { _res->destory(); }
 
 		refence<T>* _res;
 	};
 public:
 	template<typename T>
-	static Service<T>* GetService(void)
+	static auto GetService(void)->typename refence<T>::param_t*
 	{
 		refence<T>* res = _refence<T>();
 		if (res->_data)
 			return res->_data;
-			
-		Clog::error("Service not found (%s)", Service<T>::ID());
+
+		Clog::error("Service not found (%s)", refence<T>::param_t::ID());
 		return nullptr;
 	}
 
 	template<typename T, typename... Args>
 	static auto Attach(Args&& ... args)
 	{
+		using param_t = typename refence<T>::param_t;
 		refence<T>* res = _refence<T>();
 		if (res->_data)
-			Clog::error_throw_no(error::duplicate_attach, "Service duplicate attach (%s)", Service<T>::ID());
+			Clog::error_throw_no(error::duplicate_attach, "Service duplicate attach (%s)", param_t::ID());
 
-		res->_data = new Service<T>;
-		return _bind_function<T, Args...>::run(res->_data, std::forward<Args>(args)...);
+		res->create();
+		return _bind_function<param_t, Args...>::run(res->_data, std::forward<Args>(args)...);
 	}
 
 	template<typename T, typename... Args>
 	static auto Detach(Args&& ... args)
 	{
+		using param_t = typename refence<T>::param_t;
 		refence<T>* res = _refence<T>();
 		if (!res->_data)
-			Clog::error_throw_no(error::duplicate_detach, "Service duplicate detach (%s)", Service<T>::ID());
+			Clog::error_throw_no(error::duplicate_detach, "Service duplicate detach (%s)", param_t::ID());
 
 		guard<T> _guard(res);
-		return _bind_function<T, Args...>::run(res->_data, std::forward<Args>(args)...);
+		return _bind_function<param_t, Args...>::run(res->_data, std::forward<Args>(args)...);
 	}
 };
-////////////////////////////////////////////////////////////////////////////////////////////////////
-}// namespace wrap
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }// namespace com
 ////////////////////////////////////////////////////////////////////////////////////////////////////

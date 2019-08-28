@@ -16,6 +16,8 @@ namespace Utility
 namespace com
 {
 ////////////////////////////////////////////////////////////////////////////////
+namespace _impl { template<class> struct service_refence; }
+////////////////////////////////////////////////////////////////////////////////
 namespace iface
 {
 class Service
@@ -23,11 +25,15 @@ class Service
 public:
 	using SERVICE_ID = const char*;
 public:
-	virtual void LoadFromDatabase(void) = 0;
+	virtual SERVICE_ID GetId(void) = 0;
 };
 ////////////////////////////////////////////////////////////////////////////////
 #define DECLARE_SERVICE_ID(serviceId)	\
 public:									\
+	SERVICE_ID GetId(void)				\
+	{									\
+		return (#serviceId);			\
+	}									\
 	static SERVICE_ID ID(void)			\
 	{									\
 		return (#serviceId);			\
@@ -35,8 +41,7 @@ public:									\
 private:								\
 	serviceId(void);					\
 	~serviceId(void);					\
-	void LoadFromDatabase(void);		\
-	template<class T> friend struct Utility::com::iface::ServiceManager::refence;
+	template<class> friend struct Utility::com::_impl::service_refence;
 ////////////////////////////////////////////////////////////////////////////////
 }// namespace iface
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,17 +51,16 @@ namespace wrap
 template<typename T>
 class Service : public T
 {
-	Service(void) = default;
-	~Service(void) = default;
+	Service(void){};
+	~Service(void) {};
 
 	Service(const Service&) = delete;
 	Service& operator=(const Service&) = delete;
 
 	Service(const Service&&) = delete;
 	Service& operator=(const Service&&) = delete;
-
-	friend class ServiceManager;
 public:
+	template<class> friend struct Utility::com::_impl::service_refence;
 	using SERVICE_ID = const char*;
 
 	static SERVICE_ID ID(void)

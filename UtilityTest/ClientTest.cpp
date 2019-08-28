@@ -60,17 +60,20 @@ public:
 	}
 };
 
-using ServiceManager = Utility::com::iface::ServiceManager;
+using ServiceManager = com::ServiceManager;
+template<class T>
+using Service = com::wrap::Service<T>;
 class ServiceTest : public com::iface::Service
 {
 	DECLARE_SERVICE_ID(ServiceTest);
+public:
+	int init(int i) { return 1; }
+	void init2() {}
 };
 
 ServiceTest::ServiceTest() {}
 ServiceTest::~ServiceTest() {}
-void ServiceTest::LoadFromDatabase(void) {}
 
-using ServiceManager2 = Utility::com::wrap::ServiceManager;
 struct Test {
 	int init(int i) { return 1; }
 	void init2() {}
@@ -78,13 +81,13 @@ struct Test {
 
 int main(int argc, char* argv[])
 {
-	ServiceManager::Attach<ServiceTest>();
+	ServiceManager::Attach<ServiceTest>(&ServiceTest::init,1);
 	ServiceTest* pService = ServiceManager::GetService<ServiceTest>();
-	ServiceManager::Detach<ServiceTest>();
+	ServiceManager::Detach<ServiceTest>(&ServiceTest::init2);
 
-	ServiceManager2::Attach<Test>(&Test::init2);
-	com::wrap::Service<Test>* pSvr = ServiceManager2::GetService<Test>();
-	ServiceManager2::Detach<Test>(&Test::init, 1);
+	ServiceManager::Attach<Test>(&Test::init2);
+	Service<Test>* pSvr = ServiceManager::GetService<Test>();
+	ServiceManager::Detach<Test>(&Test::init, 1);
 
 	net::framework::net_init();
 
