@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="UtilityEngine" Database="./UtilityEngine.tags">
-  <Project Name="UtilityEngine" Path="UtilityEngine/UtilityEngine.project" Active="Yes"/>
+  <Project Name="UtilityEngine" Path="UtilityEngine/UtilityEngine.project" Active="No"/>
   <Project Name="ServerTest" Path="ServerTest/ServerTest.project" Active="No"/>
-  <Project Name="ClientTest" Path="ClientTest/ClientTest.project"/>
+  <Project Name="ClientTest" Path="ClientTest/ClientTest.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="UtilityEngine" ConfigName="Debug"/>
