@@ -56,6 +56,9 @@ protected:
 		static refence<T> res;
 		return &res;
 	}
+
+	template<typename T>
+	using param_t = typename refence<T>::param_t;
 protected:
 	template<typename T, typename... Args>
 	struct _bind_function;
@@ -85,38 +88,36 @@ protected:
 	};
 public:
 	template<typename T>
-	static auto GetService(void)->typename refence<T>::param_t*
+	static auto GetService(void)->param_t<T>*
 	{
 		refence<T>* res = _refence<T>();
 		if (res->_data)
 			return res->_data;
 
-		Clog::error("Service not found (%s)", refence<T>::param_t::ID());
+		Clog::error("Service not found (%s)", param_t<T>::ID());
 		return nullptr;
 	}
 
 	template<typename T, typename... Args>
-	static auto Attach(Args&& ... args)
+	static auto Attach(Args&& ... args)->decltype(_bind_function<param_t<T>, Args...>::run((param_t<T>*)nullptr, std::forward<Args>(args)...))
 	{
-		using param_t = typename refence<T>::param_t;
 		refence<T>* res = _refence<T>();
 		if (res->_data)
-			Clog::error_throw_no(error::duplicate_attach, "Service duplicate attach (%s)", param_t::ID());
+			Clog::error_throw_no(error::duplicate_attach, "Service duplicate attach (%s)", param_t<T>::ID());
 
 		res->create();
-		return _bind_function<param_t, Args...>::run(res->_data, std::forward<Args>(args)...);
+		return _bind_function<param_t<T>, Args...>::run(res->_data, std::forward<Args>(args)...);
 	}
 
 	template<typename T, typename... Args>
-	static auto Detach(Args&& ... args)
+	static auto Detach(Args&& ... args)->decltype(_bind_function<param_t<T>, Args...>::run((param_t<T>*)nullptr, std::forward<Args>(args)...))
 	{
-		using param_t = typename refence<T>::param_t;
 		refence<T>* res = _refence<T>();
 		if (!res->_data)
-			Clog::error_throw_no(error::duplicate_detach, "Service duplicate detach (%s)", param_t::ID());
+			Clog::error_throw_no(error::duplicate_detach, "Service duplicate detach (%s)", param_t<T>::ID());
 
 		guard<T> _guard(res);
-		return _bind_function<param_t, Args...>::run(res->_data, std::forward<Args>(args)...);
+		return _bind_function<param_t<T>, Args...>::run(res->_data, std::forward<Args>(args)...);
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
