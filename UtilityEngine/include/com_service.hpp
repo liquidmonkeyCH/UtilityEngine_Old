@@ -65,7 +65,7 @@ public:
 
 	static SERVICE_ID ID(void)
 	{
-		return type_name<T>();
+		return type_name<Service<T>>();
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////

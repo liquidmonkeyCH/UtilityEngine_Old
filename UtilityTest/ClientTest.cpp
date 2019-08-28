@@ -81,18 +81,22 @@ struct Test {
 
 int main(int argc, char* argv[])
 {
+	logger klogger(logger::log_level::debug);
+	Clog::active_logger(&klogger);
+
+	ServiceManager::GetService<ServiceTest>();
 	ServiceManager::Attach<ServiceTest>(&ServiceTest::init,1);
 	ServiceTest* pService = ServiceManager::GetService<ServiceTest>();
 	ServiceManager::Detach<ServiceTest>(&ServiceTest::init2);
 
+	ServiceManager::GetService<Test>();
 	ServiceManager::Attach<Test>(&Test::init2);
 	Service<Test>* pSvr = ServiceManager::GetService<Test>();
 	ServiceManager::Detach<Test>(&Test::init, 1);
 
 	net::framework::net_init();
 
-	logger klogger(logger::log_level::debug);
-	Clog::active_logger(&klogger);
+	
 
 	net::io_service_iocp io_service;
 	io_service.start();
