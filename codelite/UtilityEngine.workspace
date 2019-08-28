@@ -2,17 +2,20 @@
 <CodeLite_Workspace Name="UtilityEngine" Database="./UtilityEngine.tags">
   <Project Name="UtilityEngine" Path="UtilityEngine/UtilityEngine.project" Active="No"/>
   <Project Name="ServerTest" Path="ServerTest/ServerTest.project" Active="No"/>
-  <Project Name="ClientTest" Path="ClientTest/ClientTest.project" Active="Yes"/>
+  <Project Name="ClientTest" Path="ClientTest/ClientTest.project" Active="No"/>
+  <Project Name="Test" Path="Test/Test.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="UtilityEngine" ConfigName="Debug"/>
       <Project Name="ServerTest" ConfigName="Debug"/>
       <Project Name="ClientTest" ConfigName="Debug"/>
+      <Project Name="Test" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="UtilityEngine" ConfigName="Release"/>
       <Project Name="ServerTest" ConfigName="Release"/>
       <Project Name="ClientTest" ConfigName="Release"/>
+      <Project Name="Test" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

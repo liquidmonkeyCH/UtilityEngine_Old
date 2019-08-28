@@ -62,6 +62,19 @@
       <File Name="../../UtilityEngine/src/task_object.cpp"/>
       <File Name="../../UtilityEngine/include/task_object.hpp"/>
     </VirtualDirectory>
+    <VirtualDirectory Name="main">
+      <File Name="../../UtilityEngine/include/application.hpp"/>
+      <File Name="../../UtilityEngine/src/application.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="code">
+      <File Name="../../UtilityEngine/include/code_md5.hpp"/>
+      <File Name="../../UtilityEngine/src/code_md5.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="com">
+      <File Name="../../UtilityEngine/include/com_service.hpp"/>
+      <File Name="../../UtilityEngine/include/com_service_manager.hpp"/>
+      <File Name="../../UtilityEngine/include/com_singleton.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Static Library">
     <GlobalSettings>
@@ -83,6 +96,7 @@
       <General OutputFile="../lib/lib$(ProjectName).a" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[
+      
       ]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
@@ -120,6 +134,7 @@
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName).so" IntermediateDirectory="./Release" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[
+      
       
       
       ]]>
