@@ -127,6 +127,9 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\com_service_manager.hpp">
       <Filter>Core\com</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_singleton.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">

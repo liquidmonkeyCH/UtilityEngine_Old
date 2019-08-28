@@ -72,6 +72,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\base_defines.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\com_service.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\com_service_manager.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_singleton.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\logger.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_container.hpp" />

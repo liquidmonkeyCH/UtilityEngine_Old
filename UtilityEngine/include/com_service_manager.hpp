@@ -11,12 +11,15 @@
 #include "logger.hpp"
 #include "com_service.hpp"
 #include <type_traits>
+#include <functional>
 
 namespace Utility
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace com
 {
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class ServiceManager;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace _impl 
 {
@@ -29,6 +32,12 @@ struct service_refence
 	service_refence(void) :_data(nullptr) {}
 	~service_refence(void) { destory(); }
 
+	service_refence(const service_refence&) = delete;
+	service_refence& operator=(const service_refence&) = delete;
+	service_refence(const service_refence&&) = delete;
+	service_refence& operator=(const service_refence&&) = delete;
+	friend class com::ServiceManager;
+private:
 	void create(void) { _data = new param_t; }
 	void destory(void) { delete _data; _data = nullptr; }
 
