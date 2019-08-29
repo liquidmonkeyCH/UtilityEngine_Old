@@ -7,7 +7,7 @@
 #ifndef __COM_LESS_HPP__
 #define __COM_LESS_HPP__
 
-#include <string>
+#include <string.h>
 
 namespace Utility
 {
