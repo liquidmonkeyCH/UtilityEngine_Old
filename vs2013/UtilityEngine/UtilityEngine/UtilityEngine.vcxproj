@@ -104,7 +104,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher_pool.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\task_object.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\com_thread_pool.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\code_md5.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_md5.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl" />
@@ -127,7 +127,7 @@
     <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_balance.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\task_dispatcher_pool.cpp" />
     <ClCompile Include="..\..\..\UtilityEngine\src\task_object.cpp" />
-    <ClCompile Include="..\..\..\UtilityEngine\src\code_md5.cpp" />
+    <ClCompile Include="..\..\..\UtilityEngine\src\com_md5.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

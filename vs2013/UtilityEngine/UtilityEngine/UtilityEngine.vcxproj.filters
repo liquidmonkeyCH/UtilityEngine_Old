@@ -20,9 +20,6 @@
     <Filter Include="Core\main">
       <UniqueIdentifier>{cc032fa9-be29-446e-901e-d82acd73cbc3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\code">
-      <UniqueIdentifier>{2b1f581e-34c0-4bde-92a0-0f2f95854d19}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\com">
       <UniqueIdentifier>{3452bc2d-8a50-47bb-bac7-43112383d001}</UniqueIdentifier>
     </Filter>
@@ -115,9 +112,6 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\application.hpp">
       <Filter>Core\main</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\code_md5.hpp">
-      <Filter>Core\code</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\com_service.hpp">
       <Filter>Core\com</Filter>
     </ClInclude>
@@ -137,6 +131,9 @@
       <Filter>Core\com</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\com_random.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_md5.hpp">
       <Filter>Core\com</Filter>
     </ClInclude>
   </ItemGroup>
@@ -197,8 +194,8 @@
     <ClCompile Include="..\..\..\UtilityEngine\src\application.cpp">
       <Filter>Core\main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\UtilityEngine\src\code_md5.cpp">
-      <Filter>Core\code</Filter>
+    <ClCompile Include="..\..\..\UtilityEngine\src\com_md5.cpp">
+      <Filter>Core\com</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
