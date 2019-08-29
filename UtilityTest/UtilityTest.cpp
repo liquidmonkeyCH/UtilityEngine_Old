@@ -12,6 +12,7 @@ int main(int argc, char** argv)
 
 	UtilityTest::_Service();
 	UtilityTest::_Singleton();
+	UtilityTest::_ThreadPool();
 
 	std::cout << static_cast<unsigned short>((1437439665242112 & 0x0000ffff00000000ULL) >> 32) << std::endl;
 	Clog::debug("test done!");

@@ -66,7 +66,7 @@ public:
 	thread_pool_wrap(void){}
 	~thread_pool_wrap(void){}
 public:
-	bool schedule(T&& task)
+	bool schedule(task_t&& task)
 	{
 		std::unique_lock<std::mutex> lock(mtx);
 		if (m_state != state::start)

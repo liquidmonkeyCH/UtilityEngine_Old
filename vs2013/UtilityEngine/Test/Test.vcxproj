@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\UtilityTest\Service_Test.cpp" />
     <ClCompile Include="..\..\..\UtilityTest\Singleton_Test.cpp" />
+    <ClCompile Include="..\..\..\UtilityTest\ThreadPool_Test.cpp" />
     <ClCompile Include="..\..\..\UtilityTest\UtilityTest.cpp" />
   </ItemGroup>
   <ItemGroup>

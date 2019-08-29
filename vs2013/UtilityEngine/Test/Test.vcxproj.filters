@@ -16,6 +16,9 @@
     <ClCompile Include="..\..\..\UtilityTest\Singleton_Test.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\UtilityTest\ThreadPool_Test.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityTest\UtilityTest.hpp">
