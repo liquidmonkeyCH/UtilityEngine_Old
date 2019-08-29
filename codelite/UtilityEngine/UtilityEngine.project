@@ -10,7 +10,6 @@
   <VirtualDirectory Name="Core">
     <File Name="../../UtilityEngine/include/base_defines.hpp"/>
     <File Name="../../UtilityEngine/include/logger.hpp"/>
-    <File Name="../../UtilityEngine/include/thread_pool.hpp"/>
     <File Name="../../UtilityEngine/src/logger.cpp"/>
     <VirtualDirectory Name="mem">
       <File Name="../../UtilityEngine/include/mem_buffer.hpp"/>
@@ -66,14 +65,16 @@
       <File Name="../../UtilityEngine/include/application.hpp"/>
       <File Name="../../UtilityEngine/src/application.cpp"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="code">
-      <File Name="../../UtilityEngine/include/code_md5.hpp"/>
-      <File Name="../../UtilityEngine/src/code_md5.cpp"/>
-    </VirtualDirectory>
     <VirtualDirectory Name="com">
       <File Name="../../UtilityEngine/include/com_service.hpp"/>
       <File Name="../../UtilityEngine/include/com_service_manager.hpp"/>
       <File Name="../../UtilityEngine/include/com_singleton.hpp"/>
+      <File Name="../../UtilityEngine/include/com_less.hpp"/>
+      <File Name="../../UtilityEngine/include/com_random.hpp"/>
+      <File Name="../../UtilityEngine/include/com_thread_pool.hpp"/>
+      <File Name="../../UtilityEngine/include/com_typename.hpp"/>
+      <File Name="../../UtilityEngine/include/com_md5.hpp"/>
+      <File Name="../../UtilityEngine/src/com_md5.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Static Library">
@@ -96,6 +97,7 @@
       <General OutputFile="../lib/lib$(ProjectName).a" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[
+      
       
       ]]>
       </Environment>
@@ -134,6 +136,7 @@
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName).so" IntermediateDirectory="./Release" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[
+      
       
       
       

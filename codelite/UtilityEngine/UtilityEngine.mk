@@ -53,7 +53,7 @@ LibPath                := $(LibraryPathSwitch).
 ##
 CodeLiteDir:=/usr/share/codelite
 Objects=$(IntermediateDirectory)/src_logger$(ObjectSuffix) $(IntermediateDirectory)/src_mem_rotative_buffer$(ObjectSuffix) $(IntermediateDirectory)/src_mem_stream_buffer$(ObjectSuffix) $(IntermediateDirectory)/src_net_framework$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service_iocp$(ObjectSuffix) $(IntermediateDirectory)/src_net_session$(ObjectSuffix) $(IntermediateDirectory)/src_net_socket$(ObjectSuffix) $(IntermediateDirectory)/src_net_io_service_epoll$(ObjectSuffix) $(IntermediateDirectory)/src_task_dispatcher_balance$(ObjectSuffix) \
-	$(IntermediateDirectory)/src_task_dispatcher_pool$(ObjectSuffix) $(IntermediateDirectory)/src_task_object$(ObjectSuffix) $(IntermediateDirectory)/src_application$(ObjectSuffix) $(IntermediateDirectory)/src_code_md5$(ObjectSuffix) 
+	$(IntermediateDirectory)/src_task_dispatcher_pool$(ObjectSuffix) $(IntermediateDirectory)/src_task_object$(ObjectSuffix) $(IntermediateDirectory)/src_application$(ObjectSuffix) $(IntermediateDirectory)/src_com_md5$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -182,13 +182,13 @@ $(IntermediateDirectory)/src_application$(DependSuffix): ../../UtilityEngine/src
 $(IntermediateDirectory)/src_application$(PreprocessSuffix): ../../UtilityEngine/src/application.cpp
 	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_application$(PreprocessSuffix) "/root/UtilityEngine_New/trunk/UtilityEngine/src/application.cpp"
 
-$(IntermediateDirectory)/src_code_md5$(ObjectSuffix): ../../UtilityEngine/src/code_md5.cpp $(IntermediateDirectory)/src_code_md5$(DependSuffix)
-	$(CompilerName) $(IncludePCH) $(SourceSwitch) "/root/UtilityEngine_New/trunk/UtilityEngine/src/code_md5.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_code_md5$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/src_code_md5$(DependSuffix): ../../UtilityEngine/src/code_md5.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_code_md5$(ObjectSuffix) -MF$(IntermediateDirectory)/src_code_md5$(DependSuffix) -MM "/root/UtilityEngine_New/trunk/UtilityEngine/src/code_md5.cpp"
+$(IntermediateDirectory)/src_com_md5$(ObjectSuffix): ../../UtilityEngine/src/com_md5.cpp $(IntermediateDirectory)/src_com_md5$(DependSuffix)
+	$(CompilerName) $(IncludePCH) $(SourceSwitch) "/root/UtilityEngine_New/trunk/UtilityEngine/src/com_md5.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_com_md5$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_com_md5$(DependSuffix): ../../UtilityEngine/src/com_md5.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_com_md5$(ObjectSuffix) -MF$(IntermediateDirectory)/src_com_md5$(DependSuffix) -MM "/root/UtilityEngine_New/trunk/UtilityEngine/src/com_md5.cpp"
 
-$(IntermediateDirectory)/src_code_md5$(PreprocessSuffix): ../../UtilityEngine/src/code_md5.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_code_md5$(PreprocessSuffix) "/root/UtilityEngine_New/trunk/UtilityEngine/src/code_md5.cpp"
+$(IntermediateDirectory)/src_com_md5$(PreprocessSuffix): ../../UtilityEngine/src/com_md5.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_com_md5$(PreprocessSuffix) "/root/UtilityEngine_New/trunk/UtilityEngine/src/com_md5.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
@@ -235,9 +235,9 @@ clean:
 	$(RM) $(IntermediateDirectory)/src_application$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/src_application$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/src_application$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/src_code_md5$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/src_code_md5$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/src_code_md5$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/src_com_md5$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/src_com_md5$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/src_com_md5$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 	$(RM) "/root/UtilityEngine_New/trunk/codelite/.build-debug/UtilityEngine"
 
