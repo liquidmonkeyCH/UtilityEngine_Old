@@ -13,7 +13,7 @@
 #include <map>
 #include <vector>
 
-#include "base_defines.hpp"
+#include "com_less.hpp"
 
 namespace Utility
 {
@@ -39,7 +39,7 @@ public:
 	application(void) = default;
 	~application(void) = default;
 	using param_list = std::vector<std::string>;
-	using param_map = std::map<const char*,int,strless>;
+	using param_map = std::map<const char*,int,com::strless>;
 	friend void on_signal(int n);
 public:
 	bool Start(int param_num, char* params[]);

@@ -130,6 +130,15 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\com_thread_pool.hpp">
       <Filter>Core\com</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_less.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_typename.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_random.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_container.inl">

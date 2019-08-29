@@ -8,7 +8,7 @@
 #ifndef __COM_SERVICE_HPP__
 #define __COM_SERVICE_HPP__
 
-#include "base_defines.hpp"
+#include "com_typename.hpp"
 
 namespace Utility
 {
@@ -65,7 +65,7 @@ public:
 
 	static SERVICE_ID ID(void)
 	{
-		return type_name<Service<T>>();
+		return com::type_name<Service<T>>();
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////
