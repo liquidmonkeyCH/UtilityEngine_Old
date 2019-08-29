@@ -9,6 +9,7 @@
 //#define NDEBUG
 
 #include <assert.h>
+#include <string.h>
 #define MAX_PACKET_LEN 4096
 
 namespace Utility
