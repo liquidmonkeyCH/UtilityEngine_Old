@@ -7,7 +7,7 @@
 #define __TASK_DISPATCHER_POOL_HPP__
 
 #include "task_dispatcher.hpp"
-#include "thread_pool.hpp"
+#include "com_thread_pool.hpp"
 
 namespace Utility
 {
@@ -28,7 +28,7 @@ public:
 	void stop(void);
 	void dispatch(task_info&& _task);
 private:
-	task_thread_pool<task_info> m_workers;
+	com::task_threadpool<task_info> m_workers;
 	bool m_running;
 	std::mutex m_mutex;
 };

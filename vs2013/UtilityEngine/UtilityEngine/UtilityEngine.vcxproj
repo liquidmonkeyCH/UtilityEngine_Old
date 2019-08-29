@@ -100,7 +100,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher_balance.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\task_dispatcher_pool.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\task_object.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\thread_pool.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_thread_pool.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\code_md5.hpp" />
   </ItemGroup>
   <ItemGroup>

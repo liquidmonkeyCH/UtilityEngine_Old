@@ -85,9 +85,6 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\task_object.hpp">
       <Filter>Core\task</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\thread_pool.hpp">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\net_io_service_epoll.hpp">
       <Filter>Core\net</Filter>
     </ClInclude>
@@ -128,6 +125,9 @@
       <Filter>Core\com</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\com_singleton.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_thread_pool.hpp">
       <Filter>Core\com</Filter>
     </ClInclude>
   </ItemGroup>

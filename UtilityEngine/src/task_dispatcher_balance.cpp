@@ -47,7 +47,7 @@ dispatcher_balance::start(std::uint32_t nworker)
 		return;
 
 	m_running = true;
-	m_workers = new task_thread<task_info>[nworker];
+	m_workers = new com::task_thread<task_info>[nworker];
 	m_worker_size = nworker;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,12 +55,12 @@ void
 dispatcher_balance::dispatch(task_info&& _task)
 {
 	std::uint32_t n = _task.m_obj->get_worker_index();
-	task_thread<task_info>* worker = get_worker(n);
+	com::task_thread<task_info>* worker = get_worker(n);
 	_task.m_obj->set_worker_index(n);
 	worker->schedule(std::move(_task));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-task_thread<dispatcher_iface::task_info>*
+com::task_thread<dispatcher_iface::task_info>*
 dispatcher_balance::get_worker(std::uint32_t& n)
 {
 	if (n > m_worker_size)
@@ -69,7 +69,7 @@ dispatcher_balance::get_worker(std::uint32_t& n)
 	if (n > 0)
 		return m_workers + n - 1;
 
-	task_thread<task_info>* worker = m_workers;
+	com::task_thread<task_info>* worker = m_workers;
 	size_t ntask = 0;
 	size_t min_task = m_workers->task_size();
 	n = 1;

@@ -1,5 +1,5 @@
 #include "UtilityTest.hpp"
-#include "thread_pool.hpp"
+#include "com_thread_pool.hpp"
 
 using namespace Utility;
 
@@ -18,7 +18,7 @@ void thread_echo(int n)
 	}
 }
 
-void thread_listen(threadpool* pool, int n)
+void thread_listen(com::threadpool* pool, int n)
 {
 	while (true)
 	{
@@ -84,7 +84,7 @@ public:
 		//m_Dispatcher.schedule(&TestThread::run2, this);
 	}
 private:
-	thread m_thread;
+	com::thread m_thread;
 	std::atomic_bool m_bRun;
 	std::mutex _mtu;
 	std::condition_variable cv;
@@ -106,23 +106,25 @@ void UtilityTest::_ThreadPool()
 		<< "/////////////////////////////////////////////////////////////////////////"
 		<< std::endl;
 
-	thread_pool<20> pool3;
-	thread_pool<2> pool4;
-	threadpool pool; pool.init(20);
-	threadpool pool2; pool2.init(2);
+	com::threadpool_st<20> pool3;
+	com::threadpool_st<2> pool4;
+	com::threadpool pool; pool.init(20);
+	com::threadpool pool2; pool2.init(2);
 
-	task_thread<test> task_pool;
+	com::task_thread<test> task_pool;
 
 	TestThread th;
 	th.Start();
 
 	pool.schedule_normal(thread_listen, &pool, 1);
+	auto res = pool.schedule_future(thread_echo, 1000);
+
 	pool.schedule_normal(thread_echo,1);
 	pool.schedule_normal(thread_echo, 2);
 	pool.schedule_normal(thread_echo, 3);
 	pool.schedule_normal(thread_echo, 4);
 	pool.schedule_normal(thread_echo, 5);
-	pool.schedule_future(thread_echo, 1);
+	
 	pool.schedule_normal(thread_echo, 6);
 	
 	pool2.schedule_normal(thread_listen, &pool2, 1);
@@ -140,11 +142,18 @@ void UtilityTest::_ThreadPool()
 
 	thread_listen(&pool, 0);
 
+	if (res.valid()) res.get();
+	
 	pool.safe_stop();
+	Clog::debug("pool stop!");
 	pool2.safe_stop();
+	Clog::debug("pool2 stop!");
 	pool3.safe_stop();
+	Clog::debug("pool3 stop!");
 	pool4.safe_stop();
+	Clog::debug("pool4 stop!");
 	task_pool.safe_stop();
+	Clog::debug("task_pool stop!");
 
 	th.Stop();
 

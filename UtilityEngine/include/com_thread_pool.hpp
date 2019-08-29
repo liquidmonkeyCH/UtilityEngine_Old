@@ -1,11 +1,10 @@
 /**
-* @file ThreadPool.hpp
+* @file com_com_thread_pool.hpp
 *
-* 线程池@
 * @author Hourui (liquidmonkey)
 */
-#ifndef __THREAD_POOL_HPP__
-#define __THREAD_POOL_HPP__
+#ifndef __COM_THREAD_POOL_HPP__
+#define __COM_THREAD_POOL_HPP__
 
 #include <assert.h>
 #include <functional>
@@ -16,6 +15,12 @@
 #include <future>
 #include <atomic>
 namespace Utility
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace com
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace _impl
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
@@ -141,10 +146,10 @@ private:
 		while (tasks.empty() && m_state != state::none)
 			cv.wait(lock);
 
-		++m_working;
 		if (m_state == state::none)
 			return task_t();
 
+		++m_working;
 		task_t task(std::move(tasks.front()));
 		tasks.pop();
 
@@ -244,10 +249,16 @@ public:
 		this->_init();
 	}
 };
-using threadpool = thread_pool < 0 >;
-using thread = thread_pool < 1 >;
-template<class T> class task_thread_pool : public thread_pool < 0, T >{};
-template<class T> class task_thread : public thread_pool < 1, T >{};
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-}
-#endif //__THREAD_POOL_HPP__ 
+}// namspace _impl
+using threadpool = _impl::thread_pool < 0 >;
+using thread = _impl::thread_pool < 1 >;
+template<size_t N> using threadpool_st = _impl::thread_pool<N>;
+template<class T> using task_threadpool = _impl::thread_pool < 0, T >;
+template<class T> using task_thread  = _impl::thread_pool < 1, T >;
+template<size_t N ,class T> using task_threadpool_st  = _impl::thread_pool < N, T >;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}// namspace com
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}// namespace Utility
+#endif //__COM_THREAD_POOL_HPP__ 

@@ -19,19 +19,18 @@ namespace iface
 template<class T>
 class Singleton
 {
+protected:
 	Singleton(void) {}
 	~Singleton(void) {}
-
 
 	Singleton(const Singleton&) = delete;
 	Singleton& operator=(const Singleton&) = delete;
 	Singleton(const Singleton&&) = delete;
 	Singleton& operator=(const Singleton&&) = delete;
-
-	friend T;
 public:
 	static T* GetInstance(void)
 	{
+		static_assert(std::is_base_of<Singleton<T>, T>::value, "need inheritance");
 		static T _data;
 		return &_data;
 	}

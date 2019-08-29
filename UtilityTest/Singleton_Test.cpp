@@ -48,4 +48,6 @@ void UtilityTest::_Singleton()
 
 	SingletonTest* pSingleton = SingletonTest::GetInstance();
 	pSingleton->init();
+
+	// com::iface::Singleton <Test>::GetInstance(); // static_assert
 }
