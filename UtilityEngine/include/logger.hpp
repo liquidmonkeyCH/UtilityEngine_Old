@@ -41,13 +41,13 @@ namespace Utility
 class utility_error : public std::runtime_error
 {
 public:
-	utility_error(const std::int64_t error_no, const char* what = nullptr);
+	utility_error(const std::int64_t error_no, const char* what = nullptr) : std::runtime_error(what ? what : ""), m_error(error_no) {}
 	~utility_error(void) = default;
 
 	utility_error(const utility_error&) = default;
 	utility_error& operator=(const utility_error&) = default;
 public:
-	const std::int64_t get_error(void) const;
+	const std::int64_t get_error(void) const { return m_error; }
 private:
 	std::int64_t m_error;
 };

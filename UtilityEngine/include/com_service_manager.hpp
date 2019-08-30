@@ -1,6 +1,5 @@
 /**
 * @file com_service_manager.hpp
-* 服务管理
 *
 * @author hourui (liquidmonkey)
 **/
@@ -9,7 +8,6 @@
 #define __COM_SERVICE_MANAGER_HPP__
 
 #include "logger.hpp"
-#include "com_service.hpp"
 #include <type_traits>
 #include <functional>
 
@@ -20,6 +18,8 @@ namespace com
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ServiceManager;
+namespace iface { class Service; }
+namespace wrap { template<class> class Service; }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace _impl 
 {

@@ -1,5 +1,5 @@
 #include "UtilityTest.hpp"
-#include "com_service_manager.hpp"
+#include "com_service.hpp"
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 using namespace Utility;
 template<class T>
