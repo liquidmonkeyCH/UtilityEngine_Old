@@ -1,0 +1,12 @@
+1.安装MySQL Connector C
+2.解压mysql++-3.2.4.tar.gz
+3.用最新的vs打开 mysql++-3.2.4/vc2005的工程
+4.打开文本 mysql++-3.2.4/mysql++.bkl 
+5.修改MYSQL_WIN_DIR的值 C:\Program Files\MySQL\MySQL Connector C 6.1\（如果需要的话）
+6.编译
+7.拷贝lib及dll 到你的工程 mysql++/lib
+8.拷贝mysql++-3.2.4/lib 内的文件到你的工程 mysql++/include
+9.拷贝C:\Program Files\MySQL\MySQL Connector C 6.1\lib （直接指定路径也行）
+10.拷贝C:\Program Files\MySQL\MySQL Connector C 6.1\include （直接指定路径也行）
+
+编译时报错Debug链接mysqlpp.lib：去对应的项目中删除link中指定的错误lib即可
