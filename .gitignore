@@ -19,3 +19,7 @@ vs2015
 *.db-wal
 vs2013/UtilityEngine/ClientTest/ClientTest/Debug/ClientTest.vcxproj.FileListAbsolute.txt
 vs2013/UtilityEngine/ServerTest/ServerTest/Debug/ServerTest.vcxproj.FileListAbsolute.txt
+vs2013/UtilityEngine/Debug/UtilityMysql.lib
+*.dll
+vs2013/UtilityEngine/Debug/lnk{7923FB78-57A9-4281-873F-833B989C4C99}.tmp
+vs2013/UtilityEngine/Test/Test/Debug/Test.vcxproj.FileListAbsolute.txt

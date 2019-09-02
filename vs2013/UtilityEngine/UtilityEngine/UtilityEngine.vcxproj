@@ -76,6 +76,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\com_service_manager.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\com_singleton.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\com_typename.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\db_mysqlpp.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\logger.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_container.hpp" />

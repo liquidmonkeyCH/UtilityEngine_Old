@@ -1,31 +1,16 @@
 #include "UtilityTest.hpp"
 #include "com_service.hpp"
 
-template<const char* T>
-struct test
-{
-	using value = T;
-	int a;
-};
-
-
-void UtilityTest::_Mysql()
-{
-	test<"haha"> a;
-
-}
-
-/*#include "db_mysql.hpp"
+#include "db_mysqlpp.hpp"
 
 using namespace Utility;
-template<class T>
-using Service = com::wrap::Service<T>;
-using ServiceManager = com::ServiceManager;
 
-void DbInit(Service<db::mysql>* pService)
+enum class db::mysql::dsn_t
 {
-	pService->init_dsn("GAME","CrossGate_Game","10.0.0.35","root","3596034");
-}
+	GAME_DB,
+};
+
+using DSN = db::mysql::dsn_t;
 
 void UtilityTest::_Mysql()
 {
@@ -34,11 +19,16 @@ void UtilityTest::_Mysql()
 		<< std::endl << "// db_mysqlpp" << std::endl
 		<< "/////////////////////////////////////////////////////////////////////////"
 		<< std::endl;
+	try 
+	{
+		db::mysql::init<DSN::GAME_DB>("CrossGate_Game", "root", "3596034", "192.168.56.102", 3306, "gbk", 180);
+	}
+	catch (utility_error& e)
+	{
 
-	ServiceManager::Attach<db::mysql>(DbInit);
-	ServiceManager::Attach<db::mysql>(&db::mysql::init_dsn, "GAME", "CrossGate_Game", "10.0.0.35", "root", "3596034", "gbk", 3306, 180);
-		
-	DATABASE_MYSQLPP_BEGIN(GAME,ServiceManager::GetService<db::mysql>())
+	}
+	
+	DATABASE_MYSQLPP_BEGIN(DSN::GAME_DB)
 		db::mysql::QueryResult res;
 		int Count = 0;
 		DATABASE_MYSQLPP_QUERY(res,"SELECT COUNT(*) FROM DS_USER_INFO;");
@@ -48,6 +38,4 @@ void UtilityTest::_Mysql()
 			Clog::debug("%d", Count);
 			
 	DATABASE_MYSQLPP_END()
-		
-	ServiceManager::Detach<db::mysql>();
-}*/
+}

@@ -23,6 +23,9 @@
     <Filter Include="Core\com">
       <UniqueIdentifier>{3452bc2d-8a50-47bb-bac7-43112383d001}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\db">
+      <UniqueIdentifier>{b812654f-e235-4fed-831e-288e27fd6b40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\com_md5.hpp">
       <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\db_mysqlpp.hpp">
+      <Filter>Core\db</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
