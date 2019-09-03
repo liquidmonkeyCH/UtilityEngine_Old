@@ -18,10 +18,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{D446B2AB-5BA9-45DB-BD02-76D1870825DC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BEAECF8A-747B-41E4-A214-2D462F1DB283} = {BEAECF8A-747B-41E4-A214-2D462F1DB283}
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1} = {C6D1C1D8-1270-49D2-823E-6BC25528B3F1}
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilityMysql", "UtilityMysql\UtilityMysql.vcxproj", "{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,14 +54,6 @@ Global
 		{D446B2AB-5BA9-45DB-BD02-76D1870825DC}.Release|Win32.Build.0 = Release|Win32
 		{D446B2AB-5BA9-45DB-BD02-76D1870825DC}.Release|x64.ActiveCfg = Release|x64
 		{D446B2AB-5BA9-45DB-BD02-76D1870825DC}.Release|x64.Build.0 = Release|x64
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Debug|Win32.Build.0 = Debug|Win32
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Debug|x64.ActiveCfg = Debug|x64
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Debug|x64.Build.0 = Debug|x64
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Release|Win32.ActiveCfg = Release|Win32
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Release|Win32.Build.0 = Release|Win32
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Release|x64.ActiveCfg = Release|x64
-		{C6D1C1D8-1270-49D2-823E-6BC25528B3F1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
