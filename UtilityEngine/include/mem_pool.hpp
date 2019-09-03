@@ -1,7 +1,7 @@
 /**
 * @file mem_pool.hpp
 *
-* 小型物件内存管理
+* 脨隆脨脥脦茂录镁脛脷麓忙鹿脺脌铆
 * @author Hourui (liquidmonkey)
 */
 
@@ -36,7 +36,7 @@ protected:
 
 	static_assert(N <= LLONG_MAX, "size out of range!");
 	const static size_type _used = static_cast<size_type>(1) << (std::numeric_limits<size_type>::digits - 1);
-	const static size_type _zero = ~_used;
+	const static size_type _zero = size_type(~_used);
 
 	static void _set(size_type& _first, size_type _offset[])
 	{

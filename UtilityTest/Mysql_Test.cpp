@@ -3,6 +3,8 @@
 
 #include "db_mysqlpp.hpp"
 
+#include <memory>
+
 using namespace Utility;
 
 enum class db::mysql::dsn_t
