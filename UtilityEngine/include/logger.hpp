@@ -130,13 +130,11 @@ public:
 	static void warn(const char* fmt, ...)						{ LOG_OUTPUT(warn, fmt)	}
 	static void error(const char* fmt, ...)						{ LOG_OUTPUT(error, fmt) }
 	template<class T>
-	static void warn_throw(T e_no, const char* fmt, ...)		{ LOG_STHROW(e_no, warn, fmt) }
-	template<class T>
 	static void error_throw(T e_no, const char* fmt, ...)		{ LOG_STHROW(e_no, error, fmt) }
 	template<class T>
-	static void warn_throw_no(T e_no, const char* fmt, ...)		{ LOG_NTHROW(e_no, warn, fmt) }
-	template<class T>
 	static void error_throw_no(T e_no, const char* fmt, ...)	{ LOG_NTHROW(e_no, error, fmt) }
+	template<class T>
+	static void throw_error(T e_no, const char* fmt, ...) { LOG_FORMAT(fmt)throw utility_error(static_cast<std::int64_t>(e_no), str);}
 private:
 	static logger_iface** refence()
 	{

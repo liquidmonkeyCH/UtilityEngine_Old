@@ -38,7 +38,7 @@ private:
 	mysql& operator=(const mysql&) = delete;
 	mysql(const mysql&&) = delete;
 	mysql& operator=(const mysql&&) = delete;
-public:
+
 	template<dsn_t dsn>
 	class connection_pool : public mysqlpp::ConnectionPool
 	{
@@ -92,61 +92,6 @@ public:
 	};
 
 	template<dsn_t dsn>
-	class connection
-	{
-	public:
-		connection(connection_pool<dsn>* pool, mysqlpp::Connection* connection) :m_pool(pool), m_connnection(connection) {}
-		~connection(void) { if (m_connnection) m_pool->release(m_connnection); mysqlpp::Connection::thread_end(); }
-
-		connection(const connection&) = delete;
-		connection& operator=(const connection&) = delete;
-
-		mysqlpp::Connection* operator->() { return m_connnection; }
-	private:
-		connection_pool<dsn>* m_pool;
-		mysqlpp::Connection* m_connnection;
-	};
-
-	using QueryResult = mysqlpp::StoreQueryResult;
-	using ExecuteResult = mysqlpp::SimpleResult;
-
-	template<dsn_t dsn>
-	static void init(const char* dbname, const char* user, const char* password, const char* server,
-		unsigned int port = 3306, const char* charset = "gbk",  unsigned int idel = 3 * 60)
-	{
-		if (!dbname || !server || !user || !password)
-			Clog::error_throw_no(errors::bad_params, "init dsn(%d) params error!",dsn);
-
-		refence<dsn>* ref = mysql::get_ref<dsn>();
-		std::lock_guard<std::mutex> lock(ref->m_mutex);
-		if(ref->m_pool)
-			Clog::error_throw_no(errors::duplicate_dsn, "init dsn(%d) duplicate!", dsn);
-
-		ref->m_pool = new connection_pool<dsn>(dbname, user, password, server, port, charset, idel);
-
-		try 
-		{
-			connection<dsn> guard(ref->m_pool, ref->m_pool->grab());
-		}
-		catch (std::exception& e)
-		{
-			delete ref->m_pool;
-			ref->m_pool = nullptr;
-			Clog::error_throw_no(errors::connect_fail,"dsn(%d) %s" ,dsn,e.what());
-		}
-	}
-
-	template<dsn_t dsn>
-	static connection_pool<dsn>* get_connection_pool(void)
-	{
-		refence<dsn>* ref = get_ref<dsn>();
-		if(!ref->m_pool)
-			Clog::error_throw_no(errors::unknown_dsn, "dsn(%d) not reg!", dsn);
-
-		return ref->m_pool;
-	}
-private:
-	template<dsn_t dsn>
 	struct refence
 	{
 		refence(void) :m_pool(nullptr) {}
@@ -162,6 +107,66 @@ private:
 		static refence<dsn> ref;
 		return &ref;
 	}
+
+	template<dsn_t dsn>
+	static connection_pool<dsn>* get_connection_pool(void)
+	{
+		refence<dsn>* ref = get_ref<dsn>();
+		if (!ref->m_pool)
+			Clog::throw_error(errors::unknown_dsn, "dsn(%d) not reg!", dsn);
+
+		return ref->m_pool;
+	}
+
+	template<dsn_t dsn>
+	struct release_connection
+	{
+		release_connection(connection_pool<dsn>* pool) :m_pool(pool) {}
+		~release_connection() {}
+
+		void operator()(const mysqlpp::Connection* p)
+		{
+			if(p) m_pool->release(p);
+			mysqlpp::Connection::thread_end();
+		}
+		connection_pool<dsn>* m_pool;
+	};
+public:
+	using QueryResult = mysqlpp::StoreQueryResult;
+	using ExecuteResult = mysqlpp::SimpleResult;
+
+	template<dsn_t dsn>
+	static void init(const char* dbname, const char* user, const char* password, const char* server,
+		unsigned int port = 3306, const char* charset = "gbk",  unsigned int idel = 3 * 60)
+	{
+		if (!dbname || !server || !user || !password)
+			Clog::throw_error(errors::bad_params, "init dsn(%d) params error!",dsn);
+
+		refence<dsn>* ref = mysql::get_ref<dsn>();
+		std::lock_guard<std::mutex> lock(ref->m_mutex);
+		if(ref->m_pool)
+			Clog::throw_error(errors::duplicate_dsn, "init dsn(%d) duplicate!", dsn);
+
+		ref->m_pool = new connection_pool<dsn>(dbname, user, password, server, port, charset, idel);
+
+		try 
+		{
+			auto connection = get_connection<dsn>();
+		}
+		catch (std::exception& e)
+		{
+			delete ref->m_pool;
+			ref->m_pool = nullptr;
+			Clog::throw_error(errors::connect_fail,"dsn(%d) %s" ,dsn,e.what());
+		}
+	}
+
+	template<dsn_t dsn>
+	static std::unique_ptr<mysqlpp::Connection, release_connection<dsn>> get_connection(void)
+	{
+		connection_pool<dsn>* pool = get_connection_pool<dsn>();
+		return std::unique_ptr<mysqlpp::Connection, release_connection<dsn>>(pool->grab(), release_connection<dsn>(pool));
+	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 } // namespace db
@@ -173,8 +178,7 @@ private:
 	mysqlpp::Connection::thread_start();															\
 	try																								\
 	{																								\
-		Utility::db::mysql::connection_pool<DSN>* pool = Utility::db::mysql::get_connection_pool<DSN>();	\
-		Utility::db::mysql::connection<DSN> utility_db_mysql_connection(pool,pool->grab());			\
+		auto utility_db_mysql_connection = Utility::db::mysql::get_connection<DSN>();				\
 		mysqlpp::Query utility_db_mysql_query = utility_db_mysql_connection->query();
 
 #define DATABASE_MYSQLPP_END()																		\
