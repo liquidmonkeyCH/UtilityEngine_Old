@@ -35,8 +35,8 @@ protected:
 			unsigned long long>::type>::type>::type>::type size_type;
 
 	static_assert(N <= LLONG_MAX, "size out of range!");
-	const static size_type _used = static_cast<size_type>(1) << (std::numeric_limits<size_type>::digits - 1);
-	const static size_type _zero = size_type(~_used);
+	static constexpr size_type _used = static_cast<size_type>(1) << (std::numeric_limits<size_type>::digits - 1);
+	static constexpr size_type _zero = size_type(~_used);
 
 	static void _set(size_type& _first, size_type _offset[])
 	{

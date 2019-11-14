@@ -47,7 +47,6 @@ public:
 protected:
 	size_t get_param_num(void);
 	const char* get_param(size_t n);
-	int get_param_pos(const char* param);
 protected:
 	virtual bool OnStart(void) = 0;
 	virtual void OnStop(void) = 0;
@@ -57,7 +56,6 @@ private:
 	static controler* get_controler(void);
 private:
 	param_list				m_param_list;
-	param_map				m_param_map;
 };
 ////////////////////////////////////////////////////////////////////////////////
 }

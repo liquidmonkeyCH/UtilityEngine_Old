@@ -5,6 +5,7 @@
 **/
 
 #include "com_md5.hpp"
+#include "com_hex_caster.hpp"
 
 namespace Utility
 {
@@ -92,10 +93,8 @@ void md5::update(const void* input, size_t length) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Return the message-digest
 const unsigned char* md5::digest() {
-	if (!_finished) {
-		_finished = true;
-		final();
-	}
+	_finished = true;
+	final();
 	return _digest;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

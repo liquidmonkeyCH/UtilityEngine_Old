@@ -7,8 +7,6 @@
 #ifndef __COM_MD5_HPP__
 #define __COM_MD5_HPP__
 
-#include "com_hex_caster.hpp"
-
 namespace Utility
 {
 ////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +32,7 @@ private:
 	void encode(const unsigned long* input, unsigned char* output, size_t length);
 	void decode(const unsigned char* input, unsigned long* output, size_t length);
 private:
-	char _result[33];
+	char _result[32+1];
 	unsigned long _state[4]; /* state (ABCD) */
 	unsigned long _count[2]; /* number of bits, modulo 2^64 (low-order word first) */
 	unsigned char _buffer[64]; /* input buffer */

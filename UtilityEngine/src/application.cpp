@@ -53,7 +53,6 @@ application::Start(int param_num, char* params[])
 			bDaemon = true;
 
 		m_param_list.push_back(params[i]);
-		m_param_map.emplace(m_param_list.back().c_str(),i);
 	}
 
 	if (bDaemon)
@@ -130,16 +129,6 @@ application::get_param(size_t n)
 		return nullptr;
 
 	return m_param_list[n].c_str();
-}
-////////////////////////////////////////////////////////////////////////////////
-int
-application::get_param_pos(const char* param)
-{
-	auto it = m_param_map.find(param);
-	if (it != m_param_map.end())
-		return it->second;
-
-	return -1;
 }
 ////////////////////////////////////////////////////////////////////////////////
 }// namespace main
