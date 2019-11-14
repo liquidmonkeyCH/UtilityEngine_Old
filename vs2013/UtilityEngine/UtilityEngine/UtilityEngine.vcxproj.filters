@@ -136,11 +136,17 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\com_random.hpp">
       <Filter>Core\com</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\com_md5.hpp">
-      <Filter>Core\com</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\db_mysqlpp.hpp">
       <Filter>Core\db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_numeric_digit.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_hex_caster.hpp">
+      <Filter>Core\com</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\com_md5.hpp">
+      <Filter>Core\com</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

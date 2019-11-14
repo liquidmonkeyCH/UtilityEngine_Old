@@ -10,6 +10,7 @@ struct UtilityTest
 	static void _Singleton();
 	static void _ThreadPool();
 	static void _Mysql();
+	static void _Other();
 };
 
 #endif//__UTILITY_TEST_HPP__

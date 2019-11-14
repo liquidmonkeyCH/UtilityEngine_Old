@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\UtilityTest\Mysql_Test.cpp" />
+    <ClCompile Include="..\..\..\UtilityTest\Other_Test.cpp" />
     <ClCompile Include="..\..\..\UtilityTest\Service_Test.cpp" />
     <ClCompile Include="..\..\..\UtilityTest\Singleton_Test.cpp" />
     <ClCompile Include="..\..\..\UtilityTest\ThreadPool_Test.cpp" />

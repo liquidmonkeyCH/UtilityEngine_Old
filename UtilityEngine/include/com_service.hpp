@@ -40,7 +40,7 @@ public:									\
 private:								\
 	serviceId(void);					\
 	~serviceId(void);					\
-	template<class> friend struct Utility::com::_impl::service_refence;
+	template<class> friend struct Utility::_impl::service_refence;
 ////////////////////////////////////////////////////////////////////////////////
 }// namespace iface
 ////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ class Service : public T
 	Service(const Service&&) = delete;
 	Service& operator=(const Service&&) = delete;
 public:
-	template<class> friend struct Utility::com::_impl::service_refence;
+	template<class> friend struct Utility::_impl::service_refence;
 	using SERVICE_ID = const char*;
 
 	static SERVICE_ID ID(void)

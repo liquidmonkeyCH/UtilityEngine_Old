@@ -22,6 +22,9 @@
     <ClCompile Include="..\..\..\UtilityTest\Mysql_Test.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\UtilityTest\Other_Test.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UtilityTest\UtilityTest.hpp">
