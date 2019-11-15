@@ -79,12 +79,6 @@ void responder<session_t, handler_manager, dispatcher>::stop(void)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
-accept_data* responder<session_t, handler_manager, dispatcher>::get_accept_data(void)
-{
-	return m_accept_data.malloc();
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class session_t, class handler_manager, class dispatcher>
 session_t* responder<session_t, handler_manager, dispatcher>::get_session(void)
 {
 	std::lock_guard<std::mutex> lock(m_session_mutex);

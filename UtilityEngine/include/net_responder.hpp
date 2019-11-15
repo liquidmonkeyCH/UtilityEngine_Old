@@ -31,15 +31,15 @@ public:
 	fd_t get_fd(void){ return m_socket->get_fd(); }
 	socket_iface* get_socket(void){ return m_socket; }
 	bool is_running(void){ return m_running; }
-	virtual void stop(void) = 0;
 protected:
 	virtual void process_accept(per_io_data*, sockaddr_storage*, session_iface**) = 0;
-	virtual accept_data* get_accept_data(void) = 0;
+	accept_data* get_accept_data(void) { return m_accept_data.malloc(); }
 protected:
 	socket_iface* m_socket;
 	io_service_iface* m_io_service;
 	std::atomic_bool m_running;
 	std::promise<bool> m_can_stop;
+	mem::container<accept_data>	m_accept_data;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
@@ -62,7 +62,6 @@ public:
 	void stop(void);
 private:
 	void process_accept(per_io_data*, sockaddr_storage*, session_iface**);
-	accept_data* get_accept_data(void);
 	void post_request(session_iface* session, mem::message* msg,void* ptr);
 	session_t* get_session(void);
 	void on_close_session(session_iface* session);
@@ -71,7 +70,6 @@ protected:
 	virtual void on_stop(void){}
 protected:
 	sokcet_mode					m_socket_impl;
-	mem::container<accept_data>	m_accept_data;
 	mem::container<session_t>	m_session_pool;
 	std::mutex					m_session_mutex;
 	//! for session
