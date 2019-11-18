@@ -49,7 +49,7 @@ void responder<session_t, handler_manager, dispatcher>::stop(void)
 	m_io_service->untrack_server(this);
 	m_socket->close();
 
-	for (typename mem::container<accept_data>::iterator it = m_accept_data.used_begin(); it != m_accept_data.used_end(); ++it)
+	for (auto it = m_accept_data.used_begin(); it != m_accept_data.used_end(); ++it)
 	{
 		if (it->m_fd != INVALID_SOCKET)
 			m_socket->close_fd(it->m_fd);
@@ -59,7 +59,7 @@ void responder<session_t, handler_manager, dispatcher>::stop(void)
 	std::future<bool> stop_wait;
 	m_session_mutex.lock();
 
-	for (typename mem::container<session_t>::iterator it = m_session_pool.used_begin(); it != m_session_pool.used_end(); ++it)
+	for (auto it = m_session_pool.used_begin(); it != m_session_pool.used_end(); ++it)
 	{
 		if (!stop_wait.valid())
 			stop_wait = m_can_stop.get_future();

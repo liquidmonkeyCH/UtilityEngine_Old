@@ -12,7 +12,7 @@
 #include <sys/epoll.h> 
 
 #include "net_io_service.hpp"
-#include "mem_container.hpp"
+#include "mem_data_factory.hpp"
 
 namespace Utility
 {
@@ -59,7 +59,7 @@ private:
 	fd_t m_epoll;
 	static const int MAXEVENTS = 255; 
 	struct event_array{ struct epoll_event m_data[MAXEVENTS]; };
-	mem::container<event_array> m_events_pool;
+	mem::data_factory<event_array> m_events_pool;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 using io_service_iocp = io_service_epoll;

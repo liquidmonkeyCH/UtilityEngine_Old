@@ -7,7 +7,7 @@
 #define __NET_RESPONDER_HPP__
 
 #include <future>
-#include "mem_container.hpp"
+#include "mem_data_factory.hpp"
 #include "net_session.hpp"
 #include "msg_controler.hpp"
 
@@ -39,7 +39,7 @@ protected:
 	io_service_iface* m_io_service;
 	std::atomic_bool m_running;
 	std::promise<bool> m_can_stop;
-	mem::container<accept_data>	m_accept_data;
+	mem::data_factory<accept_data>	m_accept_data;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class session_t, class handler_manager, class dispatcher>
@@ -69,9 +69,9 @@ protected:
 	virtual void on_start(void){}
 	virtual void on_stop(void){}
 protected:
-	sokcet_mode					m_socket_impl;
-	mem::container<session_t>	m_session_pool;
-	std::mutex					m_session_mutex;
+	sokcet_mode						m_socket_impl;
+	mem::data_factory<session_t>	m_session_pool;
+	std::mutex						m_session_mutex;
 	//! for session
 	unsigned long				m_recv_buffer_size = MAX_PACKET_LEN * 10;
 	unsigned long				m_send_buffer_size = MAX_PACKET_LEN * 10;

@@ -31,9 +31,6 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp">
       <Filter>Core\mem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\UtilityEngine\include\mem_container.hpp">
-      <Filter>Core\mem</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_rotative_buffer.hpp">
       <Filter>Core\mem</Filter>
     </ClInclude>
@@ -148,11 +145,11 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\com_md5.hpp">
       <Filter>Core\com</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_data_factory.hpp">
+      <Filter>Core\mem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\UtilityEngine\include\mem_container.inl">
-      <Filter>Core\mem</Filter>
-    </None>
     <None Include="..\..\..\UtilityEngine\include\net_session.inl">
       <Filter>Core\net</Filter>
     </None>
@@ -164,6 +161,9 @@
     </None>
     <None Include="..\..\..\UtilityEngine\include\net_requester.inl">
       <Filter>Core\net</Filter>
+    </None>
+    <None Include="..\..\..\UtilityEngine\include\mem_data_factory.inl">
+      <Filter>Core\mem</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

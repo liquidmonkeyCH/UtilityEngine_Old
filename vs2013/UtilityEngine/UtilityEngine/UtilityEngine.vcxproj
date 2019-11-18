@@ -82,7 +82,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\db_mysqlpp.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\logger.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_buffer.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\mem_container.hpp" />
+    <ClInclude Include="..\..\..\UtilityEngine\include\mem_data_factory.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_message.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_pool.hpp" />
@@ -110,7 +110,7 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\com_thread_pool.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\UtilityEngine\include\mem_container.inl" />
+    <None Include="..\..\..\UtilityEngine\include\mem_data_factory.inl" />
     <None Include="..\..\..\UtilityEngine\include\mem_pool.inl" />
     <None Include="..\..\..\UtilityEngine\include\net_requester.inl" />
     <None Include="..\..\..\UtilityEngine\include\net_responder.inl" />
