@@ -85,7 +85,6 @@
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_data_factory.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_message.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream.hpp" />
-    <ClInclude Include="..\..\..\UtilityEngine\include\mem_pool.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_rotative_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_buffer.hpp" />
     <ClInclude Include="..\..\..\UtilityEngine\include\mem_stream_node.hpp" />
@@ -111,7 +110,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\UtilityEngine\include\mem_data_factory.inl" />
-    <None Include="..\..\..\UtilityEngine\include\mem_pool.inl" />
     <None Include="..\..\..\UtilityEngine\include\net_requester.inl" />
     <None Include="..\..\..\UtilityEngine\include\net_responder.inl" />
     <None Include="..\..\..\UtilityEngine\include\net_session.inl" />

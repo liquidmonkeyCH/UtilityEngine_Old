@@ -12,7 +12,7 @@
 #include <mutex>
 #include <string>
 #include "com_less.hpp"
-#include "mem_pool.hpp"
+#include "mem_data_factory.hpp"
 
 namespace Utility
 {
@@ -88,7 +88,7 @@ private:
 		unsigned int m_port;
 		unsigned int m_idel;
 
-		mem::memory_pool_ex<mysqlpp::Connection, 5, mem::release_mode::auto1chunk, mem::alloc_mode::cache, 5> m_pool;
+		mem::data_factory_ex<mysqlpp::Connection, 5, 5> m_pool;
 	};
 
 	template<dsn_t dsn>

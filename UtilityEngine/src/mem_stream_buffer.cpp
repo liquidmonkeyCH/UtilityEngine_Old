@@ -34,9 +34,9 @@ stream_buffer::~stream_buffer(void)
 void
 stream_buffer::clear(void)
 {
-	m_pool.clear();
+	m_factory.clear();
 	
-	m_head = m_pool.malloc();
+	m_head = m_factory.malloc();
 	m_head->m_next = nullptr;
 	m_tail = m_head;
 	m_next = m_head;
@@ -60,7 +60,7 @@ stream_buffer::init(unsigned long size)
 	assert(size >= MAX_PACKET_LEN);
 
 	size_t nchunk = size / MAX_PACKET_LEN;
-	m_pool.init(size%MAX_PACKET_LEN ? nchunk +1 : nchunk);
+	m_factory.init(size%MAX_PACKET_LEN ? nchunk +1 : nchunk);
 	clear();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ stream_buffer::commit_read(unsigned long size)
 		tmp = m_head;
 		m_head = m_head->m_next;
 		m_reader = m_head->m_buffer;
-		m_pool.free(tmp);
+		m_factory.free(tmp);
 		len = m_head == m_tail ? m_writer - m_reader : MAX_PACKET_LEN;
 		
 	} while (true);
@@ -137,7 +137,7 @@ stream_buffer::commit_write(unsigned long size)
 	m_readable += size;
 
 	if (m_writer >= m_tail->m_buffer + MAX_PACKET_LEN) {
-		m_tail->m_next = m_pool.malloc();
+		m_tail->m_next = m_factory.malloc();
 		m_tail = m_tail->m_next;
 		m_tail->m_next = nullptr;
 		m_writer = m_tail->m_buffer;

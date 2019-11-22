@@ -17,8 +17,6 @@
 
 #include "task_dispatcher_balance.hpp"
 
-#include "mem_pool.hpp"
-
 using namespace Utility;
 class GameSession : public net::session_wrap < net::socket_type::tcp, msg::pares_zero::message_wrap<mem::rotative_buffer,MAX_PACKET_LEN>>
 {
@@ -115,7 +113,7 @@ int main(int argc, char* argv[])
 	GameServer::dispatcher_t dispatcher;
 	dispatcher.start(10);
 
-	mem::stream_buffer::pool_t::alloc_cache(100);
+	mem::stream_buffer::factory_t::init_allocator(100);
 
 	int nCount;
 	std::cin >> nCount;

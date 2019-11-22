@@ -7,7 +7,7 @@
 #define __MEM_STREAM_BUFFER_HPP__
 
 #include "mem_buffer.hpp"
-#include "mem_pool.hpp"
+#include "mem_data_factory.hpp"
 #include "mem_stream_node.hpp"
 #include <mutex>
 
@@ -54,12 +54,12 @@ public:
 	void reset(void) override;
 	const char* next(unsigned long& size);
 public:
-	using pool_t = memory_pool_ex<stream_node, 0, mem::release_mode::auto1chunk, mem::alloc_mode::cache>;
+	using factory_t = mem::data_factory_ex<stream_node, 0, mem::factory_cache_type::DYNAMIC>;
 private:
 	stream_node*	m_head;
 	stream_node*	m_tail;
 	stream_node*	m_next;
-	pool_t			m_pool;
+	factory_t		m_factory;
 
 	char*	m_reader;
 	char*	m_writer;

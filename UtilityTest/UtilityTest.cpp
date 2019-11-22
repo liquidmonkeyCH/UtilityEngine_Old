@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <map>
 
 #include "UtilityTest.hpp"
 #include "logger.hpp"
