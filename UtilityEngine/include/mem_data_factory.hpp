@@ -190,8 +190,8 @@ class data_factory<T, 0> : public _impl::factory::data_factory<T, 0>
 {
 public:
 	using base = _impl::factory::data_factory<T,0>;
-	using size_type = base::size_type;
-	using iterator = base::iterator;
+	using size_type = typename base::size_type;
+	using iterator = typename base::iterator;
 public:
 	data_factory(void);
 	~data_factory(void);
