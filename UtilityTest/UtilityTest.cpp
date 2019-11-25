@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-#include <map>
+#include <vector>
 
 #include "UtilityTest.hpp"
 #include "logger.hpp"
@@ -15,6 +15,7 @@ int main(int argc, char** argv)
 	UtilityTest::_Service();
 	UtilityTest::_Singleton();
 	UtilityTest::_ThreadPool();
+	UtilityTest::_DataFactory();
 	//UtilityTest::_Mysql();
 
 	UtilityTest::_Other();

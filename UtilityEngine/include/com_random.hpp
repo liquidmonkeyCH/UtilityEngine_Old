@@ -8,6 +8,7 @@
 #define __COM_RANDOM_HPP__
 
 #include <time.h>
+#include <atomic>
 
 namespace Utility
 {
@@ -28,21 +29,16 @@ template<size_t N>
 class random
 {
 public:
-	static int next(void)
+	random(time_t seed = 0) { set_seed(seed ? seed : time(nullptr)); }
+	int next(void)
 	{
-		time_t* seed = _seed();
-		*seed = *seed * 214013L + 2531011L;
-		return static_cast<int>(((*seed) >> 16) & 0x7FFFFFFF);
+		m_seed = m_seed * 214013L + 2531011L;
+		return static_cast<int>(((m_seed) >> 16) & 0x7FFFFFFF);
 	}
 
-	static time_t get_seed(void) { return *_seed(); }
-	static void set_seed(time_t seed) { *_seed() = seed; }
+	void set_seed(time_t seed) { m_seed = seed; }
 private:
-	static time_t* _seed(void)
-	{
-		static time_t m_seed = time(nullptr);
-		return &m_seed;
-	}
+	std::atomic<time_t> m_seed;
 };
 ////////////////////////////////////////////////////////////////////////////////
 }// namespace com 

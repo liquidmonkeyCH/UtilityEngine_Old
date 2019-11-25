@@ -38,9 +38,11 @@ inline bool
 data_factory<T, N>::free(T* p)
 {
 	size_type _pos = npos(p);
+	assert(_pos != _zero);
 	if (_pos == _zero) return false;
 
 	assert(m_offset[_pos] == _used);
+	if (m_offset[_pos] != _used) return true;
 	++m_left;
 
 	m_offset[_pos] = m_next ? m_next : _zero;
