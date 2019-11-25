@@ -7,8 +7,9 @@
 #ifndef __COM_HEX_CASTER_HPP__
 #define __COM_HEX_CASTER_HPP__
 
-#include <string>
+#include <string.h>
 #include <cstdint>
+#include <cstddef>
 
 namespace Utility
 {

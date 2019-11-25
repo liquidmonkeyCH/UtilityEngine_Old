@@ -6,6 +6,7 @@
 
 #include "com_md5.hpp"
 #include "com_hex_caster.hpp"
+#include <string.h>
 
 namespace Utility
 {

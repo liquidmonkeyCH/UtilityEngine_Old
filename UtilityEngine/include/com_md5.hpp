@@ -7,7 +7,7 @@
 #ifndef __COM_MD5_HPP__
 #define __COM_MD5_HPP__
 
-#include <string>
+#include <cstddef>
 
 namespace Utility
 {
