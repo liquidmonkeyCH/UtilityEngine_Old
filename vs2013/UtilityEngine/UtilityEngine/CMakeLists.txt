@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 2.8)
+project(UtilityEngine)
+add_definitions(-D__LINUX__ -D__LINUX64)
+include_directories(../../../UtilityEngine/include)
+link_directories()
+set(SOURCE_FILE ../../../UtilityEngine/src/application.cpp ../../../UtilityEngine/src/com_md5.cpp ../../../UtilityEngine/src/logger.cpp ../../../UtilityEngine/src/mem_rotative_buffer.cpp ../../../UtilityEngine/src/mem_stream_buffer.cpp ../../../UtilityEngine/src/net_framework.cpp ../../../UtilityEngine/src/net_io_service.cpp ../../../UtilityEngine/src/net_io_service_epoll.cpp ../../../UtilityEngine/src/net_io_service_iocp.cpp ../../../UtilityEngine/src/net_session.cpp ../../../UtilityEngine/src/net_socket.cpp ../../../UtilityEngine/src/task_dispatcher_balance.cpp ../../../UtilityEngine/src/task_dispatcher_pool.cpp ../../../UtilityEngine/src/task_object.cpp)
+
+set(CMAKE_VERBOSE_MAKEFILE on)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -o2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_C_COMPILER "gcc")
+set(CMAKE_CXX_COMPILER "g++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+        
+add_library(UtilityEngine ${SOURCE_FILE})
+target_link_libraries(UtilityEngine  )

@@ -23,5 +23,4 @@ vs2013/UtilityEngine/Debug/UtilityMysql.lib
 *.dll
 vs2013/UtilityEngine/Debug/lnk{7923FB78-57A9-4281-873F-833B989C4C99}.tmp
 vs2013/UtilityEngine/Test/Test/Debug/Test.vcxproj.FileListAbsolute.txt
-vs2013/UtilityEngine/UtilityEngine/CMakeLists.txt
 vs2013/UtilityEngine/UtilityEngine/UtilityEngine/Debug/UtilityEngine.vcxproj.FileListAbsolute.txt
