@@ -287,7 +287,6 @@ io_service_epoll::process_event(epoll_event* m_events)
 					if(!server->is_running())
 						continue;
 
-					server->stop();
 					Clog::error_throw(errors::system, "server:epoll_ctl(EPOLL_CTL_MOD) failure!(%d)",errno);
 				}	
 				continue;
