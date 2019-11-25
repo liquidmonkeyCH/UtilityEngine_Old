@@ -8,6 +8,7 @@
 #include "net_session.hpp"
 #include "net_responder.hpp"
 #include <sys/sysinfo.h>
+#include <functional>
 
 #define EPOLL_LOG
 #ifdef EPOLL_LOG
