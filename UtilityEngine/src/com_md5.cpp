@@ -46,7 +46,7 @@ Rotation is separate from addition to prevent recomputation. */
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Construct
 md5::md5(void) { reset(); }
-md5::md5(const void* input, size_t length) { reset(); update(input, length); }
+md5::md5(const void* input, std::size_t length) { reset(); update(input, length); }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Reset the calculate state 
 void md5::reset() {
@@ -64,7 +64,7 @@ void md5::reset() {
 operation, processing another message block, and updating the
 context.
 */
-void md5::update(const void* input, size_t length) {
+void md5::update(const void* input, std::size_t length) {
 	unsigned long i, index, partLen;
 	_finished = false;
 	/* Compute number of uchar8s mod 64 */
@@ -205,8 +205,8 @@ void md5::transform(const unsigned char block[64]) {
 /* Encodes input (ulong) into output (uchar8). Assumes length is
 a multiple of 4.
 */
-void md5::encode(const unsigned long* input, unsigned char* output, size_t length) {
-	for (size_t i = 0, j = 0; j < length; ++i, j += 4) {
+void md5::encode(const unsigned long* input, unsigned char* output, std::size_t length) {
+	for (std::size_t i = 0, j = 0; j < length; ++i, j += 4) {
 		output[j] = (unsigned char)(input[i] & 0xff);
 		output[j + 1] = (unsigned char)((input[i] >> 8) & 0xff);
 		output[j + 2] = (unsigned char)((input[i] >> 16) & 0xff);
@@ -217,8 +217,8 @@ void md5::encode(const unsigned long* input, unsigned char* output, size_t lengt
 /* Decodes input (uchar8) into output (ulong). Assumes length is
 a multiple of 4.
 */
-void md5::decode(const unsigned char* input, unsigned long* output, size_t length) {
-	for (size_t i = 0, j = 0; j < length; ++i, j += 4) {
+void md5::decode(const unsigned char* input, unsigned long* output, std::size_t length) {
+	for (std::size_t i = 0, j = 0; j < length; ++i, j += 4) {
 		output[i] = ((unsigned long)input[j]) | (((unsigned long)input[j + 1]) << 8) |
 			(((unsigned long)input[j + 2]) << 16) | (((unsigned long)input[j + 3]) << 24);
 	}
