@@ -159,7 +159,6 @@ io_service_epoll::track_server(responder_iface* server)
 
 	if(!epoll_control(EPOLL_CTL_ADD,fd,&_ev))
 	{
-		server->stop();
 		Clog::error_throw(errors::system, "server:epoll_ctl(EPOLL_CTL_ADD) failure!(%d)",errno);
 	}
 }
