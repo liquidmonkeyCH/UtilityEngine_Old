@@ -166,8 +166,8 @@ class data_factory : public _impl::factory::data_factory<T,N>
 {
 public:
 	using base = _impl::factory::data_factory<T,N>;
-	using size_type = base::size_type;
-	using iterator = base::iterator;
+	using size_type = typename base::size_type;
+	using iterator = typename base::iterator;
 
 	T				_data[N];
 	size_type		_offset[N];
